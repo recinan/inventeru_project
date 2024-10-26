@@ -16,7 +16,7 @@ def dashboard(request):
         'items':items
     })
 
-@login_required
+@login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
         form = InventoryItemForm(request.POST)
@@ -36,7 +36,7 @@ def add_item(request):
     }
     return render(request, 'item_form.html',context)
 
-@login_required
+@login_required(login_url='login')
 def edit_item(request, pk):
     item = get_object_or_404(InventoryItem, pk = pk)
     if request.method == 'POST':
@@ -52,3 +52,12 @@ def edit_item(request, pk):
     }
 
     return render(request, 'item_form.html',context)
+
+@login_required(login_url='login')
+def delete_item(request, pk):
+    item = get_object_or_404(InventoryItem, pk = pk)
+    if request.method == 'POST':
+        item.delete()
+        return redirect(reverse_lazy('dashboard'))
+    return render(request, 'delete_item.html')
+
