@@ -3,6 +3,8 @@ from django.urls import reverse_lazy
 from .models import InventoryItem,Category
 from django.contrib.auth.decorators import login_required
 from .forms import InventoryItemForm
+from inventory_management.settings import LOW_QUANTITY
+from django.contrib import messages
 
 # Create your views here.
 
@@ -12,8 +14,24 @@ def index(request):
 @login_required(login_url='login')
 def dashboard(request):
     items = InventoryItem.objects.filter(user=request.user.id).order_by('id')
+    
+    low_inventory = InventoryItem.objects.filter(
+        user = request.user.id,
+        quantity__lte = LOW_QUANTITY
+    )
+
+    low_inventory_count = low_inventory.count()
+    if low_inventory_count > 0:
+        if low_inventory_count > 1:
+            messages.error(request, f'{low_inventory_count} items have low inventory')
+        else:
+            messages.error(request, f'{low_inventory_count} item has low inventory')
+
+    low_inventory_ids = low_inventory.values_list('id',flat=True)
+
     return render(request, 'dashboard.html',{
-        'items':items
+        'items':items,
+        'low_inventory_ids':low_inventory_ids
     })
 
 @login_required(login_url='login')
