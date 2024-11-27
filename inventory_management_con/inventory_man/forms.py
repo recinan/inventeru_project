@@ -4,6 +4,7 @@ from warehouse_man.models import Warehouse
 
 class InventoryItemForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.all(), initial=0)
+    warehouse = forms.ModelChoiceField(queryset=Warehouse.objects.all())
     class Meta:
         model = InventoryItem
         fields = ['name', 'quantity','category','warehouse']
