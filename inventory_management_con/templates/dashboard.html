@@ -39,6 +39,7 @@
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
+                        <td>-</td>
                         <td></td>
                     </tr>
                     {% endif %}
@@ -53,6 +54,7 @@
                                 <td class="text-success">{{item.quantity}}</td>
                             {% endif %}
                             <td>{{item.category.name}}</td>
+                            <td>{{item.warehouse.name}}</td>
                             <td><a href="{% url 'edit-item' item.id %}" class="btn btn-outline-secondary">Edit</a></td>
                             <th><a href="{% url 'delete-item' item.id %}" class="btn btn-outline-danger">Delete</a></td>
                         </tr>
