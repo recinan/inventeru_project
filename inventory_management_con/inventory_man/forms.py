@@ -10,7 +10,7 @@ class InventoryItemForm(forms.ModelForm):
         fields = ['name', 'quantity','category','warehouse']
 
 class CategoryForm(forms.ModelForm):
-    category = forms.CharField()
+    category_name = forms.CharField()
     class Meta:
         model = Category
-        fields = ['category']
+        fields = ['category_name']
