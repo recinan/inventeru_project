@@ -15,10 +15,10 @@ class InventoryItem(models.Model):
         return self.name
 
 class Category(models.Model):
-    name = models.CharField(max_length=200)
+    category_name = models.CharField(max_length=200)
 
     class Meta:
         verbose_name_plural = 'Categories'
 
     def __str__(self) -> str:
-        return self.name
+        return self.category_name
