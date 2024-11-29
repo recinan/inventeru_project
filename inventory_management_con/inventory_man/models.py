@@ -16,6 +16,7 @@ class InventoryItem(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
