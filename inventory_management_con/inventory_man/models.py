@@ -6,8 +6,8 @@ from warehouse_man.models import Warehouse
 class InventoryItem(models.Model):
     name = models.CharField(max_length=200)
     quantity = models.IntegerField()
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, blank=True, null=True)
-    warehouse = models.ForeignKey('warehouse_man.Warehouse', on_delete=models.SET_NULL, blank=True,null=True)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    #warehouse = models.ForeignKey('warehouse_man.Warehouse', on_delete=models.SET_NULL, blank=True,null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -16,7 +16,8 @@ class InventoryItem(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=200)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    warehouse = models.ForeignKey('warehouse_man.Warehouse', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Categories'
