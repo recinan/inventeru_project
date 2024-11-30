@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.urls import reverse_lazy
 from .models import InventoryItem,Category
 from django.contrib.auth.decorators import login_required
-from .forms import InventoryItemForm
+from .forms import InventoryItemForm, CategoryForm
 from inventory_management.settings import LOW_QUANTITY
 from django.contrib import messages
 
@@ -78,4 +78,20 @@ def delete_item(request, pk):
         item.delete()
         return redirect(reverse_lazy('dashboard'))
     return render(request, 'delete_item.html')
+
+
+@login_required(login_url="login")
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse_lazy('dashboard'))
+    else:
+        form = CategoryForm()
+
+    context = {
+        'form' :form
+    }
+    return render(request,'add_category.html',context)
 

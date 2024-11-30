@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "inventory_man.apps.InventoryManConfig",
     "accounts.apps.AccountsConfig",
+    "warehouse_man.apps.WarehouseManConfig",
     "crispy_forms",
     "crispy_bootstrap5"
 ]
@@ -81,7 +82,7 @@ WSGI_APPLICATION = "inventory_management.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3"
     }
 }
 
