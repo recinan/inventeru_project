@@ -7,5 +7,6 @@ urlpatterns = [
     path('add-item/',views.add_item, name='add-item'),
     path('edit-item/<int:pk>', views.edit_item, name='edit-item'),
     path('delete-item/<int:pk>', views.delete_item, name='delete-item'),
-    path('add-category', views.add_category,name='add-category')
+    path('add-category', views.add_category,name='add-category'),
+    path('get-categories-for-warehouse/<int:warehouse_id>/', views.get_categories_for_warehouse, name='get_categories_for_warehouse')
 ]

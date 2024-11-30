@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import InventoryItemForm, CategoryForm
 from inventory_management.settings import LOW_QUANTITY
 from django.contrib import messages
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -37,15 +38,16 @@ def dashboard(request):
 @login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
-        form = InventoryItemForm(request.POST)
+        form = InventoryItemForm(request.POST, user=request.user)
         if form.is_valid():
-            item = form.save(commit=False)
-            item.user = request.user
-            item.save()
-            print(request.user)
+            form.save()
+            #item = form.save(commit=False)
+            #item.user = request.user
+            #item.save()
+            #print(request.user)
             return redirect(reverse_lazy('dashboard'))
     else:
-        form = InventoryItemForm()
+        form = InventoryItemForm(user=request.user)
 
     categories = Category.objects.all()
     context = {
@@ -83,15 +85,21 @@ def delete_item(request, pk):
 @login_required(login_url="login")
 def add_category(request):
     if request.method == 'POST':
-        form = CategoryForm(request.POST)
+        form = CategoryForm(request.POST, user = request.user)
         if form.is_valid():
             form.save()
             return redirect(reverse_lazy('dashboard'))
     else:
-        form = CategoryForm()
+        form = CategoryForm(user = request.user)
 
     context = {
         'form' :form
     }
     return render(request,'add_category.html',context)
+
+@login_required
+def get_categories_for_warehouse(request, warehouse_id):
+    categories = Category.objects.filter(warehouse_id=warehouse_id)
+    category_list = [{"id": category.id, "name": category.category_name} for category in categories]
+    return JsonResponse({"categories": category_list})
 
