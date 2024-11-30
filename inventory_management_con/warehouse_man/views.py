@@ -8,12 +8,12 @@ from .forms import WarehouseForm
 login_required(login_url='login')
 def add_warehouse(request):
     if request.method == 'POST':
-        form = WarehouseForm(request.POST)
+        form = WarehouseForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
             return redirect(reverse_lazy('dashboard'))
     else:
-        form = WarehouseForm()
+        form = WarehouseForm(user=request.user)
 
     context = {
         'form':form
