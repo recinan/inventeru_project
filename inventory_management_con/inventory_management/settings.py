@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "inventory_man.apps.InventoryManConfig",
     "accounts.apps.AccountsConfig",
     "warehouse_man.apps.WarehouseManConfig",
+    "category_man.apps.CategoryManConfig",
     "crispy_forms",
     "crispy_bootstrap5"
 ]
