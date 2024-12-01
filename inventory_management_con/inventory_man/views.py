@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.urls import reverse_lazy
-from .models import InventoryItem,Category
+from .models import InventoryItem
+from category_man.models import Category
 from django.contrib.auth.decorators import login_required
-from .forms import InventoryItemForm, CategoryForm
+from .forms import InventoryItemForm
 from inventory_management.settings import LOW_QUANTITY
 from django.contrib import messages
 from django.http import JsonResponse
@@ -40,11 +41,12 @@ def add_item(request):
     if request.method == 'POST':
         form = InventoryItemForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
-            #item = form.save(commit=False)
-            #item.user = request.user
-            #item.save()
-            #print(request.user)
+            print("Form geçerli", form.cleaned_data)
+            #form.save(commit=False)
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
+            print(request.user)
             return redirect(reverse_lazy('dashboard'))
     else:
         form = InventoryItemForm(user=request.user)
@@ -81,7 +83,7 @@ def delete_item(request, pk):
         return redirect(reverse_lazy('dashboard'))
     return render(request, 'delete_item.html')
 
-
+"""
 @login_required(login_url="login")
 def add_category(request):
     if request.method == 'POST':
@@ -101,5 +103,5 @@ def add_category(request):
 def get_categories_for_warehouse(request, warehouse_id):
     categories = Category.objects.filter(warehouse_id=warehouse_id)
     category_list = [{"id": category.id, "name": category.category_name} for category in categories]
-    return JsonResponse({"categories": category_list})
+    return JsonResponse({"categories": category_list})"""
 
