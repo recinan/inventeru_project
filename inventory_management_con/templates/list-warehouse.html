@@ -1,0 +1,23 @@
+{% extends "partials/_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {% for warehouse in warehouselist %}
+            <div class="col">
+                <div class="card">
+                    <h5 class="card-header">{{warehouse.warehouse_name}}</h5>
+                    <div class="card-body">
+                      <h5 class="card-title">Special title treatment</h5>
+                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                  </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
+
+
