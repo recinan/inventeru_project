@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
-from inventory_man.models import Category, InventoryItem
+from inventory_man.models import InventoryItem
 from warehouse_man.models import Warehouse
+from category_man.models import Category
 
 class InventoryItemForm(forms.ModelForm):
     #category = forms.ModelChoiceField(queryset=Category.objects.filter(), initial=0)
@@ -29,7 +30,7 @@ class InventoryItemForm(forms.ModelForm):
             instance.save()
         return instance
 
-
+"""
 class CategoryForm(forms.ModelForm):
     category_name = forms.CharField()
     #warehouse = forms.CharField()
@@ -49,4 +50,4 @@ class CategoryForm(forms.ModelForm):
             instance.user = self.user
         if commit:
             instance.save()
-        return instance
+        return instance"""
