@@ -3,14 +3,19 @@
 {% block content %}
 <div class="container">
     <div class="row">
+        <div class="col d-flex justify-content-end mt-5">
+            <a href="{% url "add-category" %}" class="btn btn-primary">Add Category</a>
+        </div>
+    </div>
+    <div class="row">
         {% for category in categorylist %}
-        <div class="col">
+        <div class="col-4">
             <div class="card">
                 <h5 class="card-header">{{category.category_name}}</h5>
                 <div class="card-body">
                   <h5 class="card-title">Special title treatment</h5>
                   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <a href="{% url 'list-item' category.slug %}" class="btn btn-primary">Go somewhere</a>
                 </div>
               </div>
         </div>
