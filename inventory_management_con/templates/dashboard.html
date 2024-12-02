@@ -48,7 +48,7 @@
                     {% for item in items %}
                         <tr>
                             <th scope="row">{{item.id}}</th>
-                            <td>{{item.name}}</td>
+                            <td>{{item.item_name}}</td>
                             {% if item.id in low_inventory_ids %}
                                 <td class="text-danger">{{item.quantity}}</td>
                             {% else %}
