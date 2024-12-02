@@ -9,7 +9,7 @@ class InventoryItemForm(forms.ModelForm):
     #warehouse = forms.ModelChoiceField(queryset=Warehouse.objects.all(), initial=0)
     class Meta:
         model = InventoryItem
-        fields = ['name', 'quantity','category','warehouse']
+        fields = ['item_name', 'quantity','category','warehouse']
     
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user',None)
