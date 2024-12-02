@@ -12,7 +12,7 @@ def list_warehouse(request):
     context = {
         'warehouselist':warehouse_list
     }
-    return render(request, 'list-warehouse.html',context)
+    return render(request, 'list_warehouse.html',context)
 
 login_required(login_url='login')
 def add_warehouse(request):
