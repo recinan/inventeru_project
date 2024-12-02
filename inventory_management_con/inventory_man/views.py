@@ -36,6 +36,14 @@ def dashboard(request):
         'low_inventory_ids':low_inventory_ids
     })
 
+def list_item(request, category_slug):
+    category = get_object_or_404(Category, slug = category_slug)
+    inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
+    context = {
+        'items':inventory_items
+    }
+    return render(request,'list_item.html',context)
+
 @login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
@@ -83,25 +91,4 @@ def delete_item(request, pk):
         return redirect(reverse_lazy('dashboard'))
     return render(request, 'delete_item.html')
 
-"""
-@login_required(login_url="login")
-def add_category(request):
-    if request.method == 'POST':
-        form = CategoryForm(request.POST, user = request.user)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse_lazy('dashboard'))
-    else:
-        form = CategoryForm(user = request.user)
-
-    context = {
-        'form' :form
-    }
-    return render(request,'add_category.html',context)
-
-@login_required
-def get_categories_for_warehouse(request, warehouse_id):
-    categories = Category.objects.filter(warehouse_id=warehouse_id)
-    category_list = [{"id": category.id, "name": category.category_name} for category in categories]
-    return JsonResponse({"categories": category_list})"""
 
