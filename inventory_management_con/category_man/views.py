@@ -14,7 +14,7 @@ def add_category(request):
         form = CategoryForm(request.POST, user = request.user)
         if form.is_valid():
             form.save()
-            return redirect(reverse_lazy('dashboard'))
+            return redirect(reverse_lazy('list-allcategories'))
     else:
         form = CategoryForm(user = request.user)
 
@@ -36,3 +36,10 @@ def list_categories(request, warehouse_slug):
         'categorylist':category_list
     }
     return render(request, 'list_category.html', context)
+
+def list_allcategories(request):
+    all_categories = Category.objects.all()
+    context = {
+        'categorylist':all_categories
+    }
+    return render(request, 'list_category.html',context)
