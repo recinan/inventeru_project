@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 from .models import Category
-from .forms import CategoryForm
+from .forms import CategoryForm, CategoryFormWarehouse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from warehouse_man.models import Warehouse
@@ -17,6 +17,24 @@ def add_category(request):
             return redirect(reverse_lazy('list-allcategories'))
     else:
         form = CategoryForm(user = request.user)
+
+    context = {
+        'form' :form
+    }
+    return render(request,'add_category.html',context)
+
+def add_category_warehouse(request, warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    if request.method == 'POST':
+        form = CategoryFormWarehouse(request.POST, user = request.user, warehouse = warehouse)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user = request.user
+            item.warehouse = warehouse
+            item.save()
+            return redirect(reverse_lazy('list-category',kwargs={'warehouse_slug': warehouse_slug}))
+    else:
+        form = CategoryFormWarehouse(user = request.user,warehouse=warehouse)
 
     context = {
         'form' :form

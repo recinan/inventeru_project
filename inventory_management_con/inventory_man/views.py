@@ -7,6 +7,7 @@ from .forms import InventoryItemForm
 from inventory_management.settings import LOW_QUANTITY
 from django.contrib import messages
 from django.http import JsonResponse
+from warehouse_man.models import Warehouse
 
 # Create your views here.
 

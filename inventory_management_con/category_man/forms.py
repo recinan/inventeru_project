@@ -24,3 +24,18 @@ class CategoryForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+class CategoryFormWarehouse(forms.ModelForm):
+    category_name = forms.CharField()
+    #warehouse = forms.CharField()
+    class Meta:
+        model = Category
+        fields = ['category_name']
+
+    def __init__(self, *args, user=None, warehouse=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+        self.warehouse = warehouse
+
+        if warehouse:
+                self.fields['category_name'].queryset = Category.objects.filter(warehouse=warehouse)
