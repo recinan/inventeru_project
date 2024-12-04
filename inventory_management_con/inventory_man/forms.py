@@ -13,14 +13,16 @@ class InventoryItemForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user',None)
+        #warehouse = kwargs.pop('warehouse',None)
         super().__init__(*args, **kwargs)
         if user:
             #self.fields['category'].queryset = Category.objects.filter(user=user.id)
             self.fields['warehouse'].queryset = Warehouse.objects.filter(user=user.id)
+            #self.fields['category'].queryset = Category.objects.filter(user=user.id, warehouse=warehouse)
 
-            warehouse_id = kwargs.get('initial',{}).get('warehouse',None)
-            if warehouse_id:
-                self.fields['category'].queryset = Category.objects.filter(user=user,warehouse__id = warehouse_id)
+            warehouse= kwargs.get('warehouse',None)
+            if warehouse:
+                self.fields['category'].queryset = Category.objects.filter(user=user,warehouse = warehouse)
             else:
                 self.fields['category'].queryset = Category.objects.filter(user=user)
 
