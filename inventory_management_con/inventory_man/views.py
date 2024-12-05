@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from .models import InventoryItem
 from category_man.models import Category
 from django.contrib.auth.decorators import login_required
-from .forms import InventoryItemForm
+from .forms import InventoryItemForm, InventoryItemFormWarehouse
 from inventory_management.settings import LOW_QUANTITY
 from django.contrib import messages
 from django.http import JsonResponse
@@ -66,6 +66,33 @@ def add_item(request):
         'categories':categories
     }
     return render(request, 'item_form.html',context)
+
+@login_required(login_url='login')
+def add_item_warehouse(request, warehouse_slug ,category_slug):
+    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    category = get_object_or_404(Category, slug = category_slug, warehouse=warehouse)
+    if request.method == 'POST':
+        form = InventoryItemFormWarehouse(request.POST, user=request.user, warehouse = warehouse, category = category)
+        if form.is_valid():
+            print("Form geçerli", form.cleaned_data)
+            #form.save(commit=False)
+            item = form.save(commit=False)
+            item.user = request.user
+            item.warehouse = warehouse
+            item.category = category
+            item.save()
+            print(request.user)
+            return redirect(reverse_lazy('list-item',kwargs={'category_slug':category_slug}))
+    else:
+        form = InventoryItemFormWarehouse(user=request.user,warehouse=warehouse,category=category)
+
+    categories = Category.objects.all()
+    context = {
+        'form':form,
+        'warehouse':warehouse,
+        'category':category,
+    }
+    return render(request, 'item_form_warehouse.html',context)
 
 @login_required(login_url='login')
 def edit_item(request, pk):

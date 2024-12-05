@@ -16,7 +16,7 @@
                   <h5 class="card-title">{{category.warehouse.warehouse_name}}</h5>
                   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                   <a href="{% url 'list-item' category.slug %}" class="btn btn-primary">Products</a>
-                  <a href="#" class="btn btn-primary">Add Item</a>
+                  <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-primary">Add Item</a>
                 </div>
               </div>
         </div>

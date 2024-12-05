@@ -31,4 +31,21 @@ class InventoryItemForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+class InventoryItemFormWarehouse(forms.ModelForm):
+    #category = forms.ModelChoiceField(queryset=Category.objects.filter(), initial=0)
+    #warehouse = forms.ModelChoiceField(queryset=Warehouse.objects.all(), initial=0)
+    class Meta:
+        model = InventoryItem
+        fields = ['item_name', 'quantity']
+    
+    def __init__(self, *args,user=None,warehouse=None,category=None, **kwargs):
+        user = kwargs.pop('user',None)
+        #warehouse = kwargs.pop('warehouse',None)
+        super().__init__(*args, **kwargs)
+        self.user = user
+        self.warehouse = warehouse
+        self.category = category
+
+       
 
