@@ -32,7 +32,7 @@ def dashboard(request):
 
     low_inventory_ids = low_inventory.values_list('id',flat=True)
 
-    return render(request, 'dashboard.html',{
+    return render(request, 'inventory_man/dashboard.html',{
         'items':items,
         'low_inventory_ids':low_inventory_ids
     })
@@ -43,7 +43,7 @@ def list_item(request, category_slug):
     context = {
         'items':inventory_items
     }
-    return render(request,'list_item.html',context)
+    return render(request,'inventory_man/list_item.html',context)
 
 @login_required(login_url='login')
 def add_item(request):
@@ -65,7 +65,7 @@ def add_item(request):
         'form':form,
         'categories':categories
     }
-    return render(request, 'item_form.html',context)
+    return render(request, 'inventory_man/item_form.html',context)
 
 @login_required(login_url='login')
 def add_item_warehouse(request, warehouse_slug ,category_slug):
@@ -92,7 +92,7 @@ def add_item_warehouse(request, warehouse_slug ,category_slug):
         'warehouse':warehouse,
         'category':category,
     }
-    return render(request, 'item_form_warehouse.html',context)
+    return render(request, 'inventory_man/item_form_warehouse.html',context)
 
 @login_required(login_url='login')
 def edit_item(request, pk):
@@ -109,7 +109,7 @@ def edit_item(request, pk):
         'form':form
     }
 
-    return render(request, 'item_form.html',context)
+    return render(request, 'inventory_man/item_form.html',context)
 
 @login_required(login_url='login')
 def delete_item(request, pk):
@@ -117,6 +117,6 @@ def delete_item(request, pk):
     if request.method == 'POST':
         item.delete()
         return redirect(reverse_lazy('dashboard'))
-    return render(request, 'delete_item.html')
+    return render(request, 'inventory_man/delete_item.html')
 
 

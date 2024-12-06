@@ -21,7 +21,7 @@ def add_category(request):
     context = {
         'form' :form
     }
-    return render(request,'add_category.html',context)
+    return render(request,'category_man/add_category.html',context)
 
 def add_category_warehouse(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
@@ -39,7 +39,7 @@ def add_category_warehouse(request, warehouse_slug):
     context = {
         'form' :form
     }
-    return render(request,'add_category.html',context)
+    return render(request,'category_man/add_category.html',context)
 
 @login_required
 def get_categories_for_warehouse(request, warehouse_id):
@@ -53,11 +53,11 @@ def list_categories(request, warehouse_slug):
     context = {
         'categorylist':category_list
     }
-    return render(request, 'list_category.html', context)
+    return render(request, 'category_man/list_category.html', context)
 
 def list_allcategories(request):
     all_categories = Category.objects.filter(user=request.user)
     context = {
         'categorylist':all_categories
     }
-    return render(request, 'list_category.html',context)
+    return render(request, 'category_man/list_category.html',context)

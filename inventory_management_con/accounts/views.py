@@ -15,7 +15,7 @@ def register(request):
     else:
         form = UserRegisterForm()
 
-    return render(request, 'register.html', {
+    return render(request, 'accounts/register.html', {
         'form' : form 
         })
 
@@ -33,11 +33,11 @@ def login(request):
     else:
         form = UserLoginForm()
     
-    return render(request, 'login.html', {
+    return render(request, 'accounts/login.html', {
         'form':form
     })
 
 def logout(request):
     auth_logout(request)
-    return render(request, 'logout.html')
+    return render(request, 'accounts/logout.html')
 
