@@ -19,7 +19,9 @@ def add_warehouse(request):
     if request.method == 'POST':
         form = WarehouseForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
             return redirect(reverse_lazy('list-warehouse'))
     else:
         form = WarehouseForm(user=request.user)

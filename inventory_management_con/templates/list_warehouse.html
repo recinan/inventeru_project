@@ -1,6 +1,5 @@
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
-
 {% block content %}
     <div class="container">
         <div class="row">
@@ -9,6 +8,7 @@
             </div>
         </div>
         <div class="row">
+            {% if warehouselist|length > 0 %}
             {% for warehouse in warehouselist %}
             <div class="col-4 mt-5">
                 <div class="card">
@@ -22,6 +22,15 @@
                   </div>
             </div>
             {% endfor %}
+            {% else %}
+            <div class="col-4 mt-5">
+                <small class="text-muted">
+                    There is no Warehouse! If you want to add 
+                    <a href="{% url 'add-warehouse' %}">Add Warehouse</a>
+                </small>
+            </div>
+            {% endif %}
+            
         </div>
     </div>
 {% endblock content %}

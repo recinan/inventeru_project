@@ -56,7 +56,7 @@ def list_categories(request, warehouse_slug):
     return render(request, 'list_category.html', context)
 
 def list_allcategories(request):
-    all_categories = Category.objects.all()
+    all_categories = Category.objects.filter(user=request.user)
     context = {
         'categorylist':all_categories
     }
