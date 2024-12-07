@@ -1,11 +1,12 @@
 from django import forms
 from .models import Warehouse
 
+
 class WarehouseForm(forms.ModelForm):
     warehouse_name = forms.CharField()
     class Meta:
         model = Warehouse
-        fields = ['warehouse_name']
+        fields = ['warehouse_name','address','phone_number']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user',None)

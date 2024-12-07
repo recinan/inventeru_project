@@ -16,9 +16,9 @@
                     <div class="card-body">
                       <h5 class="card-title">Special title treatment</h5>
                       <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="{% url 'list-category' warehouse.slug %}" class="btn btn-primary">Categories</a>
+                      <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary">Products</a>
                       <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary">Add Categr</a>
-                      <a href="#" class="btn btn-primary">Warehouse info</a>
+                      <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary">Warehouse info</a>
                     </div>
                   </div>
             </div>

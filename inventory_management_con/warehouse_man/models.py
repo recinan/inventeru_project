@@ -3,9 +3,12 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 import uuid
 
+
 # Create your models here.
 class Warehouse(models.Model):
     warehouse_name = models.CharField(max_length=100)
+    address = models.TextField(blank=True, null=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     slug = models.SlugField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

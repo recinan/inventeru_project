@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from .forms import WarehouseForm
 from .models import Warehouse
+from inventory_man.models import InventoryItem
+from category_man.models import Category
 
 # Create your views here.
 
@@ -30,3 +32,15 @@ def add_warehouse(request):
         'form':form
     }
     return render(request, 'warehouse_man/add_warehouse.html',context)
+
+def warehouse_detail(request, warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
+    categories = Category.objects.filter(user = request.user, warehouse=warehouse)
+    items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
+    context = {
+        'warehouse':warehouse,
+        'categories':categories,
+        'items':items
+    }
+    
+    return render(request, 'warehouse_man/warehouse-detail.html',context)

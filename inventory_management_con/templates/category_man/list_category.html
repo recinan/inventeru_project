@@ -1,27 +1,74 @@
 {% extends 'partials/_base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
+  <div class="container">
     <div class="row">
-        <div class="col d-flex justify-content-end mt-5">
-            <a href="{% url "add-category" %}" class="btn btn-primary">Add Category</a>
-        </div>
+      <div class="col d-flex justify-content-end mt-5">
+        <a href="{% url 'add-category' %}" class="btn btn-primary">Add Category</a>
+      </div>
     </div>
     <div class="row">
+      <div class="col-3">
         {% for category in categorylist %}
-        <div class="col-4 mt-5">
-            <div class="card">
-                <h5 class="card-header">{{category.category_name}}</h5>
-                <div class="card-body">
-                  <h5 class="card-title">{{category.warehouse.warehouse_name}}</h5>
-                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                  <a href="{% url 'list-item' category.slug %}" class="btn btn-primary">Products</a>
-                  <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-primary">Add Item</a>
-                </div>
+            <div class="card mt-3">
+              <div class="card-body">
+                <h5 class="card-title">{{ category.warehouse.warehouse_name }}</h5>
+                <p class="card-text">{{ category.category_name }}</p>
+                <a href="{% url 'list-item-category' category.slug %}" class="btn btn-primary">Products</a>
+                <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-primary">Add Item</a>
               </div>
-        </div>
+            </div>
         {% endfor %}
-    </div>
-</div>
-{% endblock content %}
+      </div>
+      <div class="col-9">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Price</th>
+              <th scope="col">Description</th>
+              <th scope="col">Category</th>
+              <th scope="col">Warehouse</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if all_items|length == 0 %}
+              <tr>
+                <th scope="row">-</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td></td>
+              </tr>
+            {% endif %}
 
+            {% for item in all_items %}
+              <tr>
+                <th scope="row">{{ item.id }}</th>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.quantity }} {{ item.unit }}</td>
+                <td>{{ item.price }} {{ item.currency }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.category.category_name }}</td>
+                <td>{{ item.warehouse.warehouse_name }}</td>
+                <td>
+                  <a href="{% url 'edit-item' item.id %}" class="btn btn-outline-secondary">Edit</a>
+                </td>
+                <td>
+                  <a href="{% url 'item-detail' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-success">Detail</a>
+                </td>
+                <td>
+                  <a href="{% url 'delete-item' item.id %}" class="btn btn-outline-danger">Delete</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

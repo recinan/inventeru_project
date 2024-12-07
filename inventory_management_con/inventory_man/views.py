@@ -37,13 +37,25 @@ def dashboard(request):
         'low_inventory_ids':low_inventory_ids
     })
 
-def list_item(request, category_slug):
+def list_item(request, warehouse_slug):
+    all_categories = Category.objects.filter(user = request.user)
+    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
+    context = {
+        'categorylist':all_categories,
+        'all_items':inventory_items
+    }
+    return render(request,'category_man/list_category.html',context)
+
+def list_item_category(request, category_slug):
+    all_categories = Category.objects.filter(user = request.user)
     category = get_object_or_404(Category, slug = category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
     context = {
-        'items':inventory_items
+        'categorylist':all_categories,
+        'all_items':inventory_items
     }
-    return render(request,'inventory_man/list_item.html',context)
+    return render(request,'category_man/list_category.html',context)
 
 @login_required(login_url='login')
 def add_item(request):
