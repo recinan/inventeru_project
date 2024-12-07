@@ -111,6 +111,24 @@ def edit_item(request, pk):
 
     return render(request, 'inventory_man/item_form.html',context)
 
+def item_detail(request, warehouse_slug, category_slug, item_slug):
+    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    category = get_object_or_404(Category, slug=category_slug)
+    item = get_object_or_404(InventoryItem, warehouse=warehouse, category=category, slug=item_slug)
+    if request.method == 'POST':
+        form = InventoryItemFormWarehouse(request.POST, instance = item)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse_lazy('list-item',kwargs={'category_slug':category_slug}))
+    else:
+        form = InventoryItemFormWarehouse(instance = item)
+    
+    context = {
+        'form':form
+    }
+
+    return render(request, 'inventory_man/item_form_warehouse.html',context)
+
 @login_required(login_url='login')
 def delete_item(request, pk):
     item = get_object_or_404(InventoryItem, pk = pk)

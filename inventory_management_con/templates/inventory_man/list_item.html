@@ -13,6 +13,8 @@
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Qty</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Category</th>
                     <th scope="col">Warehouse</th>
                 </tr>
@@ -34,10 +36,13 @@
                     <tr>
                         <th scope="row">{{item.id}}</th>
                         <td>{{item.item_name}}</td>
-                        <td>{{item.quantity}}</td>
+                        <td>{{item.quantity}} {{item.unit}}</td>
+                        <td>{{item.price}} {{item.currency}}</td>
+                        <td>{{item.description}}</td>
                         <td>{{item.category.category_name}}</td>
                         <td>{{item.warehouse.warehouse_name}}</td>
                         <td><a href="{% url 'edit-item' item.id %}" class="btn btn-outline-secondary">Edit</a></td>
+                        <td><a href="{% url 'item-detail' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-success">Detail</a></td>
                         <th><a href="{% url 'delete-item' item.id %}" class="btn btn-outline-danger">Delete</a></td>
                     </tr>
                 {% endfor %}
