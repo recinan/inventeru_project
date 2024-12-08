@@ -38,20 +38,22 @@ def dashboard(request):
     })
 
 def list_item(request, warehouse_slug):
-    all_categories = Category.objects.filter(user = request.user)
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    all_categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
     context = {
+        'warehouse_slug':warehouse_slug,
         'categorylist':all_categories,
         'all_items':inventory_items
     }
     return render(request,'category_man/list_category.html',context)
 
-def list_item_category(request, category_slug):
+def list_item_category(request, warehouse_slug, category_slug):
     all_categories = Category.objects.filter(user = request.user)
     category = get_object_or_404(Category, slug = category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
     context = {
+        'warehouse_slug':warehouse_slug,
         'categorylist':all_categories,
         'all_items':inventory_items
     }
@@ -94,7 +96,7 @@ def add_item_warehouse(request, warehouse_slug ,category_slug):
             item.category = category
             item.save()
             print(request.user)
-            return redirect(reverse_lazy('list-item',kwargs={'category_slug':category_slug}))
+            return redirect(reverse_lazy('list-item',kwargs={'warehouse_slug':warehouse_slug}))
     else:
         form = InventoryItemFormWarehouse(user=request.user,warehouse=warehouse,category=category)
 
@@ -147,6 +149,9 @@ def delete_item(request, pk):
     if request.method == 'POST':
         item.delete()
         return redirect(reverse_lazy('dashboard'))
+    context = {
+        'item':item
+    }
     return render(request, 'inventory_man/delete_item.html')
 
 

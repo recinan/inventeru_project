@@ -5,6 +5,7 @@ from .forms import CategoryForm, CategoryFormWarehouse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from warehouse_man.models import Warehouse
+from inventory_man.models import InventoryItem
 
 # Create your views here.
 
@@ -49,9 +50,12 @@ def get_categories_for_warehouse(request, warehouse_id):
 
 def list_categories(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
-    category_list = Category.objects.filter(user = request.user, warehouse = warehouse)
+    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET.get('searchCategory',''))
+    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
     context = {
-        'categorylist':category_list
+        'warehouse_slug':warehouse_slug,
+        'categorylist':category_list,
+        'all_items':inventory_items
     }
     return render(request, 'category_man/list_category.html', context)
 
@@ -61,3 +65,24 @@ def list_allcategories(request):
         'categorylist':all_categories
     }
     return render(request, 'category_man/list_category.html',context)
+
+def search_category_bar(request,warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET['searchCategory'])
+    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
+    context = {
+        'warehouse_slug':warehouse_slug,
+        'categorylist':category_list,
+        'all_items':inventory_items
+    }
+    return render(request, 'category_man/list_category.html', context)
+
+def delete_category(request,category_slug):
+    item = get_object_or_404(Category, slug = category_slug)
+    if request.method == 'POST':
+        item.delete()
+        return redirect(reverse_lazy('dashboard'))
+    context = {
+        'category':item
+    }
+    return render(request,'category_man/delete_category.html',context)

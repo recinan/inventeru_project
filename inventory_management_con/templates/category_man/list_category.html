@@ -13,9 +13,9 @@
           <div class="row">
             <div class="widget-search">
               <div class="site-search-area">
-                <form method="GET" id="site-searchform" action="">
+                <form method="GET" id="site-searchform" action="{% url "search-category" warehouse_slug %}">
                   <div class="form-container">
-                    <input class="input-text form-control" name="search" placeholder="Search category keywords..." type="text">
+                    <input class="input-text form-control" name="searchCategory" placeholder="Search category keywords..." type="text">
                     <input id="searchsubmit" value="Search" type="submit">
                   </div>
                 </form>
@@ -28,8 +28,9 @@
               <div class="card-body">
                 <h5 class="card-title">{{ category.warehouse.warehouse_name }}</h5>
                 <p class="card-text">{{ category.category_name }}</p>
-                <a href="{% url 'list-item-category' category.slug %}" class="btn btn-primary">Products</a>
+                <a href="{% url 'list-item-category' category.warehouse.slug category.slug %}" class="btn btn-primary">Products</a>
                 <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-primary">Add Item</a>
+                <a href="{% url 'delete-category' category.slug %}" class="btn btn-outline-danger">Delete</a>
               </div>
             </div>
         {% endfor %}
