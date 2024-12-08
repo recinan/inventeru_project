@@ -1,0 +1,21 @@
+.form-container {
+    display: flex; /* Yan yana hizalama */
+    align-items: center; /* Dikeyde ortalama */
+    gap: 10px; /* Elemanlar arasında boşluk */
+}
+
+.input-text {
+    flex: 1; /* Metin kutusunun genişliğini esnek yapar */
+}
+
+#searchsubmit {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#searchsubmit:hover {
+    background-color: #0056b3;
+}
