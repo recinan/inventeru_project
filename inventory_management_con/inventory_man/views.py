@@ -42,6 +42,7 @@ def list_item(request, warehouse_slug):
     category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
     context = {
+        'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
         'categorylist':category_list,
         'all_items':inventory_items
@@ -148,6 +149,7 @@ def search_product_bar(request,warehouse_slug):
     category_list = Category.objects.filter(user=request.user, warehouse=warehouse)
     inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = request.GET['searchProduct'])
     context = {
+        'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
         'categorylist':category_list,
         'all_items':inventory_items
