@@ -117,12 +117,14 @@
       </div>
     </div>
     {% else %}
-    <div class="col-4 mt-5">
-      <small class="text-muted">
-          There is no Category or Product! Firstly! You should add category
-          <a href="{% url 'add-category-warehouse' warehouse_slug %}">Add Category</a>
-      </small>
-  </div>
+    <div class="container">
+      <div class="col-4 mt-5">
+        <small class="text-muted">
+            There is no Category or Product! Firstly, you should add category
+            <a href="{% url 'add-category-warehouse' warehouse_slug %}">Add Category</a>
+        </small>
+    </div>
+    </div>
     {% endif %}
   </div>
 {% endblock %}

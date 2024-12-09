@@ -3,10 +3,14 @@
 {% block content %}
     <div class="container">
         <div class="row">
+            <div class="col d-flex mt-4">
+                <h1>Warehouse Page</h1>
+            </div>
             <div class="col d-flex justify-content-end mt-5">
                 <a href="{% url "add-warehouse" %}" class="btn btn-primary">Add Warehouse</a>
             </div>
         </div>
+        <hr size="6">
         <div class="row">
             {% if warehouselist|length > 0 %}
             {% for warehouse in warehouselist %}
@@ -15,11 +19,12 @@
                     <h5 class="card-header">{{warehouse.warehouse_name}}</h5>
                     <div class="card-body">
                       <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                      <p class="card-text">{{warehouse.address}}</p>
                       <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary">Products</a>
                       <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary">Add Categr</a>
                       <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary">Warehouse info</a>
                     </div>
+                    <h5 class="card-header"></h5>
                   </div>
             </div>
             {% endfor %}

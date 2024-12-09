@@ -5,7 +5,8 @@
         <div class="row">
             <form method='POST' class="col-sm-11 col-md-4 mx-auto mt-5">
                 {% csrf_token %}
-                <h1 class="fw-light">Are you sure you want to delele {{category.category_name}}</h1>
+                <h1 class="fw-light">Are you sure you want to delete {{category.category_name}} !</h1>
+                <h1 class="fw-light">All products in this category will be deleted!</h1>
                 <p class="fw-light">This cannot be undone</p>
                 <div>
                     <button class="btn btn-danger">Delete</button>
