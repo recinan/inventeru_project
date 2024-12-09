@@ -38,6 +38,7 @@ def add_category_warehouse(request, warehouse_slug):
         form = CategoryFormWarehouse(user = request.user,warehouse=warehouse)
 
     context = {
+        'warehouse':warehouse,
         'form' :form
     }
     return render(request,'category_man/add_category.html',context)

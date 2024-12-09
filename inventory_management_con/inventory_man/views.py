@@ -50,7 +50,8 @@ def list_item(request, warehouse_slug):
     return render(request,'category_man/list_category.html',context)
 
 def list_item_category(request, warehouse_slug, category_slug):
-    all_categories = Category.objects.filter(user = request.user)
+    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
+    all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
     category = get_object_or_404(Category, slug = category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
     context = {
@@ -97,7 +98,7 @@ def add_item_warehouse(request, warehouse_slug ,category_slug):
             item.category = category
             item.save()
             print(request.user)
-            return redirect(reverse_lazy('list-item',kwargs={'warehouse_slug':warehouse_slug}))
+            return redirect(reverse_lazy('list-item-category',kwargs={'warehouse_slug':warehouse_slug, 'category_slug':category_slug}))
     else:
         form = InventoryItemFormWarehouse(user=request.user,warehouse=warehouse,category=category)
 
