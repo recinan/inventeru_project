@@ -41,9 +41,9 @@
             <div class="col-6">
               <div class="widget-search">
                 <div class="site-search-area">
-                  <form method="GET" id="site-searchform" action="">
+                  <form method="GET" id="site-searchform" action="{% url 'search-product' warehouse_slug %}">
                     <div class="form-container"> 
-                      <input class="input-text form-control" name="search" placeholder="Search product keywords..." type="text">
+                      <input class="input-text form-control" name="searchProduct" placeholder="Search product keywords..." type="text">
                       <input id="searchsubmit" value="Search" type="submit">
                     </div>
                   </form>

@@ -39,11 +39,11 @@ def dashboard(request):
 
 def list_item(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
-    all_categories = Category.objects.filter(user = request.user, warehouse=warehouse)
+    category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
     context = {
         'warehouse_slug':warehouse_slug,
-        'categorylist':all_categories,
+        'categorylist':category_list,
         'all_items':inventory_items
     }
     return render(request,'category_man/list_category.html',context)
@@ -143,6 +143,17 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
 
     return render(request, 'inventory_man/item_form_warehouse.html',context)
 
+def search_product_bar(request,warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
+    category_list = Category.objects.filter(user=request.user, warehouse=warehouse)
+    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = request.GET['searchProduct'])
+    context = {
+        'warehouse_slug':warehouse_slug,
+        'categorylist':category_list,
+        'all_items':inventory_items
+    }
+    return render(request, 'category_man/list_category.html',context)
+
 @login_required(login_url='login')
 def delete_item(request, pk):
     item = get_object_or_404(InventoryItem, pk = pk)
@@ -152,6 +163,6 @@ def delete_item(request, pk):
     context = {
         'item':item
     }
-    return render(request, 'inventory_man/delete_item.html')
+    return render(request, 'inventory_man/delete_item.html', context)
 
 
