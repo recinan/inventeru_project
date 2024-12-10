@@ -88,7 +88,7 @@ def add_item_warehouse(request, warehouse_slug ,category_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category = get_object_or_404(Category, slug = category_slug, warehouse=warehouse)
     if request.method == 'POST':
-        form = InventoryItemFormWarehouse(request.POST, user=request.user, warehouse = warehouse, category = category)
+        form = InventoryItemFormWarehouse(request.POST, request.FILES ,user=request.user, warehouse = warehouse, category = category)
         if form.is_valid():
             print("Form geçerli", form.cleaned_data)
             #form.save(commit=False)

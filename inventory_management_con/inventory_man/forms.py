@@ -37,7 +37,7 @@ class InventoryItemFormWarehouse(forms.ModelForm):
     #warehouse = forms.ModelChoiceField(queryset=Warehouse.objects.all(), initial=0)
     class Meta:
         model = InventoryItem
-        fields = ['item_name', 'quantity','unit','price','currency','description']
+        fields = ['item_image','item_name', 'quantity','unit','price','currency','description']
     
     def __init__(self, *args,user=None,warehouse=None,category=None, **kwargs):
         user = kwargs.pop('user',None)

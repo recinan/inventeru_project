@@ -18,6 +18,7 @@ class InventoryItem(models.Model):
         ('USD','United States Dollars'),
         ('EUR','Euro')
     ]
+    item_image = models.ImageField(null=True,blank=True,upload_to='images/item_images/',default="images/item_images/default_image.jpg")
     item_name = models.CharField(max_length=200)
     quantity = models.IntegerField()
     unit = models.CharField(max_length=10,choices=UNIT_CHOICES,default='pcs')
