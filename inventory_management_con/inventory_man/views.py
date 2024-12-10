@@ -140,10 +140,11 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
         form = InventoryItemFormWarehouse(instance = item)
     
     context = {
+        'item':item,
         'form':form
     }
 
-    return render(request, 'inventory_man/item_form_warehouse.html',context)
+    return render(request, 'inventory_man/item_detail.html',context)
 
 def search_product_bar(request,warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
