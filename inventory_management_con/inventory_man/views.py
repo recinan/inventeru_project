@@ -198,7 +198,7 @@ def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
 
     #Create a text object
     textob = c.beginText()
-    textob.setTextOrigin(inch,2.5*inch)
+    textob.setTextOrigin(page_width/2 - 50,2.5*inch)
     textob.setFont("Helvetica",14)
 
     lines = [
@@ -215,7 +215,7 @@ def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
 
     if item.item_image:
         image_path = item.item_image.path 
-        x = page_width/2 - 50  # X-coordinate
+        x = page_width/2 - 60  # X-coordinate
         y = 25 # Y-coordinate
         width = 2 * inch  # Desired width
         height = 2 * inch  # Desired height
