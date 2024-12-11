@@ -43,6 +43,7 @@ def dashboard(request):
         'low_inventory_ids':low_inventory_ids
     })
 
+@login_required(login_url='login')
 def list_item(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
@@ -55,6 +56,7 @@ def list_item(request, warehouse_slug):
     }
     return render(request,'category_man/list_category.html',context)
 
+@login_required(login_url='login')
 def list_item_category(request, warehouse_slug, category_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
@@ -133,6 +135,7 @@ def edit_item(request, pk):
 
     return render(request, 'inventory_man/item_form.html',context)
 
+@login_required(login_url='login')
 def item_detail(request, warehouse_slug, category_slug, item_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category = get_object_or_404(Category, slug=category_slug)
@@ -155,6 +158,7 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
 
     return render(request, 'inventory_man/item_detail.html',context)
 
+@login_required(login_url='login')
 def search_product_bar(request,warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
     category_list = Category.objects.filter(user=request.user, warehouse=warehouse)
@@ -178,6 +182,7 @@ def delete_item(request, pk):
     }
     return render(request, 'inventory_man/delete_item.html', context)
 
+@login_required(login_url='login')
 def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
     category = get_object_or_404(Category, slug=category_slug)

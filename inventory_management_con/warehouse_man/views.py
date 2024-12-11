@@ -33,6 +33,7 @@ def add_warehouse(request):
     }
     return render(request, 'warehouse_man/add_warehouse.html',context)
 
+@login_required(login_url='login')
 def warehouse_detail(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
