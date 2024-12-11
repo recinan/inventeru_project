@@ -6,8 +6,14 @@ from django.contrib.auth.decorators import login_required
 from .forms import InventoryItemForm, InventoryItemFormWarehouse
 from inventory_management.settings import LOW_QUANTITY
 from django.contrib import messages
-from django.http import JsonResponse
 from warehouse_man.models import Warehouse
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import ImageReader
+from PIL import Image
 
 # Create your views here.
 
@@ -37,6 +43,7 @@ def dashboard(request):
         'low_inventory_ids':low_inventory_ids
     })
 
+@login_required(login_url='login')
 def list_item(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
@@ -49,6 +56,7 @@ def list_item(request, warehouse_slug):
     }
     return render(request,'category_man/list_category.html',context)
 
+@login_required(login_url='login')
 def list_item_category(request, warehouse_slug, category_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
@@ -88,7 +96,7 @@ def add_item_warehouse(request, warehouse_slug ,category_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category = get_object_or_404(Category, slug = category_slug, warehouse=warehouse)
     if request.method == 'POST':
-        form = InventoryItemFormWarehouse(request.POST, user=request.user, warehouse = warehouse, category = category)
+        form = InventoryItemFormWarehouse(request.POST, request.FILES ,user=request.user, warehouse = warehouse, category = category)
         if form.is_valid():
             print("Form geçerli", form.cleaned_data)
             #form.save(commit=False)
@@ -127,6 +135,7 @@ def edit_item(request, pk):
 
     return render(request, 'inventory_man/item_form.html',context)
 
+@login_required(login_url='login')
 def item_detail(request, warehouse_slug, category_slug, item_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category = get_object_or_404(Category, slug=category_slug)
@@ -140,11 +149,16 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
         form = InventoryItemFormWarehouse(instance = item)
     
     context = {
+        'warehouse_slug':warehouse_slug,
+        'category_slug':category_slug,
+        'item_slug':item_slug,
+        'item':item,
         'form':form
     }
 
-    return render(request, 'inventory_man/item_form_warehouse.html',context)
+    return render(request, 'inventory_man/item_detail.html',context)
 
+@login_required(login_url='login')
 def search_product_bar(request,warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
     category_list = Category.objects.filter(user=request.user, warehouse=warehouse)
@@ -168,4 +182,56 @@ def delete_item(request, pk):
     }
     return render(request, 'inventory_man/delete_item.html', context)
 
+@login_required(login_url='login')
+def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
+    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
+    category = get_object_or_404(Category, slug=category_slug)
+    item = get_object_or_404(InventoryItem, slug = item_slug, warehouse=warehouse,category=category)
 
+    # Create ByteStream Buffer
+    buf = io.BytesIO()
+    # Create a canvas
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+
+    # Page size (width, height)
+    page_width, page_height = letter
+
+    #Create a text object
+    textob = c.beginText()
+    textob.setTextOrigin(page_width/2 - 50,2.5*inch)
+    textob.setFont("Helvetica",14)
+
+    lines = [
+        f"Item Name: {item.item_name}",
+        f"Quantity: {item.quantity} {item.unit}",
+        f"Price: {item.price} {item.currency}",
+        f"Description: {item.description}",
+        f"Category: {item.category}",
+        f"Warehouse: {item.warehouse}"
+    ]
+
+    for line in lines:
+        textob.textLine(line)
+
+    if item.item_image:
+        image_path = item.item_image.path 
+        x = page_width/2 - 60  # X-coordinate
+        y = 25 # Y-coordinate
+        width = 2 * inch  # Desired width
+        height = 2 * inch  # Desired height
+        try:
+            with Image.open(image_path) as img:
+                img = img.transpose(Image.FLIP_TOP_BOTTOM)
+                img_buffer = io.BytesIO()
+                img.save(img_buffer,format="PNG")
+                img_buffer.seek(0)
+            c.drawImage(ImageReader(img_buffer),x,y,width,height)
+        except Exception as e:
+            print(f"Error adding image: {e}")
+    
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+    filename = f'{item.item_name}.pdf'
+    return FileResponse(buf, as_attachment=True, filename=filename)
