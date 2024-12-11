@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col d-flex mt-4">
-                <h1>Warehouse Page</h1>
+                <h1>Item Detail Page</h1>
             </div>
         </div>
         <hr size="6">
@@ -38,9 +38,17 @@
                     <div class="form-group">
                         {{ form.description|as_crispy_field }}
                     </div>
-                    <div class="mt-3">
-                        <button class="btn btn-primary">Add Item</button>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mt-3">
+                                <button class="btn btn-primary">Edit</button>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <a href="{% url 'item-detail-pdf' warehouse_slug category_slug item_slug%}" class="btn btn-outline-primary my-3 mx-4">Item Detail Pdf</a>
+                        </div>
                     </div>
+                    
                 </form>
             </div>
         </div>

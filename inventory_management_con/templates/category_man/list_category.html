@@ -102,9 +102,6 @@
                 <td>{{ item.category.category_name }}</td>
                 <td>{{ item.warehouse.warehouse_name }}</td>
                 <td>
-                  <a href="{% url 'edit-item' item.id %}" class="btn btn-outline-secondary">Edit</a>
-                </td>
-                <td>
                   <a href="{% url 'item-detail' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-success">Detail</a>
                 </td>
                 <td>

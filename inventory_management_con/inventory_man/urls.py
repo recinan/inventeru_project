@@ -11,5 +11,6 @@ urlpatterns = [
     path('item-detail/<slug:warehouse_slug>/<slug:category_slug>/<slug:item_slug>', views.item_detail, name='item-detail'),
     path('edit-item/<int:pk>', views.edit_item, name='edit-item'),
     path('search-product/<slug:warehouse_slug>',views.search_product_bar,name='search-product'),
+    path('item-detail-pdf/<slug:warehouse_slug>/<slug:category_slug>/<slug:item_slug>',views.item_detail_pdf,name='item-detail-pdf'),
     path('delete-item/<int:pk>', views.delete_item, name='delete-item')
 ]
