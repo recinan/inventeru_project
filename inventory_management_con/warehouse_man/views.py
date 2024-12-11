@@ -19,17 +19,17 @@ def list_warehouse(request):
 login_required(login_url='login')
 def add_warehouse(request):
     if request.method == 'POST':
-        form = WarehouseForm(request.POST, user=request.user)
-        if form.is_valid():
-            item = form.save(commit=False)
-            item.user = request.user
-            item.save()
+        warehouse_form= WarehouseForm(request.POST, user=request.user)
+        if warehouse_form.is_valid():
+            warehouse = warehouse_form.save(commit=False)
+            warehouse.user = request.user
+            warehouse.save()
             return redirect(reverse_lazy('list-warehouse'))
     else:
-        form = WarehouseForm(user=request.user)
+        warehouse_form= WarehouseForm(user=request.user)
 
     context = {
-        'form':form
+        'warehouse_form':warehouse_form
     }
     return render(request, 'warehouse_man/add_warehouse.html',context)
 

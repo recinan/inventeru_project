@@ -2,13 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 import uuid
-
+#from warehouse_man.models import WarehouseAdress
 
 # Create your models here.
 class Warehouse(models.Model):
     warehouse_name = models.CharField(max_length=100)
-    address = models.TextField(blank=True, null=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
+    neighborhood = models.CharField(max_length=100,blank=True,null=True)
+    street = models.CharField(max_length=150,blank=True,null=True)
+    district = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100,default='Türkiye')
     slug = models.SlugField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

@@ -13,7 +13,7 @@
         <div class="col-11 col-md-4 mx-auto mt-5">
             <form method="POST">
                 {% csrf_token %}
-                {{form|crispy}}
+                {{warehouse_form|crispy}}
                 <div class="mt-3">
                     <button class="btn btn-primary">Add Warehouse</button>
                 </div>

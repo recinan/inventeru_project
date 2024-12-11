@@ -19,7 +19,7 @@
                     <h5 class="card-header">{{warehouse.warehouse_name}}</h5>
                     <div class="card-body">
                       <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">{{warehouse.address}}</p>
+                      <p class="card-text">{{warehouse.neighborhood}} {{warehouse.street}} {{warehouse.district}}/{{warehouse.city}} {{warehouse.country}} {{warehouse.postal_code}}</p>
                       <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary">Products</a>
                       <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary">Add Categr</a>
                       <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary">Warehouse info</a>
