@@ -71,10 +71,14 @@ def warehouse_detail(request, warehouse_slug):
     
     return render(request, 'warehouse_man/warehouse-detail.html',context)
 
-def warehouse_detail_pdf(request, warehouse_slug):
+def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
+    # If category slug comes as parameter
+    if category_slug is not None:
+        category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
+        items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse,category=category)
 
     pdfmetrics.registerFont(TTFont("CourierNew","static/fonts/couriernew.ttf"))
 
@@ -107,7 +111,7 @@ def warehouse_detail_pdf(request, warehouse_slug):
     products.setFont("CourierNew",10)
     table_header = ("C".ljust(5) 
                     + "Name".ljust(15) 
-                    + "Qty".ljust(5) 
+                    + "Qty".ljust(10) 
                     + "Price".ljust(15) 
                     + "Description".ljust(20) 
                     + "Category".ljust(20))
@@ -118,7 +122,7 @@ def warehouse_detail_pdf(request, warehouse_slug):
     for item in items:
         line = (f"{str(i)}-".ljust(5)
         + f"{item.item_name}".ljust(15) 
-        + f"{item.quantity}".ljust(5)
+        + f"{item.quantity} {item.unit}".ljust(10)
         + f"{item.price} {item.currency}".ljust(15)
         + f"{item.description[:20]}".ljust(20) 
         + f"{item.category}".ljust(20) )
