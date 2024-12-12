@@ -10,6 +10,8 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 
 # Create your views here.
@@ -74,6 +76,8 @@ def warehouse_detail_pdf(request, warehouse_slug):
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
 
+    pdfmetrics.registerFont(TTFont("CourierNew","static/fonts/couriernew.ttf"))
+
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=letter,bottomup=0)
 
@@ -100,7 +104,7 @@ def warehouse_detail_pdf(request, warehouse_slug):
     #Products info text object
     products = c.beginText()
     products.setTextOrigin(80,inch)
-    products.setFont("Courier",10)
+    products.setFont("CourierNew",10)
     table_header = ("C".ljust(5) 
                     + "Name".ljust(15) 
                     + "Qty".ljust(5) 
