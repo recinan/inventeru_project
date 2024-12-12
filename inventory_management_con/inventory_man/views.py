@@ -69,6 +69,7 @@ def list_item_category(request, warehouse_slug, category_slug):
     }
     return render(request,'category_man/list_category.html',context)
 
+""
 @login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
