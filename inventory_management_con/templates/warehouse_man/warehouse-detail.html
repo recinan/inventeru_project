@@ -10,9 +10,9 @@
                     </div>
                     <div class="card-body">
                       <h5 class="card-title">{{warehouse.warehouse_name}}</h5>
-                      <p class="card-text">Address: {{warehouse.address}}</p>
+                      <p class="card-text">Address: {{warehouse.neighborhood}} {{warehouse.street}} {{warehouse.district}}/{{warehouse.city}} {{warehouse.country}} {{warehouse.postal_code}}</p>
                       <p class="card-text">Phone Number: {{warehouse.phone_number}}</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                      <a href="{% url 'edit-warehouse' warehouse.slug %}" class="btn btn-primary">Edit Warehouse</a>
                     </div>
                     <div class="card-footer text-body-secondary">
                     </div>
