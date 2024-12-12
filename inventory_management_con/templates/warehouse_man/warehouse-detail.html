@@ -13,6 +13,7 @@
                       <p class="card-text">Address: {{warehouse.neighborhood}} {{warehouse.street}} {{warehouse.district}}/{{warehouse.city}} {{warehouse.country}} {{warehouse.postal_code}}</p>
                       <p class="card-text">Phone Number: {{warehouse.phone_number}}</p>
                       <a href="{% url 'edit-warehouse' warehouse.slug %}" class="btn btn-primary">Edit Warehouse</a>
+                      <a href="{% url 'warehouse-detail-pdf' warehouse.slug %}" class="btn btn-primary">Warehouse Detail Pdf</a>
                     </div>
                     <div class="card-footer text-body-secondary">
                     </div>
