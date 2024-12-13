@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 -requirements.txt güncellenmeli , reportlab eklenmeli
 
@@ -9,8 +8,3 @@
 -go back butonları her zaman dashboard'a götürüyor , bir önceki sayfaya götürmesine rağmen .
 
 -eklenen resimlerin media/images/item_images a ekleniyor , bu database'de olmalı programda şişme oluşturabilir mi ? BLOB yöntemi kullanılabirir , chatgpt şuanki yöntemin değişmemesini öneriyor.
-=======
--Search Category keyword , eklenmiş bir depoda kategorileri ararken eğer ilk kez arama keywordunda hiçbir sonuç yoksa there is no catergory or product diyor depo için , halbuki kategori veya depo var ama aranan sonuç yok . Bu hata sadece ilk kez arama yapıldığında oluyor . 
-
--go back butonları her zaman dashboard'a götürüyor , bir önceki sayfaya götürmesine rağmen . 
->>>>>>> 58c8c11edf48a75a29ce7911693b8a7a8ac9fe47
