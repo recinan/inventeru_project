@@ -45,7 +45,11 @@
                 <a href="{% url 'list-item-category' category.warehouse.slug category.slug %}" class="btn btn-primary">Products</a>
                 <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-primary">Add Item</a>
                 <a href="{% url 'delete-category' category.slug %}" class="btn btn-outline-danger">Delete</a>
+                {% if category.slug %}
                 <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug category.slug %}" class="btn btn-outline-danger">pdf</a>
+                {% else %}
+                <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug%}" class="btn btn-outline-danger">pdf</a>
+                {% endif %}
               </div>
             </div>
         {% endfor %}
