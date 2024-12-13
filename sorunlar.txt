@@ -1,0 +1,3 @@
+-Search Category keyword , eklenmiş bir depoda kategorileri ararken eğer ilk kez arama keywordunda hiçbir sonuç yoksa there is no catergory or product diyor depo için , halbuki kategori veya depo var ama aranan sonuç yok . Bu hata sadece ilk kez arama yapıldığında oluyor . 
+
+-go back butonları her zaman dashboard'a götürüyor , bir önceki sayfaya götürmesine rağmen . 
