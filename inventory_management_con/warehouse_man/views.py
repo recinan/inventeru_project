@@ -75,7 +75,7 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
-    # If category slug comes as parameter
+    # If category slug comes as a parameter
     if category_slug is not None:
         category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
         items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse,category=category)
@@ -86,6 +86,7 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     c = canvas.Canvas(buf, pagesize=letter,bottomup=0)
 
     page_width, page_height = letter
+    line_height = 12
 
     c.setFont("Helvetica-Bold",14)
     c.drawString(80,30,f"{warehouse.warehouse_name}")
@@ -99,15 +100,16 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     warehouse_info_textob.textLine(f"Adress: {warehouse.neighborhood} {warehouse.street} {warehouse.district} / {warehouse.city} {warehouse.country} {warehouse.postal_code}")
     warehouse_info_textob.textLine("-----------------------------------------------------------------------------------------------------------------------------------------")
     warehouse_info_textob.textLine(f"Phone Number: {warehouse.phone_number}")
-    #warehouse_info_textob.textLine(f"Total Number of Categories: {categories.count()} - Total Number of Items: {items.count()}")
+    
     c.setLineWidth(1)
-    #c.line(50,100,page_width-50,100)
     c.drawText(warehouse_info_textob)
     
+    y_position = 65
+    x_position = 80
 
     #Products info text object
     products = c.beginText()
-    products.setTextOrigin(80,inch)
+    products.setTextOrigin(x_position,y_position)
     products.setFont("CourierNew",10)
     table_header = ("C".ljust(5) 
                     + "Name".ljust(15) 
@@ -116,25 +118,35 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
                     + "Description".ljust(20) 
                     + "Category".ljust(20))
     products.textLine(table_header)
+    y_position += line_height
     products.textLine("-"*80)
-    lines = []
+    y_position += line_height
     i = 1
     for item in items:
+
+        if y_position >= page_height - 30:
+            c.drawText(products)
+            c.showPage()
+            products = c.beginText()
+            y_position = 20
+            products.setTextOrigin(x_position,y_position)
+            products.setFont("CourierNew",10)
+            products.textLine(table_header)
+            y_position += line_height
+            products.textLine("-"*80)
+            y_position += line_height
+
         line = (f"{str(i)}-".ljust(5)
         + f"{item.item_name}".ljust(15) 
         + f"{item.quantity} {item.unit}".ljust(10)
         + f"{item.price} {item.currency}".ljust(15)
         + f"{item.description[:20]}".ljust(20) 
         + f"{item.category}".ljust(20) )
-        #lines.append(f"{i}- " + f"{item.item_name}".ljust(15) + f"{item.quantity}".ljust(5) + f"{item.description[:20]}".ljust(20) + f"{item.category}".ljust(20) + f"{item.warehouse}".ljust(15))
         products.textLine(line)
+        y_position += line_height
         i+=1
 
-    #for line in lines:
-     #   products.textLine(line)
-
     c.drawText(products)
-    c.showPage()
     c.save()
     buf.seek(0)
     filename = f'{warehouse.warehouse_name}.pdf'
