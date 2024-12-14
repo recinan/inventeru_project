@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from warehouse_man.models import Warehouse
 from inventory_man.models import InventoryItem
 import re
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -56,10 +57,15 @@ def list_categories(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET.get('searchCategory',''))
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
+    
+    p = Paginator(category_list,3)
+    page = request.GET.get('page')
+    categories = p.get_page(page)
+
     context = {
         'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
-        'categorylist':category_list,
+        'categorylist':categories,
         'all_items':inventory_items
     }
     return render(request, 'category_man/list_category.html', context)
