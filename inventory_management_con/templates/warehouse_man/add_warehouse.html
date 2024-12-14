@@ -1,7 +1,7 @@
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<a href="{% url 'dashboard' %}" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
+<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
 <div class="container">
     <div class="row">
         <div class="col d-flex mt-4">
@@ -22,6 +22,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 
 {% endblock content %}
 
