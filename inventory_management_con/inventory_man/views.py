@@ -145,7 +145,7 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
         form = InventoryItemFormWarehouse(request.POST, instance = item)
         if form.is_valid():
             form.save()
-            return redirect(reverse_lazy('list-item',kwargs={'category_slug':category_slug}))
+            return redirect(reverse_lazy('list-item-category',kwargs={'warehouse_slug':warehouse_slug,'category_slug':category_slug}))
     else:
         form = InventoryItemFormWarehouse(instance = item)
     
