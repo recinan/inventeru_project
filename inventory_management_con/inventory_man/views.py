@@ -15,6 +15,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.utils import ImageReader
 from PIL import Image
 import re
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -49,11 +50,20 @@ def list_item(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
+
+    p_item = Paginator(inventory_items,15)
+    page_item = request.GET.get('item_page')
+    items = p_item.get_page(page_item)
+
+    p_category = Paginator(category_list,4)
+    page_category = request.GET.get('category_page')
+    categories = p_category.get_page(page_category)
+
     context = {
         'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
-        'categorylist':category_list,
-        'all_items':inventory_items
+        'categorylist':categories,
+        'all_items':items
     }
     return render(request,'category_man/list_category.html',context)
 
@@ -63,10 +73,21 @@ def list_item_category(request, warehouse_slug, category_slug):
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
     category = get_object_or_404(Category, slug = category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
+    
+    p_item = Paginator(inventory_items,15)
+    page_item = request.GET.get('item_page')
+    items = p_item.get_page(page_item)
+
+    p_category = Paginator(all_categories,4)
+    page_category = request.GET.get('category_page')
+    categories = p_category.get_page(page_category)
+
+
     context = {
+        'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
-        'categorylist':all_categories,
-        'all_items':inventory_items
+        'categorylist':categories,
+        'all_items':items
     }
     return render(request,'category_man/list_category.html',context)
 
