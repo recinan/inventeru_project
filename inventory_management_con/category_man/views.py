@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from warehouse_man.models import Warehouse
 from inventory_man.models import InventoryItem
+import re
 
 # Create your views here.
 
@@ -74,7 +75,13 @@ def list_allcategories(request):
 @login_required(login_url='login')
 def search_category_bar(request,warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
-    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET['searchCategory'])
+
+    search_filter = request.GET.get('searchCategory', '').strip()
+
+    if not re.match(r'^[\w\s-]*$', search_filter):
+        search_filter = ''
+
+    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = search_filter)
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
     context = {
         'warehouse':warehouse,
