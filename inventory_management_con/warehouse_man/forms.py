@@ -6,7 +6,7 @@ class WarehouseForm(forms.ModelForm):
     warehouse_name = forms.CharField()
     class Meta:
         model = Warehouse
-        fields = ['warehouse_name','address','phone_number']
+        fields = ['warehouse_name','phone_number','neighborhood','street','district','city','postal_code','country']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user',None)
