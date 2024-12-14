@@ -69,6 +69,7 @@ def list_item_category(request, warehouse_slug, category_slug):
     }
     return render(request,'category_man/list_category.html',context)
 
+""
 @login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
@@ -196,18 +197,25 @@ def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
     # Page size (width, height)
     page_width, page_height = letter
 
+    c.setFont("Helvetica-Bold",20)
+    c.drawString(200,60,"Inventory Manager")
+    c.setLineWidth(5)
+    c.line(50,100,page_width-50,100)
+
     #Create a text object
     textob = c.beginText()
-    textob.setTextOrigin(page_width/2 - 50,2.5*inch)
+    textob.setTextOrigin(80,5*inch)
     textob.setFont("Helvetica",14)
-
+    
     lines = [
         f"Item Name: {item.item_name}",
         f"Quantity: {item.quantity} {item.unit}",
         f"Price: {item.price} {item.currency}",
         f"Description: {item.description}",
         f"Category: {item.category}",
-        f"Warehouse: {item.warehouse}"
+        f"Warehouse: {item.warehouse}",
+        f"Adress: {item.warehouse.neighborhood} {item.warehouse.street}",
+        f"        {item.warehouse.district} / {item.warehouse.city} {item.warehouse.postal_code}"
     ]
 
     for line in lines:
@@ -216,7 +224,7 @@ def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
     if item.item_image:
         image_path = item.item_image.path 
         x = page_width/2 - 60  # X-coordinate
-        y = 25 # Y-coordinate
+        y = 120 # Y-coordinate
         width = 2 * inch  # Desired width
         height = 2 * inch  # Desired height
         try:

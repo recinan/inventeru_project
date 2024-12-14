@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from inventory_man.models import InventoryItem
 from warehouse_man.models import Warehouse
 from category_man.models import Category
+from django.core.exceptions import ValidationError
 
 class InventoryItemForm(forms.ModelForm):
     #category = forms.ModelChoiceField(queryset=Category.objects.filter(), initial=0)
@@ -38,6 +39,18 @@ class InventoryItemFormWarehouse(forms.ModelForm):
     class Meta:
         model = InventoryItem
         fields = ['item_image','item_name', 'quantity','unit','price','currency','description']
+
+    def clean_price(self):
+        price = self.cleaned_data.get('price')
+        if (price < 0):
+            raise ValidationError("Price cannot be less than zero !")
+        return price
+    
+    def clean_quantity(self):
+        quantity = self.cleaned_data.get('quantity')
+        if(quantity<0):
+            raise ValidationError("Quantity cannot be less than zero !")
+        return quantity
     
     def __init__(self, *args,user=None,warehouse=None,category=None, **kwargs):
         user = kwargs.pop('user',None)

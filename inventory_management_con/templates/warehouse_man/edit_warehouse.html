@@ -1,7 +1,7 @@
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
+<a href="{% url 'dashboard' %}" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
 <div class="container">
     <div class="row">
         <div class="col d-flex mt-4">
@@ -41,19 +41,13 @@
                     {{ warehouse_form.country|as_crispy_field }}
                 </div>
                 <div class="mt-3">
-                    <button class="btn btn-primary">Add Warehouse</button>
+                    <button class="btn btn-primary">Edit Warehouse</button>
                 </div>
             </form>
             
         </div>
     </div>
 </div>
-
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
 
 {% endblock content %}
 
