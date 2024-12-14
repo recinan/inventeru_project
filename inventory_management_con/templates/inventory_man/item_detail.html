@@ -9,7 +9,7 @@
             </div>
         </div>
         <hr size="6">
-        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
+        <button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
         <div class="row">
             <div class="col-11 col-md-4 mx-auto mt-5">
                 <h1>Inventory Item</h1>
@@ -53,5 +53,11 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 {% endblock content %}
 
