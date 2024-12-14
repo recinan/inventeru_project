@@ -14,6 +14,7 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.utils import ImageReader
 from PIL import Image
+import re
 
 # Create your views here.
 
@@ -145,7 +146,7 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
         form = InventoryItemFormWarehouse(request.POST, instance = item)
         if form.is_valid():
             form.save()
-            return redirect(reverse_lazy('list-item',kwargs={'category_slug':category_slug}))
+            return redirect(reverse_lazy('list-item-category',kwargs={'warehouse_slug':warehouse_slug,'category_slug':category_slug}))
     else:
         form = InventoryItemFormWarehouse(instance = item)
     
@@ -162,8 +163,14 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
 @login_required(login_url='login')
 def search_product_bar(request,warehouse_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
+
+    search_filter = request.GET.get('searchProduct', '').strip()
+
+    if not re.match(r'^[\w\s-]*$', search_filter):
+        search_filter = ''
+
     category_list = Category.objects.filter(user=request.user, warehouse=warehouse)
-    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = request.GET['searchProduct'])
+    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = search_filter)
     context = {
         'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
