@@ -4,6 +4,7 @@ from warehouse_man.models import Warehouse
 from category_man.models import Category
 from django.utils.text import slugify
 import uuid
+from django.conf import settings
 # Create your models here.
 
 class InventoryItem(models.Model):
@@ -29,7 +30,7 @@ class InventoryItem(models.Model):
     warehouse = models.ForeignKey('warehouse_man.Warehouse', on_delete=models.SET_NULL, blank=True,null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Inventory Items'
