@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,7 +44,8 @@ INSTALLED_APPS = [
     "warehouse_man.apps.WarehouseManConfig",
     "category_man.apps.CategoryManConfig",
     "crispy_forms",
-    "crispy_bootstrap5"
+    "crispy_bootstrap5",
+    "django_recaptcha"
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -134,6 +136,12 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 14400
+
+AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
+
+RECAPTCHA_PUBLIC_KEY = config("RECAPTCHA_PUBLIC_KEY", cast=str)
+RECAPTCHA_PRIVATE_KEY = config("RECAPTCHA_PRIVATE_KEY", cast=str)
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
