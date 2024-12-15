@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
-from accounts.forms import UserRegisterForm, UserLoginForm
+from accounts.forms import UserRegisterForm, UserLoginForm, UserUpdateForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from .decorators import user_not_authenticated
@@ -56,6 +57,26 @@ def login(request):
     return render(request, 'accounts/login.html', {
         'form':form
     })
+
+def profile_update(request,username):
+    if request.method == "POST":
+        user = request.user
+        form = UserUpdateForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            user_form = form.save()
+            messages.success(request, f"{user_form.username}, Your profile has been updated!")
+            return redirect('profile-update', user_form.username)
+
+        for error in list(form.errors.values()):
+            messages.error(request, error)
+
+    user = get_user_model().objects.filter(username=username).first()
+    if user:
+        form = UserUpdateForm(instance=user)
+
+        return render(request, 'accounts/profile.html',{'form':form})
+
+    return redirect('index')
 
 def logout(request):
     auth_logout(request)

@@ -37,3 +37,11 @@ class UserLoginForm(AuthenticationForm):
 
     captcha = ReCaptchaField(widget = ReCaptchaV2Checkbox())
 
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+    phone_number =forms.CharField()
+
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name','last_name','email','phone_number']
+

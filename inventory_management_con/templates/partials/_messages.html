@@ -23,3 +23,13 @@
         {% endif %}
     {% endfor %}
 {% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.alert .close').forEach(function (closeButton) {
+            closeButton.addEventListener('click', function () {
+                this.parentElement.style.display = 'none';
+            });
+        });
+    });
+</script>
