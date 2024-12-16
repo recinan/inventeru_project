@@ -2,20 +2,21 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 import uuid
+from django.conf import settings
 #from warehouse_man.models import WarehouseAdress
 
 # Create your models here.
 class Warehouse(models.Model):
     warehouse_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
-    neighborhood = models.CharField(max_length=100,blank=True,null=True)
-    street = models.CharField(max_length=150,blank=True,null=True)
+    neighborhood = models.CharField(max_length=100,blank=True,default='')
+    street = models.CharField(max_length=150,blank=True,default='')
     district = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100,default='Türkiye')
     slug = models.SlugField(blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural= "Warehouses"

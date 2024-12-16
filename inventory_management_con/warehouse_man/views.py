@@ -5,6 +5,7 @@ from .forms import WarehouseForm
 from .models import Warehouse
 from inventory_man.models import InventoryItem
 from category_man.models import Category
+from django.contrib import messages
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
@@ -12,6 +13,10 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+import folium
+import googlemaps
+from decouple import config
+
 
 
 # Create your views here.
@@ -58,12 +63,48 @@ def edit_warehouse(request,warehouse_slug):
     }
     return render(request,'warehouse_man/edit_warehouse.html',context)
 
+def warehouse_location(address):
+    google_api_key = config("GOOGLE_MAPS_API")
+    gmaps = googlemaps.Client(key=google_api_key)
+    geocode_result = gmaps.geocode(address)
+    print(geocode_result)
+
+    if geocode_result:
+        lat = geocode_result[0]['geometry']['location']['lat']
+        lng = geocode_result[0]['geometry']['location']['lng']
+        country = geocode_result[0].get('formatted_address', "Unknown Location")
+    else:
+        lat, lng, country = 0, 0, "Unknown Location"
+
+    m = folium.Map(location=[lat, lng], zoom_start=15)
+    folium.Marker([lat, lng], tooltip='Click for more', popup=country).add_to(m)
+    m = m._repr_html_()
+    return m
+    
 @login_required(login_url='login')
 def warehouse_detail(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
+    
+    address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
+    m = warehouse_location(address=address)
+    if request.method == "POST":
+        warehouse = warehouse
+        form = WarehouseForm(request.POST, instance = warehouse)
+        if form.is_valid():
+            warehouse_form = form.save()
+            messages.success(request, f"Warehouse has been updated")
+            return redirect('warehouse-detail',warehouse_slug)
+        for error in list(form.errors.values()):
+            messages.error(request, error)
+        
+    if warehouse:
+        form = WarehouseForm(instance=warehouse)
+    
     context = {
+        'map':m,
+        'warehouse_form':form,
         'warehouse':warehouse,
         'categories':categories,
         'items':items
