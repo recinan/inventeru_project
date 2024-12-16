@@ -94,6 +94,8 @@ def warehouse_detail(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
+    inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 )
+    print(type(items))
     
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
@@ -101,7 +103,7 @@ def warehouse_detail(request, warehouse_slug):
         warehouse = warehouse
         form = WarehouseForm(request.POST, instance = warehouse)
         if form.is_valid():
-            warehouse_form = form.save()
+            form.save()
             messages.success(request, f"Warehouse has been updated")
             return redirect('warehouse-detail',warehouse_slug)
         for error in list(form.errors.values()):
@@ -115,7 +117,8 @@ def warehouse_detail(request, warehouse_slug):
         'warehouse_form':form,
         'warehouse':warehouse,
         'categories':categories,
-        'items':items
+        'items':items,
+        'less_items': inventory_items_less_than_five
     }
     
     return render(request, 'warehouse_man/warehouse-detail.html',context)
@@ -200,3 +203,5 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     buf.seek(0)
     filename = f'{warehouse.warehouse_name}.pdf'
     return FileResponse(buf, as_attachment=True, filename=filename)
+
+
