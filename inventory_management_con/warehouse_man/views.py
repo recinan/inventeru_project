@@ -64,10 +64,18 @@ def edit_warehouse(request,warehouse_slug):
     return render(request,'warehouse_man/edit_warehouse.html',context)
 
 def warehouse_location(address):
+    
     google_api_key = config("GOOGLE_MAPS_API")
+
+    if google_api_key == "dummy_api_key":
+        # Return mock response
+        return {"address": address}
+    
     gmaps = googlemaps.Client(key=google_api_key)
     geocode_result = gmaps.geocode(address)
     print(geocode_result)
+
+    
 
     if geocode_result:
         lat = geocode_result[0]['geometry']['location']['lat']
