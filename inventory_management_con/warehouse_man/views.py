@@ -86,6 +86,7 @@ def warehouse_detail(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
+    print(type(items))
     
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
@@ -93,7 +94,7 @@ def warehouse_detail(request, warehouse_slug):
         warehouse = warehouse
         form = WarehouseForm(request.POST, instance = warehouse)
         if form.is_valid():
-            warehouse_form = form.save()
+            form.save()
             messages.success(request, f"Warehouse has been updated")
             return redirect('warehouse-detail',warehouse_slug)
         for error in list(form.errors.values()):
