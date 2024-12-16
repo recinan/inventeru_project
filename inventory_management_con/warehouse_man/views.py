@@ -5,6 +5,7 @@ from .forms import WarehouseForm
 from .models import Warehouse
 from inventory_man.models import InventoryItem
 from category_man.models import Category
+from django.contrib import messages
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
@@ -12,6 +13,7 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+
 
 
 # Create your views here.
@@ -63,7 +65,22 @@ def warehouse_detail(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
+    
+    if request.method == "POST":
+        warehouse = warehouse
+        form = WarehouseForm(request.POST, instance = warehouse)
+        if form.is_valid():
+            warehouse_form = form.save()
+            messages.success(request, f"Warehouse has been updated")
+            return redirect('warehouse-detail',warehouse_slug)
+        for error in list(form.errors.values()):
+            messages.error(request, error)
+        
+    if warehouse:
+        form = WarehouseForm(instance=warehouse)
+    
     context = {
+        'warehouse_form':form,
         'warehouse':warehouse,
         'categories':categories,
         'items':items
