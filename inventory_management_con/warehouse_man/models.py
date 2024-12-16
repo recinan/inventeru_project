@@ -9,8 +9,8 @@ from django.conf import settings
 class Warehouse(models.Model):
     warehouse_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
-    neighborhood = models.CharField(max_length=100,blank=True,null=True)
-    street = models.CharField(max_length=150,blank=True,null=True)
+    neighborhood = models.CharField(max_length=100,blank=True,default='')
+    street = models.CharField(max_length=150,blank=True,default='')
     district = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=100)
     city = models.CharField(max_length=100)

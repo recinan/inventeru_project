@@ -5,7 +5,7 @@
 <a onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
 
     <div class="container text-center">
-        <div class="row mt-5">
+        <div class="row mt-5 mb-5">
             <div class="col-6">
               <div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial-style" style="min-height: 65vh;">
                 <legend class="border-bottom mb-4">Warehouse Information</legend>
@@ -53,7 +53,6 @@
                             {{warehouse_form.country|as_crispy_field}}
                           </div>
                       </div>
-                        <a href="#">Change Password</a>
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Update</button>
@@ -63,7 +62,9 @@
               </div>
             </div>
             <div class="col-6">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2995.8585466605787!2d35.52166587563522!3d38.70810355785175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x152b128772a0703f%3A0xac1161778fc5a4f3!2sErciyes%20%C3%9Cniversitesi%20M%C3%BChendislik%20Fak%C3%BCltesi!5e1!3m2!1str!2str!4v1733592512061!5m2!1str!2str" width="600" height="450" style="border:0; border: 2px solid #000; border-radius: 10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div style="width: 600px; height: 365px; border: 2px solid #000; border-radius: 10px;">
+                    {{ map|safe }}
+                </div>
             </div>
         </div>
     </div>
