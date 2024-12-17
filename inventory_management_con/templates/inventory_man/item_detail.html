@@ -2,19 +2,22 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+
+<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
+
 <div class="container text-center">
     <div class="row mt-5 mb-5">
-        <div class="col-6">
-          <div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial-style" style="min-height: 65vh;">
+        <div class="col-lg-6 col-md-8 col-12">
+          <div class="content-section tutorial-style" style="min-height: 65vh;">
             <legend class="border-bottom mb-4">Item Information</legend>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="media">
-                    <div class="media-body">
-                        <img src="{{item.item_image.url}}" style="max-width: 150px;" alt="">
+                    <div class="media-body text-left">
+                        <img src="{{item.item_image.url}}" class="img-fluid" alt="" style="max-width: 150px;">
                         <p class="text-secondary">Name: {{form.instance.item_name}}</p>
                         <p class="text-secondary">Qty: {{form.instance.quantity}} {{form.instance.unit}} - Price: {{form.instance.price}} {{form.instance.currency}}</p>
-                        <p class="text-secondary">Description {{form.instance.description}}</p>
+                        <p class="text-secondary">Description: {{form.instance.description}}</p>
                         <p class="text-secondary">Category: {{item.category}} - Warehouse: {{item.warehouse}}</p>
                     </div>
                 </div>
@@ -27,25 +30,24 @@
                         {{ form.item_name|as_crispy_field }}
                     </div>
                     <div class="form-group row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-12">
                             {{ form.quantity|as_crispy_field }}
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-12">
                             {{ form.unit|as_crispy_field }}
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-12">
                             {{ form.price|as_crispy_field }}
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-12">
                             {{ form.currency|as_crispy_field }}
                         </div>
                     </div>
                     <div class="form-group">
                         {{ form.description|as_crispy_field }}
                     </div>
-                  
                 </fieldset>
                 
                 <div class="form-group">
@@ -58,10 +60,4 @@
     </div>
 </div>
     
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
 {% endblock content %}
-

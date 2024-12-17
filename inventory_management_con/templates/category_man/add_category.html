@@ -1,9 +1,10 @@
+
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="container">
-        <button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
-    <div class="row">
+<div class="container d-flex justify-content-start align-items-start">
+    <button onclick="goBack()" class="btn btn-outline-primary my-3">Go Back</button>
+</div>
         <div class="col mt-5">
           <h1>{{warehouse.warehouse_name}}</h1>
         </div>
