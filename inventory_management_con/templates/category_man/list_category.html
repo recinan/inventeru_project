@@ -1,48 +1,42 @@
 {% extends 'partials/_base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
 <div class="container">
-  <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12 text-center mt-5">
-            <h1>{{ warehouse.warehouse_name }}</h1>
+    <div class="row">
+        <div class="col mt-5">
+          <h1>{{warehouse.warehouse_name}}</h1>
         </div>
     </div>
-</div>
     <hr size="6">
-
     <!--
     <div class="row">
       <div class="col d-flex justify-content-end">
         <a href="{% url 'add-category-warehouse' warehouse_slug %}" class="btn btn-primary">Add Category</a>
       </div>
     </div>-->
-
     {% if categorylist|length > 0 %}
     <div class="row">
       <div class="col-3">
         <div class="container">
-          <div class="col-12 col-md-8"> <!-- Genişliği artırdık -->
+          <div class="row">
             <div class="widget-search">
-                <div class="site-search-area">
-                    <form method="GET" id="site-searchform" action="{% url 'search-category' warehouse_slug %}">
-                        <div class="form-container">
-                            <input class="input-text form-control" name="searchCategory" placeholder="Search category keywords..." type="text">
-                            <input id="searchsubmit" value="Search" type="submit" class="btn btn-primary padding padding">
-                        </div>
-                    </form>
-                </div>
+              <div class="site-search-area">
+                <form method="GET" id="site-searchform" action="{% url 'search-category' warehouse_slug %}">
+                  <div class="form-container">
+                    <input class="input-text form-control" name="searchCategory" placeholder="Search category keywords..." type="text">
+                    <input id="searchsubmit" value="Search" type="submit">
+                  </div>
+                </form>
+              </div>
             </div>
-        </div>
-</div>
-        <hr size="6" class="mt-3">
-        <div class="col text-center">
-          <div class="mx-auto">
-              <a href="{% url 'add-category-warehouse' warehouse_slug %}" class="btn btn-primary">Add Category</a>
           </div>
-      </div>
-      
+        </div>
+        <hr size="6" class="mt-3">
+        <div class="col">
+          <div class="mx-auto">
+            <a href="{% url 'add-category-warehouse' warehouse_slug %}" class="btn btn-primary">Add Category</a>
+          </div>
+        </div>
         {% for category in categorylist %}
             <div class="card text-center mt-3">
               <div class="card-body ">
@@ -74,91 +68,111 @@
         {% endfor %}
         <!--Pagination for categories-->
         <div class="container mt-3">
-          <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-center">
-                  <!-- First and Previous Page -->
-                  {% if categorylist.has_previous %}
-                      <li class="page-item">
-                          <a class="page-link" href="?category_page=1" aria-label="First">
-                              <span aria-hidden="true">&laquo; First</span>
-                          </a>
-                      </li>
-                      <li class="page-item">
-                          <a class="page-link" href="?category_page={{ categorylist.previous_page_number }}" aria-label="Previous">
-                              <span aria-hidden="true">&laquo;</span>
-                          </a>
-                      </li>
-                  {% else %}
-                      <li class="page-item disabled">
-                          <a class="page-link" aria-disabled="true" aria-label="First">
-                              <span aria-hidden="true">&laquo; First</span>
-                          </a>
-                      </li>
-                      <li class="page-item disabled">
-                          <a class="page-link" aria-disabled="true" aria-label="Previous">
-                              <span aria-hidden="true">&laquo;</span>
-                          </a>
-                      </li>
-                  {% endif %}
-      
-                  <!-- Page Numbers -->
-                  <li class="page-item active" aria-current="page">
-                      <a class="page-link">{{ categorylist.number }}</a>
-                  </li>
-      
-                  <!-- Next and Last Page -->
-                  {% if categorylist.has_next %}
-                      <li class="page-item">
-                          <a class="page-link" href="?category_page={{ categorylist.next_page_number }}" aria-label="Next">
-                              <span aria-hidden="true">&raquo;</span>
-                          </a>
-                      </li>
-                      <li class="page-item">
-                          <a class="page-link" href="?category_page={{ categorylist.paginator.num_pages }}" aria-label="Last">
-                              <span aria-hidden="true">Last &raquo;</span>
-                          </a>
-                      </li>
-                  {% else %}
-                      <li class="page-item disabled">
-                          <a class="page-link" aria-disabled="true" aria-label="Next">
-                              <span aria-hidden="true">&raquo;</span>
-                          </a>
-                      </li>
-                      <li class="page-item disabled">
-                          <a class="page-link" aria-disabled="true" aria-label="Last">
-                              <span aria-hidden="true">Last &raquo;</span>
-                          </a>
-                      </li>
-                  {% endif %}
-              </ul>
+          <nav aria-label="Page navigation example mt-3">
+            <ul class="pagination justify-content-center">
+              <!-- Önceki Sayfa -->
+              {% if categorylist.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?category_page=1" aria-label="First">
+                    <span aria-hidden="true">&laquo; First</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?category_page={{ categorylist.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" aria-disabled="true" aria-label="First">
+                    <span aria-hidden="true">&laquo; First</span>
+                  </a>
+                </li>
+                <li class="page-item disabled">
+                  <a class="page-link" aria-disabled="true" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+          
+              <!-- Sayfa Numaraları -->
+              <li class="page-item active" aria-current="page">
+                <a class="page-link">{{ categorylist.number }}</a>
+              </li>
+          
+              <!-- Sonraki Sayfa -->
+              {% if categorylist.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?category_page={{ categorylist.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?category_page={{ categorylist.paginator.num_pages }}" aria-label="Last">
+                    <span aria-hidden="true">Last &raquo;</span>
+                  </a>
+                </li>
+              {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" aria-disabled="true" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+                <li class="page-item disabled">
+                  <a class="page-link" aria-disabled="true" aria-label="Last">
+                    <span aria-hidden="true">Last &raquo;</span>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
           </nav>
-      </div>
-      
+        </div>
       </div>
       <div class="col-9">
         <div class="container">
           <div class="row">
-              <div class="col-12 col-md-8">
-                  <div class="widget-search">
-                      <div class="site-search-area">
-                          <form method="GET" id="site-searchform" action="{% url 'search-product' warehouse_slug %}">
-                              <div class="form-container">
-                                  <input class="input-text form-control" name="searchProduct" placeholder="Search product keywords..." type="text">
-                                  <input id="searchsubmit" value="Search" type="submit" class="btn btn-primary padding padding">
-                              </div>
-                          </form>
-                      </div>
-                  </div>
+            <div class="col-6">
+              <div class="widget-search">
+                <div class="site-search-area">
+                  <form method="GET" id="site-searchform" action="{% url 'search-product' warehouse_slug %}">
+                    <div class="form-container"> 
+                      <input class="input-text form-control" name="searchProduct" placeholder="Search product keywords..." type="text">
+                      <input id="searchsubmit" value="Search" type="submit">
+                    </div>
+                  </form>
+                </div>
               </div>
+            </div>
           </div>
-      </div>
-      
+        </div>
         <hr size="6" class="mt-3">
-        <div class="table-responsive">
-          <table class="table table-hover table-striped">
-            <thead>
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Price</th>
+              <th scope="col">Description</th>
+              <th scope="col">Category</th>
+              <th scope="col">Warehouse</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if all_items|length == 0 %}
               <tr>
+                <th scope="row">-</th>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td></td>
+              </tr>
+            {% endif %}
 
+            {% for item in all_items %}
+              <tr>
                 <th scope="row">{{ item.id }}</th>
                 <td>{{ item.item_name }}</td>
                 <td>{{ item.quantity }} {{ item.unit }}</td>
@@ -181,104 +195,73 @@
                   </div>
                 </td>
               </tr>
-            </thead>
-            <tbody>
-              {% if all_items|length == 0 %}
-                <tr>
-                  <td colspan="8" class="text-center text-muted">No items found.</td>
-                </tr>
-              {% else %}
-                {% for item in all_items %}
-                  <tr>
-                    <th scope="row" class="text-right">{{ item.id }}</th>
-                    <td>{{ item.item_name }}</td>
-                    <td class="text-right">{{ item.quantity }} {{ item.unit }}</td>
-                    <td class="text-right">{{ item.price }} {{ item.currency }}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.category.category_name }}</td>
-                    <td>{{ item.warehouse.warehouse_name }}</td>
-                    <td>
-                      <div class="btn-group" role="group">
-                        <a href="{% url 'item-detail' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-success btn-sm">Details</a>
-                        <a href="{% url 'delete-item' item.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
-                      </div>
-                    </td>
-                  </tr>
-                {% endfor %}
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
-        
+            {% endfor %}
+          </tbody>
+        </table>
         <!--Pagination for items-->
-        <!-- Pagination for categories -->
-<nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-      <!-- First and Previous Page -->
-      {% if categorylist.has_previous %}
-          <li class="page-item">
-              <a class="page-link" href="?category_page=1" aria-label="First">
-                  <span aria-hidden="true">&laquo;&laquo; First</span>
-              </a>
-          </li>
-          <li class="page-item">
-              <a class="page-link" href="?category_page={{ categorylist.previous_page_number }}" aria-label="Previous">
-                  <span aria-hidden="true">&laquo; Prev</span>
-              </a>
-          </li>
-      {% else %}
-          <li class="page-item disabled">
-              <a class="page-link" aria-disabled="true" aria-label="First">
-                  <span aria-hidden="true">&laquo;&laquo; First</span>
-              </a>
-          </li>
-          <li class="page-item disabled">
-              <a class="page-link" aria-disabled="true" aria-label="Previous">
-                  <span aria-hidden="true">&laquo; Prev</span>
-              </a>
-          </li>
-      {% endif %}
-
-      <!-- Page Numbers -->
-      {% for page_num in categorylist.paginator.page_range %}
-          {% if page_num == categorylist.number %}
-              <li class="page-item active">
-                  <a class="page-link">{{ page_num }}</a>
-              </li>
-          {% else %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            {% if all_items.has_previous %}
               <li class="page-item">
-                  <a class="page-link" href="?category_page={{ page_num }}">{{ page_num }}</a>
+                <a class="page-link" href="?item_page=1" aria-label="First">
+                  <span aria-hidden="true">&laquo; First</span>
+                </a>
               </li>
-          {% endif %}
-      {% endfor %}
-
-      <!-- Next and Last Page -->
-      {% if categorylist.has_next %}
-          <li class="page-item">
-              <a class="page-link" href="?category_page={{ categorylist.next_page_number }}" aria-label="Next">
-                  <span aria-hidden="true">Next &raquo;</span>
-              </a>
-          </li>
-          <li class="page-item">
-              <a class="page-link" href="?category_page={{ categorylist.paginator.num_pages }}" aria-label="Last">
-                  <span aria-hidden="true">Last &raquo;&raquo;</span>
-              </a>
-          </li>
-      {% else %}
-          <li class="page-item disabled">
-              <a class="page-link" aria-disabled="true" aria-label="Next">
-                  <span aria-hidden="true">Next &raquo;</span>
-              </a>
-          </li>
-          <li class="page-item disabled">
-              <a class="page-link" aria-disabled="true" aria-label="Last">
-                  <span aria-hidden="true">Last &raquo;&raquo;</span>
-              </a>
-          </li>
-      {% endif %}
-  </ul>
-</nav>
-
+              <li class="page-item">
+                <a class="page-link" href="?item_page={{ all_items.previous_page_number }}" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" aria-disabled="true" aria-label="First">
+                  <span aria-hidden="true">&laquo; First</span>
+                </a>
+              </li>
+              <li class="page-item disabled">
+                <a class="page-link" aria-disabled="true" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+            {% endif %}
+        
+            {% for page_num in all_items.paginator.page_range %}
+              {% if page_num == all_items.number %}
+                <li class="page-item active">
+                  <a class="page-link">{{ page_num }}</a>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?item_page={{ page_num }}">{{ page_num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+        
+            {% if all_items.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?item_page={{ all_items.next_page_number }}" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?item_page={{ all_items.paginator.num_pages }}" aria-label="Last">
+                  <span aria-hidden="true">Last &raquo;</span>
+                </a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" aria-disabled="true" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              <li class="page-item disabled">
+                <a class="page-link" aria-disabled="true" aria-label="Last">
+                  <span aria-hidden="true">Last &raquo;</span>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>        
       </div>
     </div>
     {% else %}
