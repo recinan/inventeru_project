@@ -142,6 +142,7 @@ AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
 RECAPTCHA_PUBLIC_KEY = config("RECAPTCHA_PUBLIC_KEY", cast=str)
 RECAPTCHA_PRIVATE_KEY = config("RECAPTCHA_PRIVATE_KEY", cast=str)
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error'] 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
