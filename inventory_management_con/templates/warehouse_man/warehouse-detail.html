@@ -4,10 +4,18 @@
 
 <a onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
 
-    <div class="container text-center">
-        <div class="row mt-5 mb-5">
-            <div class="col-6">
-              <div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial-style" style="min-height: 65vh;">
+<div class="container text-center">
+    <div class="row mt-5 mb-5">
+        <!-- Map Column (will be first on mobile) -->
+        <div class="col-12 col-md-6 order-md-1">
+            <div class="map-container">
+                {{ map|safe }}
+            </div>
+        </div>
+
+        <!-- Warehouse Information Column -->
+        <div class="col-12 col-md-6 order-md-0">
+            <div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial-style" style="min-height: 65vh;">
                 <legend class="border-bottom mb-4">Warehouse Information</legend>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -41,53 +49,45 @@
                     <fieldset class="form-group">
                         <legend class="border-bottom mb-4">Edit Warehouse</legend>
                         <div class="form-group">
-                          {{ warehouse_form.warehouse_name|as_crispy_field }}
-                      </div>
-                      <div class="form-group">
-                          {{ warehouse_form.phone_number|as_crispy_field }}
-                      </div>
-                      <hr>
+                            {{ warehouse_form.warehouse_name|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ warehouse_form.phone_number|as_crispy_field }}
+                        </div>
+                        <hr>
                         <h5>Warehouse Address</h5>
-                      <hr>
-                      <div class="form-group">
-                          {{ warehouse_form.neighborhood|as_crispy_field }}
-                      </div>
-                      <div class="form-group">
-                          {{ warehouse_form.street|as_crispy_field }}
-                      </div>
-                      <div class="form-group row">
-                          <div class="col-6">
-                              {{ warehouse_form.district|as_crispy_field }}
-                          </div>
-                          <div class="col-6">
-                              {{ warehouse_form.city|as_crispy_field }}
-                          </div>
-                      </div>
-                      <div class="form-group row ">
-                          <div class="col-6">
-                            {{ warehouse_form.postal_code|as_crispy_field}}
-                          </div>
-                          <div class="col-6">
-                            {{warehouse_form.country|as_crispy_field}}
-                          </div>
-                      </div>
+                        <hr>
+                        <div class="form-group">
+                            {{ warehouse_form.neighborhood|as_crispy_field }}
+                        </div>
+                        <div class="form-group">
+                            {{ warehouse_form.street|as_crispy_field }}
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-6">
+                                {{ warehouse_form.district|as_crispy_field }}
+                            </div>
+                            <div class="col-6">
+                                {{ warehouse_form.city|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="form-group row ">
+                            <div class="col-6">
+                                {{ warehouse_form.postal_code|as_crispy_field}}
+                            </div>
+                            <div class="col-6">
+                                {{warehouse_form.country|as_crispy_field}}
+                            </div>
+                        </div>
                     </fieldset>
                     <div class="form-group">
                         <button class="btn btn-outline-info" type="submit">Update</button>
                     </div>
-                    
                 </form>
-              </div>
-            </div>
-            <div class="col-6">
-                <div style="width: 600px; height: 365px; border: 2px solid #000; border-radius: 10px;">
-                    {{ map|safe }}
-                </div>
             </div>
         </div>
-    </div>
 
-    
+    </div>
+</div>
 
 {% endblock content %}
-

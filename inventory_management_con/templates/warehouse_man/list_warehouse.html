@@ -1,44 +1,46 @@
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col d-flex mt-4">
-                <h1>Warehouse Page</h1>
-            </div>
-            <div class="col d-flex justify-content-end mt-5">
-                <a href="{% url "add-warehouse" %}" class="btn btn-primary">Add Warehouse</a>
-            </div>
+
+<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 d-flex mt-3">
+            <h1 class="h3">Warehouse Page</h1>
         </div>
-        <hr size="6">
-        <div class="row">
-            {% if warehouselist|length > 0 %}
-            {% for warehouse in warehouselist %}
-            <div class="col-4 mt-5">
-                <div class="card">
-                    <h5 class="card-header">{{warehouse.warehouse_name}}</h5>
-                    <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">{{warehouse.neighborhood}} {{warehouse.street}} {{warehouse.district}}/{{warehouse.city}} {{warehouse.country}} {{warehouse.postal_code}}</p>
-                      <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary">Products</a>
-                      <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary">Add Categr</a>
-                      <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary">Warehouse info</a>
-                    </div>
-                    <h5 class="card-header"></h5>
-                  </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <div class="col-4 mt-5">
-                <small class="text-muted">
-                    There is no Warehouse! If you want to add 
-                    <a href="{% url 'add-warehouse' %}">Add Warehouse</a>
-                </small>
-            </div>
-            {% endif %}
-            
+        <div class="col-12 col-md-6 d-flex justify-content-end mt-3 mt-md-5">
+            <a href="{% url "add-warehouse" %}" class="btn btn-primary">Add Warehouse</a>
         </div>
     </div>
+    <hr size="6">
+    <div class="row">
+        {% if warehouselist|length > 0 %}
+        {% for warehouse in warehouselist %}
+        <div class="col-12 col-md-6 col-lg-4 mt-5">
+            <div class="card">
+                <h5 class="card-header">{{ warehouse.warehouse_name }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">
+                        {{ warehouse.neighborhood }} {{ warehouse.street }} {{ warehouse.district }}/{{ warehouse.city }} {{ warehouse.country }} {{ warehouse.postal_code }}
+                    </p>
+                    <div class="d-grid gap-2 d-md-block">
+                        <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary mb-2">Products</a>
+                        <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary mb-2">Add Category</a>
+                        <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary mb-2">Warehouse Info</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 mt-5 text-center">
+            <small class="text-muted">
+                There is no Warehouse! If you want to add 
+                <a href="{% url 'add-warehouse' %}">Add Warehouse</a>
+            </small>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock content %}
-
-
