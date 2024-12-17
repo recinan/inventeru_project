@@ -28,7 +28,7 @@ def add_category(request):
 
 @login_required(login_url='login')
 def add_category_warehouse(request, warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user,slug = warehouse_slug)
     if request.method == 'POST':
         form = CategoryFormWarehouse(request.POST, user = request.user, warehouse = warehouse)
         if form.is_valid():
@@ -54,7 +54,7 @@ def get_categories_for_warehouse(request, warehouse_id):
 
 @login_required(login_url='login')
 def list_categories(request, warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET.get('searchCategory',''))
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
     

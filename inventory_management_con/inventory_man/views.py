@@ -47,7 +47,7 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def list_item(request, warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
 
@@ -69,9 +69,9 @@ def list_item(request, warehouse_slug):
 
 @login_required(login_url='login')
 def list_item_category(request, warehouse_slug, category_slug):
-    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
-    category = get_object_or_404(Category, slug = category_slug)
+    category = get_object_or_404(Category, user=request.user, slug = category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
     
     p_item = Paginator(inventory_items,15)
@@ -91,7 +91,28 @@ def list_item_category(request, warehouse_slug, category_slug):
     }
     return render(request,'category_man/list_category.html',context)
 
-""
+def list_item_less_than_five(request,warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
+    all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
+    #category = get_object_or_404(Category, slug = category_slug)
+    inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 )
+    
+    p_item = Paginator(inventory_items_less_than_five,15)
+    page_item = request.GET.get('item_page')
+    items = p_item.get_page(page_item)
+    p_category = Paginator(all_categories,4)
+    page_category = request.GET.get('category_page')
+    categories = p_category.get_page(page_category)
+
+    context = {
+        'warehouse':warehouse,
+        'warehouse_slug':warehouse_slug,
+        'categorylist':categories,
+        'all_items':items
+    }
+
+    return render(request, 'category_man/list_category.html',context)
+
 @login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
@@ -116,8 +137,8 @@ def add_item(request):
 
 @login_required(login_url='login')
 def add_item_warehouse(request, warehouse_slug ,category_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
-    category = get_object_or_404(Category, slug = category_slug, warehouse=warehouse)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
+    category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
     if request.method == 'POST':
         form = InventoryItemFormWarehouse(request.POST, request.FILES ,user=request.user, warehouse = warehouse, category = category)
         if form.is_valid():
@@ -271,3 +292,4 @@ def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
     buf.seek(0)
     filename = f'{item.item_name}.pdf'
     return FileResponse(buf, as_attachment=True, filename=filename)
+
