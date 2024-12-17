@@ -14,8 +14,8 @@
                 {% csrf_token %}
                 <div class="media">
                     <div class="media-body text-left">
-                        <img src="{{item.item_image.url}}" class="img-fluid" alt="" style="max-width: 150px;">
-                        <p class="text-secondary">Name: {{form.instance.item_name}}</p>
+                        <img src="{{item.item_image.url}}" class="img-fluid border border-2 border-secondary rounded" alt="" style="max-width: 150px;">
+                        <p class="text-secondary mt-3">Name: {{form.instance.item_name}}</p>
                         <p class="text-secondary">Qty: {{form.instance.quantity}} {{form.instance.unit}} - Price: {{form.instance.price}} {{form.instance.currency}}</p>
                         <p class="text-secondary">Description: {{form.instance.description}}</p>
                         <p class="text-secondary">Category: {{item.category}} - Warehouse: {{item.warehouse}}</p>

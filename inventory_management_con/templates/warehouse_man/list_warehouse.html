@@ -28,7 +28,7 @@
                     </p>
                     <div class="d-grid gap-2 d-md-block">
                         <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary mb-2">Products</a>
-                        <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary mb-2">Add Category</a>
+                        {% comment %} <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary mb-2">Add Category</a> {% endcomment %}
                         <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary mb-2">Warehouse Info</a>
                         <a href="{% url 'delete-warehouse' warehouse.slug %}" class="btn btn-outline-primary mb-2">Delete</a>
                     </div>
