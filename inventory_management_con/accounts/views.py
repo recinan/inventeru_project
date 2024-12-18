@@ -74,9 +74,14 @@ def profile_update(request,username):
     if user:
         form = UserUpdateForm(instance=user)
 
-        return render(request, 'accounts/profile.html',{'form':form})
+    context={
+        'user':user,
+        'form':form
+    }
 
-    return redirect('index')
+    return render(request, 'accounts/profile.html',context)
+
+    #return redirect('index')
 
 def logout(request):
     auth_logout(request)

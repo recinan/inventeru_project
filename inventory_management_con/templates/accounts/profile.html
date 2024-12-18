@@ -9,8 +9,16 @@
                     <legend class="border-bottom mb-4">Profile Information</legend>
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="media">
-                            <div class="media-body">
+                        <div class="media d-flex">
+                            {% if user.username == form.instance.username %}
+                                <input id="id_image" type="file" name="user_image" hidden/>
+                                    <label for="id_image">
+                                        <img class="rounded-circle account-img profile-img" style="max-width: 150px; cursor: pointer;" src="{{form.instance.user_image.url}}" title="Upload new image">
+                                    </label>
+                            {% else %}
+                                <img class="rounded-circle account-img profile-img" style="max-width: 150px;" src="{{form.instance.user_image.url}}" alt="">
+                            {% endif %}
+                            <div class="media-body" style="margin-left:20px;">
                                 <h2 class="account-heading">{{form.instance.username}}
                                     <small class="text-muted">({{form.instance.status}})</small>
                                 </h2>
