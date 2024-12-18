@@ -8,6 +8,7 @@ from warehouse_man.models import Warehouse
 from inventory_man.models import InventoryItem
 import re
 from django.core.paginator import Paginator
+from util_funcs.Paginator import PaginatorClass
 
 # Create your views here.
 
@@ -57,10 +58,11 @@ def list_categories(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET.get('searchCategory',''))
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
-    
+    """
     p = Paginator(category_list,3)
-    page = request.GET.get('page')
-    categories = p.get_page(page)
+    page = request.GET.get('category_page')
+    categories = p.get_page(page)"""
+    categories = PaginatorClass.paginator(request,category_list,3,'category_page')
 
     context = {
         'warehouse':warehouse,
@@ -80,7 +82,7 @@ def list_allcategories(request):
 
 @login_required(login_url='login')
 def search_category_bar(request,warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user ,slug = warehouse_slug)
 
     search_filter = request.GET.get('searchCategory', '').strip()
 
@@ -89,11 +91,24 @@ def search_category_bar(request,warehouse_slug):
 
     category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = search_filter)
     inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
+    """
+    p = Paginator(category_list,3)
+    page = request.GET.get('category_page')
+    categories = p.get_page(page)
+    """
+    categories = PaginatorClass.paginator(request,category_list,3,'category_page')
+   
+    """
+    p_item = Paginator(inventory_items,15)
+    page_item = request.GET.get('item_page')
+    items = p_item.get_page(page_item)"""
+    items = PaginatorClass.paginator(request,inventory_items,15,'item_page')
+
     context = {
         'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
-        'categorylist':category_list,
-        'all_items':inventory_items
+        'categorylist':categories,
+        'all_items':items
     }
     return render(request, 'category_man/list_category.html', context)
 
