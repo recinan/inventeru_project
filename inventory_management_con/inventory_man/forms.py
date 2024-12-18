@@ -40,6 +40,15 @@ class InventoryItemFormWarehouse(forms.ModelForm):
         model = InventoryItem
         fields = ['item_image','item_name', 'quantity','unit','price','currency','description']
 
+    def clean_item_name(self):
+        item_name = self.cleaned_data.get('item_name')
+        if not self.user or not self.warehouse:
+            raise ValidationError("User or warehouse information is missing.")
+
+        if InventoryItem.objects.filter(user=self.user, warehouse=self.warehouse,item_name=item_name).exists():
+            raise ValidationError(f'{item_name} already exists in this warehouse!')
+        return item_name
+
     def clean_price(self):
         price = self.cleaned_data.get('price')
         if (price < 0):
@@ -53,12 +62,12 @@ class InventoryItemFormWarehouse(forms.ModelForm):
         return quantity
     
     def __init__(self, *args,user=None,warehouse=None,category=None, **kwargs):
-        user = kwargs.pop('user',None)
+        #user = kwargs.pop('user',None)
         #warehouse = kwargs.pop('warehouse',None)
-        super().__init__(*args, **kwargs)
         self.user = user
         self.warehouse = warehouse
         self.category = category
+        super().__init__(*args, **kwargs)
 
        
 

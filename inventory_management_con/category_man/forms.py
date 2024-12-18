@@ -32,10 +32,17 @@ class CategoryFormWarehouse(forms.ModelForm):
         model = Category
         fields = ['category_name']
 
+    def clean_category_name(self):
+        category_name = self.cleaned_data['category_name']
+
+        if Category.objects.filter(user=self.user, warehouse = self.warehouse,category_name=category_name).exists():
+            raise forms.ValidationError(f'{category_name} category already exists!')
+        return category_name
+
     def __init__(self, *args, user=None, warehouse=None, **kwargs):
-        super().__init__(*args, **kwargs)
         self.user = user
         self.warehouse = warehouse
+        super().__init__(*args, **kwargs)
 
         if warehouse:
                 self.fields['category_name'].queryset = Category.objects.filter(warehouse=warehouse)
