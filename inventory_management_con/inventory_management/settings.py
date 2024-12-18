@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "warehouse_man.apps.WarehouseManConfig",
     "category_man.apps.CategoryManConfig",
+    "accounts_plans.apps.AccountsPlansConfig",
     "crispy_forms",
     "crispy_bootstrap5",
     "django_recaptcha"

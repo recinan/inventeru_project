@@ -31,6 +31,13 @@ def list_warehouse(request):
 
 login_required(login_url='login')
 def add_warehouse(request):
+    user_warehouse_count = Warehouse.objects.filter(user=request.user).count()
+    user_warehouse_count_limit = request.user.get_warehouse_limit()
+
+    if user_warehouse_count >= user_warehouse_count_limit:
+        messages.error(request, "You achieved your warehouse limit!")
+        return redirect(reverse_lazy('list-warehouse'))
+
     if request.method == 'POST':
         warehouse_form= WarehouseForm(request.POST, user=request.user)
         if warehouse_form.is_valid():

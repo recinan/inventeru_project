@@ -142,6 +142,13 @@ def add_item(request):
 def add_item_warehouse(request, warehouse_slug ,category_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
     category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
+    category_product_count = InventoryItem.objects.filter(user=request.user, warehouse=warehouse,category=category).count()
+    category_product_count_limit = request.user.get_products_per_category_limit()
+
+    if category_product_count >= category_product_count_limit:
+        messages.error(request,"You achieved your product count by category limit!")
+        return redirect(reverse_lazy('list-item-category',kwargs={'warehouse_slug':warehouse_slug, 'category_slug':category_slug}))
+
     if request.method == 'POST':
         form = InventoryItemFormWarehouse(request.POST, request.FILES ,user=request.user, warehouse = warehouse, category = category)
         if form.is_valid():

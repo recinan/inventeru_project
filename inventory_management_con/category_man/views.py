@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
+from django.contrib import messages
 from .models import Category
 from .forms import CategoryForm, CategoryFormWarehouse
 from django.contrib.auth.decorators import login_required
@@ -30,6 +31,13 @@ def add_category(request):
 @login_required(login_url='login')
 def add_category_warehouse(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user,slug = warehouse_slug)
+    warehouse_category_count = Category.objects.filter(user=request.user, warehouse=warehouse).count()
+    warehouse_category_count_limit = request.user.get_category_per_warehouse_limit()
+
+    if warehouse_category_count >= warehouse_category_count_limit:
+        messages.error(request, "You achieved your category limit!")
+        return redirect(reverse_lazy('list-category',kwargs={'warehouse_slug':warehouse_slug}))
+
     if request.method == 'POST':
         form = CategoryFormWarehouse(request.POST, user = request.user, warehouse = warehouse)
         if form.is_valid():
