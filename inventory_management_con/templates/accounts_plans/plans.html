@@ -1,0 +1,34 @@
+{% extends 'partials/_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col mt-5">
+        <h1>Plan Page</h1>
+      </div>
+    </div>
+    <hr size="6" />
+    <div class="row justify-content-center">
+        {% for plan in plans %}
+      <div class="col-4">
+          <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">{{plan.plan_name}}</h5>
+              <p class="card-text">{{plan.plan_description}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Max Warehouse: {{plan.warehouse_limit}}</li>
+              <li class="list-group-item">Max Category per Warehouse: {{plan.category_per_warehouse_limit}}</li>
+              <li class="list-group-item">Max Product per Category: {{plan.products_per_category_limit}}</li>
+            </ul>
+            <div class="card-body">
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

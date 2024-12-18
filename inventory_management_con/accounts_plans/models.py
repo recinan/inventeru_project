@@ -4,6 +4,7 @@ from django.db import models
 
 class Plan(models.Model):
     plan_name = models.CharField(max_length=50)
+    plan_description = models.TextField(blank=True, default="---")
     warehouse_limit = models.PositiveIntegerField(default=1)
     category_per_warehouse_limit = models.PositiveIntegerField(default=3)
     products_per_category_limit = models.PositiveIntegerField(default=20)

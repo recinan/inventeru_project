@@ -25,7 +25,7 @@
                                 <p class="text-secondary">{{form.instance.first_name}} {{form.instance.last_name}}</p>
                                 <p class="text-secondary">{{form.instance.email}}</p>
                                 <p class="text-secondary">{{form.instance.phone_number}}</p>
-                                <p class="text-secondary fs-6 fw-semibold">Current Plan: {{user.user_plan.plan_name}}   <a href="#" class="btn btn-outline-info btn-sm">Upgrade Plan</a></p>
+                                <p class="text-secondary fs-6 fw-semibold">Current Plan: {{user.user_plan.plan_name}}   <a href="{% url 'plan-page' %}" class="btn btn-outline-info btn-sm">Upgrade Plan</a></p>
                             </div>
                         </div>
             
