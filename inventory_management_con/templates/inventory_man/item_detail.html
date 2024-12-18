@@ -11,7 +11,15 @@
                 {% csrf_token %}
                 <div class="media">
                     <div class="media-body">
-                        <img class="img-fluid border border-2 border-secondary rounded mt-2 mb-3" src="{{item.item_image.url}}" style="max-width: 150px;" alt="">
+                        {% if form.instance.item_image.url %}
+                        <input id="id_image" type="file" name="item_image" hidden/>
+                        <label for="id_image">
+                            <img class="img-fluid border border-2 border-secondary rounded mt-2 mb-3" src="{{form.instance.item_image.url}}" style="max-width: 150px; cursor: pointer;" title="Upload New Image">
+                        </label>
+                        {% else %}
+                            <img class="img-fluid border border-2 border-secondary rounded mt-2 mb-3" src="/media/images/item_images/default_image.jpg" style="max-width: 150px; cursor: pointer;" title="Upload New Image">
+                        {% endif %}
+                        
                         <p class="text-secondary">Name: {{form.instance.item_name}}</p>
                         <p class="text-secondary">Qty: {{form.instance.quantity}} {{form.instance.unit}} - Price: {{form.instance.price}} {{form.instance.currency}}</p>
                         <p class="text-secondary">Description {{form.instance.description}}</p>
@@ -20,9 +28,6 @@
                 </div>
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Edit Item</legend>
-                    <div class="form-group">
-                        {{ form.item_image|as_crispy_field }}
-                    </div>
                     <div class="form-group">
                         {{ form.item_name|as_crispy_field }}
                     </div>

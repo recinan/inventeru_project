@@ -195,7 +195,7 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
     category = get_object_or_404(Category, user=request.user,slug=category_slug)
     item = get_object_or_404(InventoryItem, warehouse=warehouse, category=category, slug=item_slug)
     if request.method == 'POST':
-        form = InventoryItemFormWarehouse(request.POST, instance = item)
+        form = InventoryItemFormWarehouse(request.POST, request.FILES,instance = item)
         if form.is_valid():
             form.save()
             return redirect(reverse_lazy('list-item-category',kwargs={'warehouse_slug':warehouse_slug,'category_slug':category_slug}))
