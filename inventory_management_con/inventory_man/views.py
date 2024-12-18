@@ -50,7 +50,7 @@ def dashboard(request):
 def list_item(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
     category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
-    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
+    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse).order_by('date_created')
     """
     p_item = Paginator(inventory_items,15)
     page_item = request.GET.get('item_page')
@@ -75,7 +75,7 @@ def list_item_category(request, warehouse_slug, category_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
     category = get_object_or_404(Category, user=request.user, slug = category_slug)
-    inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
+    inventory_items = InventoryItem.objects.filter(user=request.user,category=category).order_by('date_created')
     """
     p_item = Paginator(inventory_items,15)
     page_item = request.GET.get('item_page')
@@ -101,7 +101,7 @@ def list_item_less_than_five(request,warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
     #category = get_object_or_404(Category, slug = category_slug)
-    inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 )
+    inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 ).order_by('date_created')
     """
     p_item = Paginator(inventory_items_less_than_five,15)
     page_item = request.GET.get('item_page')
@@ -222,7 +222,7 @@ def search_product_bar(request,warehouse_slug):
         search_filter = ''
 
     category_list = Category.objects.filter(user=request.user, warehouse=warehouse)
-    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = search_filter)
+    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = search_filter).order_by('date_created')
     """
     p = Paginator(category_list,3)
     page = request.GET.get('category_page')
