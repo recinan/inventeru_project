@@ -204,4 +204,14 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     filename = f'{warehouse.warehouse_name}.pdf'
     return FileResponse(buf, as_attachment=True, filename=filename)
 
+def delete_warehouse(request, warehouse_slug):
+    item = get_object_or_404(Warehouse, slug=warehouse_slug)
+    if request.method == 'POST':
+        item.delete()
+        return redirect(reverse_lazy('list-warehouse'))
+    
+    context = {
+        'warehouse':item
+    }
+    return render(request, 'warehouse_man/delete_warehouse.html',context)
 

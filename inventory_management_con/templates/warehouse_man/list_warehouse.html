@@ -8,9 +8,11 @@
         <div class="col-12 col-md-6 d-flex mt-3">
             <h1 class="h3">Warehouse Page</h1>
         </div>
+        {% if warehouselist|length > 0 %}
         <div class="col-12 col-md-6 d-flex justify-content-end mt-3 mt-md-5">
             <a href="{% url "add-warehouse" %}" class="btn btn-primary">Add Warehouse</a>
         </div>
+        {%endif%}
     </div>
     <hr size="6">
     <div class="row">
@@ -28,6 +30,7 @@
                         <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary mb-2">Products</a>
                         <a href="{% url 'add-category-warehouse' warehouse.slug %}" class="btn btn-primary mb-2">Add Category</a>
                         <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary mb-2">Warehouse Info</a>
+                        <a href="{% url 'delete-warehouse' warehouse.slug %}" class="btn btn-outline-primary mb-2">Delete</a>
                     </div>
                 </div>
             </div>
@@ -35,9 +38,9 @@
         {% endfor %}
         {% else %}
         <div class="col-12 mt-5 text-center">
-            <small class="text-muted">
+            <small class="text-muted  fs-5 ">
                 There is no Warehouse! If you want to add 
-                <a href="{% url 'add-warehouse' %}">Add Warehouse</a>
+                <a href="{% url 'add-warehouse' %}"><p class="fs-5 fw-semibold"> Add Warehouse </p></a>            
             </small>
         </div>
         {% endif %}

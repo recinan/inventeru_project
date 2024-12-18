@@ -71,17 +71,17 @@ def list_item(request, warehouse_slug):
 def list_item_category(request, warehouse_slug, category_slug):
     warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
-    category = get_object_or_404(Category, slug = category_slug)
+    category = get_object_or_404(Category, user=request.user, slug = category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
     
     p_item = Paginator(inventory_items,15)
     page_item = request.GET.get('item_page')
     items = p_item.get_page(page_item)
-
+    
     p_category = Paginator(all_categories,4)
     page_category = request.GET.get('category_page')
     categories = p_category.get_page(page_category)
-
+    
 
     context = {
         'warehouse':warehouse,
