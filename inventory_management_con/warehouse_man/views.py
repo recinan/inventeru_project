@@ -114,7 +114,7 @@ def warehouse_detail(request, warehouse_slug):
     
     return render(request, 'warehouse_man/warehouse-detail.html',context)
 
-def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
+def warehouse_detail_pdf(request, warehouse_slug, category_slug=None, less_item_id=None):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
@@ -122,6 +122,11 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     if category_slug is not None:
         category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
         items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse,category=category)
+
+    less_item_id = request.GET.get('less_item_id')
+    if less_item_id is not None and less_item_id == 'less_items' :
+        items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, quantity__lte = 5).order_by('date_created')
+
 
     pdfmetrics.registerFont(TTFont("CourierNew","static/fonts/couriernew.ttf"))
 

@@ -56,8 +56,8 @@ def get_categories_for_warehouse(request, warehouse_id):
 @login_required(login_url='login')
 def list_categories(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
-    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET.get('searchCategory',''))
-    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse).order_by('date_created')
+    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = request.GET.get('searchCategory','')).order_by('-date_created')
+    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse).order_by('-date_created')
     """
     p = Paginator(category_list,3)
     page = request.GET.get('category_page')
@@ -89,8 +89,8 @@ def search_category_bar(request,warehouse_slug):
     if not re.match(r'^[\w\s-]*$', search_filter):
         search_filter = ''
 
-    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = search_filter)
-    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse).order_by('date_created')
+    category_list = Category.objects.filter(user = request.user, warehouse = warehouse,category_name__contains = search_filter).order_by('-date_created')
+    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse).order_by('-date_created')
     """
     p = Paginator(category_list,3)
     page = request.GET.get('category_page')

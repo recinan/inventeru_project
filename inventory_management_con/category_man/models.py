@@ -11,6 +11,7 @@ class Category(models.Model):
     category_name = models.CharField(max_length=200)
     warehouse = models.ForeignKey('warehouse_man.Warehouse', on_delete=models.CASCADE)
     slug = models.SlugField(blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
