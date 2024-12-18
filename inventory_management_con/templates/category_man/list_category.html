@@ -4,186 +4,93 @@
 
 
 <button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
-
 <div class="container">
-    <div class="row">
-        <div class="col mt-5">
-          <h1>{{warehouse.warehouse_name}}</h1>
-        </div>
-    </div>
-    <hr size="6">
-    <!--
-    <div class="row">
-      <div class="col d-flex justify-content-end">
-        <a href="{% url 'add-category-warehouse' warehouse_slug %}" class="btn btn-primary">Add Category</a>
-      </div>
-    </div>-->
-    {% if categorylist|length > 0 %}
-    <div class="row">
-      <div class="col-3">
-        <div class="container">
-          <div class="row">
-            <div class="widget-search">
-              <div class="site-search-area">
-                <form method="GET" id="site-searchform" action="{% url 'search-category' warehouse_slug %}">
-                  <div class="form-container">
-                    <input class="input-text form-control" name="searchCategory" placeholder="Search category keywords..." type="text">
-                    <input id="searchsubmit" value="Search" type="submit">
-                  </div>
-                </form>
-              </div>
-            </div>
+
+
+  <div class="row">
+    <!-- Sol sütun (Kategoriler) -->
+    <div class="col-12 col-md-3">
+      <div class="container">
+        <div class="row">
+          <!-- Arama Alanı -->
+          <div class="input-group mb-3">
+            <input class="form-control col-3" id="searchTerm" placeholder="Enter search term..." type="text">
+            
+            <!-- Kategori ve Item seçim dropdown -->
+            <select id="searchType" class="form-control">
+              <option value="category">Search Category</option>
+              <option value="item">Search Item</option>
+            </select>
+
+            <button class="btn btn-primary col-3" onclick="performSearch()">Search</button>
           </div>
         </div>
-        <hr size="6" class="mt-3">
-        <div class="col">
-          <div class="mx-auto">
-            <a href="{% url 'add-category-warehouse' warehouse_slug %}" class="btn btn-primary">Add Category</a>
-          </div>
-        </div>
+
+        <hr>
+
+        <!-- Kategori Listesi -->
         {% for category in categorylist %}
-            <div class="card text-center mt-3">
-              <div class="card-body ">
-                <h5 class="card-text"><a href="{% url 'list-item-category' category.warehouse.slug category.slug %}">{{ category.category_name }}</a></h5>
-                <div class="colspan-3">
-                  <div class="btn-group" role="group">
-                    <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-outline-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                    </svg></a>
-                    <a href="{% url 'delete-category' category.slug %}" class="btn btn-outline-danger btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                    </svg></a>
-                    {% if category.slug %}
-                    <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug category.slug %}" class="btn btn-outline-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                    </svg></a>
-                    {% else %}
-                    <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug%}" class="btn btn-outline-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                    </svg></a>
-                    {% endif %}
-                  </div>
-                </div>
-                
+          <div class="card mb-3 category-card">
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ category.category_name }}</h5>
+              
+              <div class="btn-group" role="group">
+                <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-outline-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg></a>
+                <a href="{% url 'delete-category' category.slug %}" class="btn btn-outline-danger btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                </svg></a>
+                {% if category.slug %}
+                <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug category.slug %}" class="btn btn-outline-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                </svg></a>
+                {% else %}
+                <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug%}" class="btn btn-outline-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                </svg></a>
+                {% endif %}
               </div>
-            </div>
-        {% endfor %}
-        <!--Pagination for categories-->
-        <div class="container mt-3">
-          <nav aria-label="Page navigation example mt-3">
-            <ul class="pagination justify-content-center">
-              <!-- Önceki Sayfa -->
-              {% if categorylist.has_previous %}
-                <li class="page-item">
-                  <a class="page-link" href="?category_page=1" aria-label="First">
-                    <span aria-hidden="true">&laquo; First</span>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="?category_page={{ categorylist.previous_page_number }}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-              {% else %}
-                <li class="page-item disabled">
-                  <a class="page-link" aria-disabled="true" aria-label="First">
-                    <span aria-hidden="true">&laquo; First</span>
-                  </a>
-                </li>
-                <li class="page-item disabled">
-                  <a class="page-link" aria-disabled="true" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-              {% endif %}
-          
-              <!-- Sayfa Numaraları -->
-              <li class="page-item active" aria-current="page">
-                <a class="page-link">{{ categorylist.number }}</a>
-              </li>
-          
-              <!-- Sonraki Sayfa -->
-              {% if categorylist.has_next %}
-                <li class="page-item">
-                  <a class="page-link" href="?category_page={{ categorylist.next_page_number }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="?category_page={{ categorylist.paginator.num_pages }}" aria-label="Last">
-                    <span aria-hidden="true">Last &raquo;</span>
-                  </a>
-                </li>
-              {% else %}
-                <li class="page-item disabled">
-                  <a class="page-link" aria-disabled="true" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-                <li class="page-item disabled">
-                  <a class="page-link" aria-disabled="true" aria-label="Last">
-                    <span aria-hidden="true">Last &raquo;</span>
-                  </a>
-                </li>
-              {% endif %}
-            </ul>
-          </nav>
-        </div>
-      </div>
-      <div class="col-9">
-        <div class="container">
-          <div class="row">
-            <div class="col-6">
-              <div class="widget-search">
-                <div class="site-search-area">
-                  <form method="GET" id="site-searchform" action="{% url 'search-product' warehouse_slug %}">
-                    <div class="form-container"> 
-                      <input class="input-text form-control" name="searchProduct" placeholder="Search product keywords..." type="text">
-                      <input id="searchsubmit" value="Search" type="submit">
-                    </div>
-                  </form>
-                </div>
-              </div>
+
+
             </div>
           </div>
-        </div>
-        <hr size="6" class="mt-3">
-        <table class="table table-hover table-striped">
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Sağ sütun (Ürünler) -->
+    <div class="col-12 col-md-9">
+      <div class="table-responsive">
+
+        <table class="table table-striped">
+
+          <h1>{{warehouse.warehouse_name}}</h1>
+
+          <hr>
+
           <thead>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Qty</th>
-              <th scope="col">Price</th>
-              <th scope="col">Description</th>
-              <th scope="col">Category</th>
-              <th scope="col">Warehouse</th>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Description</th>
             </tr>
           </thead>
           <tbody>
-            {% if all_items|length == 0 %}
-              <tr>
-                <th scope="row">-</th>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td></td>
-              </tr>
-            {% endif %}
-
             {% for item in all_items %}
-              <tr>
-                <th scope="row">{{ item.id }}</th>
+              <tr class="item-row">
+                <td>{{ item.id }}</td>
                 <td>{{ item.item_name }}</td>
-                <td>{{ item.quantity }} {{ item.unit }}</td>
-                <td>{{ item.price }} {{ item.currency }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price }}</td>
                 <td>{{ item.description }}</td>
-                <td>{{ item.category.category_name }}</td>
-                <td>{{ item.warehouse.warehouse_name }}</td>
+                
+                
+
                 <td class="colspan-3">
                   <div class="btn-group" role="group">
                     <a href="{% url 'item-detail' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
@@ -198,85 +105,56 @@
                     </svg></a>
                   </div>
                 </td>
+
+
               </tr>
+
+
             {% endfor %}
           </tbody>
+
+          
+
         </table>
-        <!--Pagination for items-->
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            {% if all_items.has_previous %}
-              <li class="page-item">
-                <a class="page-link" href="?item_page=1" aria-label="First">
-                  <span aria-hidden="true">&laquo; First</span>
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="?item_page={{ all_items.previous_page_number }}" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-            {% else %}
-              <li class="page-item disabled">
-                <a class="page-link" aria-disabled="true" aria-label="First">
-                  <span aria-hidden="true">&laquo; First</span>
-                </a>
-              </li>
-              <li class="page-item disabled">
-                <a class="page-link" aria-disabled="true" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-            {% endif %}
-        
-            {% for page_num in all_items.paginator.page_range %}
-              {% if page_num == all_items.number %}
-                <li class="page-item active">
-                  <a class="page-link">{{ page_num }}</a>
-                </li>
-              {% else %}
-                <li class="page-item">
-                  <a class="page-link" href="?item_page={{ page_num }}">{{ page_num }}</a>
-                </li>
-              {% endif %}
-            {% endfor %}
-        
-            {% if all_items.has_next %}
-              <li class="page-item">
-                <a class="page-link" href="?item_page={{ all_items.next_page_number }}" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="?item_page={{ all_items.paginator.num_pages }}" aria-label="Last">
-                  <span aria-hidden="true">Last &raquo;</span>
-                </a>
-              </li>
-            {% else %}
-              <li class="page-item disabled">
-                <a class="page-link" aria-disabled="true" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-              <li class="page-item disabled">
-                <a class="page-link" aria-disabled="true" aria-label="Last">
-                  <span aria-hidden="true">Last &raquo;</span>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
-        </nav>        
       </div>
     </div>
-    {% else %}
-    <div class="container">
-      <div class="col-4 mt-5">
-        <small class="text-muted">
-            There is no Category or Product! Firstly, you should add category
-            <a href="{% url 'add-category-warehouse' warehouse_slug %}">Add Category</a>
-        </small>
-    </div>
-    </div>
-    {% endif %}
   </div>
+</div>
+
+<script>
+  // Arama fonksiyonu
+  function performSearch() {
+    const searchTerm = document.getElementById('searchTerm').value.toLowerCase();
+    const searchType = document.getElementById('searchType').value;
+
+    // Kategori araması
+    if (searchType === 'category') {
+      const categoryCards = document.querySelectorAll('.category-card');
+      categoryCards.forEach(card => {
+        const categoryName = card.querySelector('.card-title').textContent.toLowerCase();
+        if (categoryName.includes(searchTerm)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Ürün araması
+    if (searchType === 'item') {
+      const itemRows = document.querySelectorAll('.item-row');
+      itemRows.forEach(row => {
+        const itemName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        if (itemName.includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  }
+</script>
+
+<!-- Bootstrap Bundle JS -->
+
 {% endblock %}

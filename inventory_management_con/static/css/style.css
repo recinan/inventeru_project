@@ -116,6 +116,40 @@
     padding: 0.75rem 1rem;  /* Butonun daha geniş görünmesini sağlar */
 }
 
+/* Mobilde tablo yatay kaydırma özelliği */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Kategori kartlarının responsive düzenlemesi */
+  @media (max-width: 768px) {
+    .card {
+      margin-bottom: 20px;
+    }
+
+    .content {
+        padding: 10px;
+      }
+
+    /* Kategoriler ve ürünler alt alta gelsin */
+    .col-3, .col-9 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+
+  /* Daha küçük ekranlar için (telefonlar) */
+  @media (max-width: 576px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    button {
+      font-size: 0.8rem;
+    }
+  }
+ 
 
 
 
