@@ -2,10 +2,15 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    display: -webkit-flex; /* Safari için */
+
 }
 
 .input-text {
     flex: 1;
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 #searchsubmit {
@@ -14,27 +19,37 @@
     color: white;
     border: none;
     cursor: pointer;
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 #searchsubmit:hover {
     background-color: #0056b3;
 }
 .message-container {
-    display: flex;
     justify-content: center; /* Yatayda ortalar */
     align-items: center; /* Dikeyde ortalar */
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
     
 }
 .alert {
     max-width: flex; /* Mesajların genişliğini sınırlayabiliriz */
     width: 100%;
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .container {
-    display: flex;
     justify-content: center; /* Yatayda ortalar */
     align-items: center; /* Dikeyde ortalar */
     min-height: flex; /* Sayfa yüksekliği kadar, tamamen ekranı kapsar */
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+    max-width: 100%;
 
     flex-wrap: wrap;
 }
@@ -42,6 +57,9 @@
 .card {
     width: flex;
     max-width: flex; /* Kartın genişliğini sınırlayabilirsiniz */
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 /* Map Container için responsive düzenleme */
@@ -52,6 +70,9 @@
     position: relative;
     border: 2px solid #000;
     border-radius: 10px;
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .map-container iframe,
@@ -63,6 +84,10 @@
     width: 100%;
     height: 100%;
     border-radius: 10px; /* Harita kenarlarının yuvarlanması */
+
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .pagination .page-item.active .page-link {
@@ -70,66 +95,96 @@
     font-weight: bold;
     background-color: #007bff;
     color: white;
+
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .pagination .page-item .page-link {
     font-size: 1rem;
-    padding: 0.5rem 0.75rem; /* Butonun dikey yüksekliğini küçültmek için */
+    /*padding: 0.5rem 0.75rem; /* Butonun dikey yüksekliğini küçültmek için */
+    padding: 0.25rem 0.5rem;  /* First ve Last butonları için daha küçük padding */
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;  /* Yüksekliği daha kompakt yapmak için */
+
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .pagination .page-item.disabled .page-link {
     color: #6c757d;
 }
 
-.pagination .page-item .page-link {
-    padding: 0.25rem 0.5rem;  /* First ve Last butonları için daha küçük padding */
-}
 
 .pagination .page-item {
     font-size: 0.9rem; /* Genel buton boyutunu küçültmek */
+
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
-.pagination .page-item .page-link {
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;  /* Yüksekliği daha kompakt yapmak için */
-}
 
 /* Arama kutusunun daha geniş olmasını sağlar */
 .widget-search .site-search-area input.input-text {
     width: 100%;  /* Arama kutusunu tüm alanı kapsayacak şekilde genişletir */
     padding: 0.5rem;  /* Padding'i artırarak kutunun iç alanını genişletir */
     font-size: 1rem;  /* Font boyutunu artırarak okunabilirliği artırır */
+
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .widget-search .site-search-area form .form-container {
-    display: flex;
     align-items: center;
     width: 100%;  /* Formu tüm genişliğe yay */
+
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .widget-search .site-search-area form .input-text {
     flex-grow: 1;  /* Geniş alanı arama kutusuna verir */
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 .widget-search .site-search-area form .btn {
     flex-shrink: 0;  /* Butonun genişliğini sabit tutar */
     padding: 0.75rem 1rem;  /* Butonun daha geniş görünmesini sağlar */
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
 }
 
 /* Mobilde tablo yatay kaydırma özelliği */
 .table-responsive {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    display: -webkit-flex; /* Safari için */
+    display: flex; /* Diğer tarayıcılar için */
+
   }
 
   /* Kategori kartlarının responsive düzenlemesi */
   @media (max-width: 768px) {
     .card {
       margin-bottom: 20px;
+      display: -webkit-flex; /* Safari için */
+      display: flex; /* Diğer tarayıcılar için */
+
     }
 
     .content {
         padding: 10px;
+        display: -webkit-flex; /* Safari için */
+        display: flex; /* Diğer tarayıcılar için */
+
       }
 
     /* Kategoriler ve ürünler alt alta gelsin */
@@ -143,13 +198,31 @@
   @media (max-width: 576px) {
     h1 {
       font-size: 1.5rem;
+      display: -webkit-flex; /* Safari için */
+      display: flex; /* Diğer tarayıcılar için */
+
     }
 
     button {
       font-size: 0.8rem;
+      display: -webkit-flex; /* Safari için */
+      display: flex; /* Diğer tarayıcılar için */
+
     }
   }
- 
+
+  body, html {
+    overflow-x: hidden; /* Yatay kaydırmayı engeller */
+}
+.container-fluid {
+    max-width: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 
 
 

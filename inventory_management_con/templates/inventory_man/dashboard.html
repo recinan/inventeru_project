@@ -1,15 +1,16 @@
 {% extends "partials/_base.html" %}
 
 {% block content %}
+
     {% if messages %}
     <div class="col-12 d-flex justify-content-center">
         {% for message in messages %}
             {% if message.tags == 'error' %}
-                <div class="col-md-10 col-12 alert alert-danger alert-dismissible fade show">
+                <div class="col-12 alert alert-danger alert-dismissible fade show">
                     {{ message }}
                 </div>
             {% else %}
-                <div class="col-md-10 col-12 alert alert-success alert-dismissible fade show">
+                <div class="col-12 alert alert-success alert-dismissible fade show">
                     {{ message }}
                 </div>
             {% endif %}
@@ -25,7 +26,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Special title treatment</h5>
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="{% url 'list-warehouse' %}" class="btn btn-primary">Warehouse Page</a>
+                        <a href="{% url 'list-warehouse' %}" class="btn btn-primary w-100">Warehouse Page</a>
                     </div>
                     <div class="card-footer text-body-secondary"></div>
                 </div>
