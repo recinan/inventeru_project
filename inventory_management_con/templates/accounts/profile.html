@@ -26,6 +26,11 @@
                                 <p class="text-secondary">{{form.instance.email}}</p>
                                 <p class="text-secondary">{{form.instance.phone_number}}</p>
                                 <p class="text-secondary fs-6 fw-semibold">Current Plan: {{user.user_plan.plan_name}}   <a href="{% url 'plan-page' %}" class="btn btn-outline-info btn-sm">Upgrade Plan</a></p>
+                                {% if user.user_plan.plan_type == 'infinite' %}
+                                <p class="text-secondary">You are on free plan</p>
+                                {% else %}
+                                <p class="text-secondary">Your plan expires on {{subscription.sub_end_date|date:"d/m/Y h:i a"}}</p>
+                                {% endif %}
                             </div>
                         </div>
             

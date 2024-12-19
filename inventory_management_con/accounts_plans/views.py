@@ -31,9 +31,12 @@ def create_subscription(sub_user, new_plan):
         subscription.sub_end_date = datetime.max
     if new_plan.plan_type == "monthly":
         subscription.sub_end_date = now() + timedelta(days=30)
-    if new_plan.plan_name == "annual":
+    if new_plan.plan_type == "annual":
         subscription.sub_end_date = now() + timedelta(days=365)
     subscription.sub_is_active = True
     subscription.save()
     return subscription
+
+def check_subscription_status_every_logged_in():
+    pass
     

@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from .decorators import user_not_authenticated
+from accounts_plans.models import Subscription
 # Create your views here.
 
 @user_not_authenticated
@@ -73,10 +74,13 @@ def profile_update(request,username):
     user = get_user_model().objects.filter(username=username).first()
     if user:
         form = UserUpdateForm(instance=user)
+    
+    subscription = Subscription.objects.filter(sub_user = request.user).first()
 
     context={
         'user':user,
-        'form':form
+        'form':form,
+        'subscription':subscription
     }
 
     return render(request, 'accounts/profile.html',context)
