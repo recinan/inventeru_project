@@ -23,7 +23,7 @@
               <li class="list-group-item">Max Product per Category: {{plan.products_per_category_limit}}</li>
             </ul>
             <div class="card-body">
-              <a href="#" class="card-link">Card link</a>
+              <a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Upgrade</a>
               <a href="#" class="card-link">Another link</a>
             </div>
           </div>
