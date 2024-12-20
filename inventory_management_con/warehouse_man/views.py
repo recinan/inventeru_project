@@ -16,8 +16,14 @@ from reportlab.pdfbase.ttfonts import TTFont
 import folium
 import googlemaps
 from decouple import config
+from django.db import models
+import matplotlib.pyplot as plt
+import matplotlib
+from io import BytesIO
+import base64
 
 
+matplotlib.use('Agg')
 
 # Create your views here.
 
@@ -97,6 +103,8 @@ def warehouse_detail(request, warehouse_slug):
     
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
+    category_chart = category_per_warehouse_chart(request,warehouse_slug)
+
     if request.method == "POST":
         warehouse = warehouse
         form = WarehouseForm(request.POST, instance = warehouse)
@@ -116,7 +124,8 @@ def warehouse_detail(request, warehouse_slug):
         'warehouse':warehouse,
         'categories':categories,
         'items':items,
-        'less_items': inventory_items_less_than_five
+        'less_items': inventory_items_less_than_five,
+        'chart':category_chart
     }
     
     return render(request, 'warehouse_man/warehouse-detail.html',context)
@@ -217,3 +226,44 @@ def delete_warehouse(request, warehouse_slug):
         'warehouse':item
     }
     return render(request, 'warehouse_man/delete_warehouse.html',context)
+
+def category_per_warehouse_chart(request, warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
+    categories = Category.objects.filter(warehouse=warehouse)
+    
+    category_data = {}
+    for category in categories:
+        max_quantity = InventoryItem.objects.filter(user=request.user, category=category).aggregate(total=models.Sum('quantity'))['total'] or 0
+        if max_quantity > 0:
+            category_data[category.category_name] = max_quantity
+
+    labels = list(category_data.keys())
+    sizes = list(category_data.values())
+
+    if not sizes:
+        sizes = list()
+        plt.figure(figsize=(6,6))
+        plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
+        plt.title('Categories per warehouse')
+
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        buffer.close()
+        plt.close()
+
+        return image_base64
+    
+    plt.figure(figsize=(6,6))
+    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
+    plt.title('Categories per warehouse')
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+    plt.close()
+
+    return image_base64
