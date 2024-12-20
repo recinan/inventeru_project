@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from accounts.forms import UserRegisterForm, UserLoginForm, UserUpdateForm
 from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import get_user_model
 from django.contrib import messages
@@ -30,7 +30,7 @@ def register(request):
         })
 
 @user_not_authenticated
-def login(request):
+def login_user(request):
     if request.user.is_authenticated:
         return redirect('index')
 
@@ -42,7 +42,7 @@ def login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 if user.is_active:
-                    auth_login(request, user)
+                    login(request, user)
                     messages.success(request, f"Hello <b>{user.username}</b> You have been logged in")
                     return redirect('index')
             else:

@@ -23,7 +23,7 @@ from decouple import config
 
 @login_required(login_url='login')
 def list_warehouse(request):
-    warehouse_list = Warehouse.objects.filter(user = request.user.id)
+    warehouse_list = Warehouse.objects.filter(user = request.user.id, is_active=True)
     context = {
         'warehouselist':warehouse_list
     }

@@ -5,6 +5,11 @@ from django.urls import reverse_lazy
 from .models import Subscription
 from django.utils.timezone import now
 from datetime import datetime,timedelta
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
+from django.conf import settings
+from warehouse_man.models import Warehouse
+
 # Create your views here.
 
 def plan_page(request):
@@ -37,6 +42,3 @@ def create_subscription(sub_user, new_plan):
     subscription.save()
     return subscription
 
-def check_subscription_status_every_logged_in():
-    pass
-    
