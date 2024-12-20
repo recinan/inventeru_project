@@ -45,6 +45,7 @@
             <div class="card text-center mt-3">
               <div class="card-body ">
                 <h5 class="card-text"><a href="{% url 'list-item-category' category.warehouse.slug category.slug %}">{{ category.category_name }}</a></h5>
+                
                 <div class="colspan-3">
                   <div class="btn-group" role="group">
                     <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-outline-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -60,13 +61,10 @@
                       <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
                     </svg></a>
                     {% else %}
-                    <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug%}" class="btn btn-outline-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                    </svg></a>
+                    <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug%}" class="btn btn-outline-success btn-sm">pdf</a>
                     {% endif %}
                   </div>
                 </div>
-                
               </div>
             </div>
         {% endfor %}
@@ -153,7 +151,7 @@
         <table class="table table-hover table-striped">
           <thead>
             <tr>
-              <th scope="col">ID</th>
+              <th scope="col">-</th>
               <th scope="col">Name</th>
               <th scope="col">Qty</th>
               <th scope="col">Price</th>
@@ -177,7 +175,7 @@
 
             {% for item in all_items %}
               <tr>
-                <th scope="row">{{ item.id }}</th>
+                <th scope="row">{{ all_items.start_index|add:forloop.counter0 }}</th>
                 <td>{{ item.item_name }}</td>
                 <td>{{ item.quantity }} {{ item.unit }}</td>
                 <td>{{ item.price }} {{ item.currency }}</td>

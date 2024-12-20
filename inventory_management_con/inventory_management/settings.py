@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "warehouse_man.apps.WarehouseManConfig",
     "category_man.apps.CategoryManConfig",
+    "accounts_plans.apps.AccountsPlansConfig",
     "crispy_forms",
     "crispy_bootstrap5",
     "django_recaptcha"
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "accounts_plans.middleware.CheckSubscriptionAndManageWarehousesMiddleware"
 ]
 
 ROOT_URLCONF = "inventory_management.urls"

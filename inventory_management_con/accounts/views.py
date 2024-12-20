@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
 from accounts.forms import UserRegisterForm, UserLoginForm, UserUpdateForm
 from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from .decorators import user_not_authenticated
+from accounts_plans.models import Subscription
 # Create your views here.
 
 @user_not_authenticated
@@ -29,7 +30,7 @@ def register(request):
         })
 
 @user_not_authenticated
-def login(request):
+def login_user(request):
     if request.user.is_authenticated:
         return redirect('index')
 
@@ -41,7 +42,7 @@ def login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 if user.is_active:
-                    auth_login(request, user)
+                    login(request, user)
                     messages.success(request, f"Hello <b>{user.username}</b> You have been logged in")
                     return redirect('index')
             else:
@@ -73,10 +74,18 @@ def profile_update(request,username):
     user = get_user_model().objects.filter(username=username).first()
     if user:
         form = UserUpdateForm(instance=user)
+    
+    subscription = Subscription.objects.filter(sub_user = request.user).first()
 
-        return render(request, 'accounts/profile.html',{'form':form})
+    context={
+        'user':user,
+        'form':form,
+        'subscription':subscription
+    }
 
-    return redirect('index')
+    return render(request, 'accounts/profile.html',context)
+
+    #return redirect('index')
 
 def logout(request):
     auth_logout(request)

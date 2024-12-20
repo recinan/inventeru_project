@@ -16,14 +16,20 @@ from reportlab.pdfbase.ttfonts import TTFont
 import folium
 import googlemaps
 from decouple import config
+from django.db import models
+import matplotlib.pyplot as plt
+import matplotlib
+from io import BytesIO
+import base64
 
 
+matplotlib.use('Agg')
 
 # Create your views here.
 
 @login_required(login_url='login')
 def list_warehouse(request):
-    warehouse_list = Warehouse.objects.filter(user = request.user.id)
+    warehouse_list = Warehouse.objects.filter(user = request.user.id, is_active=True)
     context = {
         'warehouselist':warehouse_list
     }
@@ -31,6 +37,13 @@ def list_warehouse(request):
 
 login_required(login_url='login')
 def add_warehouse(request):
+    user_warehouse_count = Warehouse.objects.filter(user=request.user).count()
+    user_warehouse_count_limit = request.user.get_warehouse_limit()
+
+    if user_warehouse_count >= user_warehouse_count_limit:
+        messages.error(request, "You achieved your warehouse limit!")
+        return redirect(reverse_lazy('list-warehouse'))
+
     if request.method == 'POST':
         warehouse_form= WarehouseForm(request.POST, user=request.user)
         if warehouse_form.is_valid():
@@ -95,10 +108,11 @@ def warehouse_detail(request, warehouse_slug):
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
     inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 )
-    print(type(items))
     
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
+    category_chart = category_per_warehouse_chart(request,warehouse_slug)
+
     if request.method == "POST":
         warehouse = warehouse
         form = WarehouseForm(request.POST, instance = warehouse)
@@ -111,6 +125,11 @@ def warehouse_detail(request, warehouse_slug):
         
     if warehouse:
         form = WarehouseForm(instance=warehouse)
+
+    CHART_OPTIONS = {
+    'options1': 'Categories in warehouse',
+    'options2': 'Products in warehouse'
+    }
     
     context = {
         'map':m,
@@ -118,12 +137,14 @@ def warehouse_detail(request, warehouse_slug):
         'warehouse':warehouse,
         'categories':categories,
         'items':items,
-        'less_items': inventory_items_less_than_five
+        'less_items': inventory_items_less_than_five,
+        'chart':category_chart,
+        'chart_options':CHART_OPTIONS
     }
     
     return render(request, 'warehouse_man/warehouse-detail.html',context)
 
-def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
+def warehouse_detail_pdf(request, warehouse_slug, category_slug=None, less_item_id=None):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
     categories = Category.objects.filter(user = request.user, warehouse=warehouse)
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
@@ -131,6 +152,11 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     if category_slug is not None:
         category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
         items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse,category=category)
+
+    less_item_id = request.GET.get('less_item_id')
+    if less_item_id is not None and less_item_id == 'less_items' :
+        items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, quantity__lte = 5).order_by('date_created')
+
 
     pdfmetrics.registerFont(TTFont("CourierNew","static/fonts/couriernew.ttf"))
 
@@ -205,7 +231,7 @@ def warehouse_detail_pdf(request, warehouse_slug, category_slug=None):
     return FileResponse(buf, as_attachment=True, filename=filename)
 
 def delete_warehouse(request, warehouse_slug):
-    item = get_object_or_404(Warehouse, slug=warehouse_slug)
+    item = get_object_or_404(Warehouse,user=request.user, slug=warehouse_slug)
     if request.method == 'POST':
         item.delete()
         return redirect(reverse_lazy('list-warehouse'))
@@ -214,4 +240,45 @@ def delete_warehouse(request, warehouse_slug):
         'warehouse':item
     }
     return render(request, 'warehouse_man/delete_warehouse.html',context)
+
+def category_per_warehouse_chart(request, warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
+    categories = Category.objects.filter(warehouse=warehouse)
+    
+    category_data = {}
+    for category in categories:
+        max_quantity = InventoryItem.objects.filter(user=request.user, category=category).aggregate(total=models.Sum('quantity'))['total'] or 0
+        if max_quantity > 0:
+            category_data[category.category_name] = max_quantity
+
+    labels = list(category_data.keys())
+    sizes = list(category_data.values())
+
+    if not sizes:
+        sizes = list()
+        plt.figure(figsize=(6,6))
+        plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
+        plt.title('Categories per warehouse')
+
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        buffer.close()
+        plt.close()
+
+        return image_base64
+    
+    plt.figure(figsize=(6,6))
+    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140, textprops={'fontsize':10}, labeldistance=0.8)
+    plt.title('Categories per warehouse')
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+    plt.close()
+
+    return image_base64
 

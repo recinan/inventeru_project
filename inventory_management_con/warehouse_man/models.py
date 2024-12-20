@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 import uuid
 from django.conf import settings
+from django.utils.timezone import now
 #from warehouse_man.models import WarehouseAdress
 
 # Create your models here.
@@ -17,6 +18,8 @@ class Warehouse(models.Model):
     country = models.CharField(max_length=100,default='Türkiye')
     slug = models.SlugField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=now)
 
     class Meta:
         verbose_name_plural= "Warehouses"

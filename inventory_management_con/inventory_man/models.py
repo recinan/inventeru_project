@@ -5,9 +5,15 @@ from category_man.models import Category
 from django.utils.text import slugify
 import uuid
 from django.conf import settings
+import os
 # Create your models here.
 
 class InventoryItem(models.Model):
+    def image_upload_to(self, instance=None):
+        if instance:
+            return os.path.join('images/item_images/',self.slug, instance)
+        return None
+
     UNIT_CHOICES = [
         ('kg', 'Kilogram'),
         ('ltr', 'Litre'),
@@ -19,7 +25,7 @@ class InventoryItem(models.Model):
         ('USD','United States Dollars'),
         ('EUR','Euro')
     ]
-    item_image = models.ImageField(null=True,blank=True,upload_to='images/item_images/',default="images/item_images/default_image.jpg")
+    item_image = models.ImageField(null=True,blank=True,upload_to=image_upload_to,default="images/item_images/default_image.jpg")
     item_name = models.CharField(max_length=200)
     quantity = models.IntegerField()
     unit = models.CharField(max_length=10,choices=UNIT_CHOICES,default='pcs')

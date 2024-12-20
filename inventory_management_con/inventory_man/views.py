@@ -16,6 +16,7 @@ from reportlab.lib.utils import ImageReader
 from PIL import Image
 import re
 from django.core.paginator import Paginator
+from util_funcs.Paginator import PaginatorClass
 
 # Create your views here.
 
@@ -47,17 +48,12 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def list_item(request, warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
-    category_list = Category.objects.filter(user = request.user, warehouse=warehouse)
-    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse)
-
-    p_item = Paginator(inventory_items,15)
-    page_item = request.GET.get('item_page')
-    items = p_item.get_page(page_item)
-
-    p_category = Paginator(category_list,4)
-    page_category = request.GET.get('category_page')
-    categories = p_category.get_page(page_category)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
+    category_list = Category.objects.filter(user = request.user, warehouse=warehouse).order_by('-date_created')
+    inventory_items = InventoryItem.objects.filter(user=request.user,warehouse=warehouse).order_by('-date_created')
+   
+    items = PaginatorClass.paginator(request,inventory_items,15,'item_page')
+    categories = PaginatorClass.paginator(request,category_list,3,'category_page')
 
     context = {
         'warehouse':warehouse,
@@ -69,19 +65,22 @@ def list_item(request, warehouse_slug):
 
 @login_required(login_url='login')
 def list_item_category(request, warehouse_slug, category_slug):
-    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
-    all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
+    all_categories = Category.objects.filter(user = request.user,warehouse=warehouse).order_by('-date_created')
     category = get_object_or_404(Category, user=request.user, slug = category_slug)
-    inventory_items = InventoryItem.objects.filter(user=request.user,category=category)
-    
+    inventory_items = InventoryItem.objects.filter(user=request.user,category=category).order_by('-date_created')
+    """
     p_item = Paginator(inventory_items,15)
     page_item = request.GET.get('item_page')
-    items = p_item.get_page(page_item)
+    items = p_item.get_page(page_item)"""
+    items = PaginatorClass.paginator(request,inventory_items,15,'item_page')
     
+    """
     p_category = Paginator(all_categories,4)
     page_category = request.GET.get('category_page')
-    categories = p_category.get_page(page_category)
-    
+    categories = p_category.get_page(page_category)"""
+    categories = PaginatorClass.paginator(request,all_categories,3,'category_page')
+
 
     context = {
         'warehouse':warehouse,
@@ -92,19 +91,21 @@ def list_item_category(request, warehouse_slug, category_slug):
     return render(request,'category_man/list_category.html',context)
 
 def list_item_less_than_five(request,warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
-    all_categories = Category.objects.filter(user = request.user,warehouse=warehouse)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
+    all_categories = Category.objects.filter(user = request.user,warehouse=warehouse).order_by('date_created').order_by('-date_created')
     #category = get_object_or_404(Category, slug = category_slug)
-    inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 )
-    
+    inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 ).order_by('-date_created')
+    """
     p_item = Paginator(inventory_items_less_than_five,15)
     page_item = request.GET.get('item_page')
-    items = p_item.get_page(page_item)
+    items = p_item.get_page(page_item)"""
+    items = PaginatorClass.paginator(request,inventory_items_less_than_five,15,'item_page')
 
+    """
     p_category = Paginator(all_categories,4)
     page_category = request.GET.get('category_page')
-    categories = p_category.get_page(page_category)
-
+    categories = p_category.get_page(page_category)"""
+    categories = PaginatorClass.paginator(request,all_categories,3,'category_page')
 
     context = {
         'warehouse':warehouse,
@@ -112,9 +113,9 @@ def list_item_less_than_five(request,warehouse_slug):
         'categorylist':categories,
         'all_items':items
     }
-    return render(request,'category_man/list_category.html',context)
 
-""
+    return render(request, 'category_man/list_category.html',context)
+
 @login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
@@ -139,8 +140,15 @@ def add_item(request):
 
 @login_required(login_url='login')
 def add_item_warehouse(request, warehouse_slug ,category_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
-    category = get_object_or_404(Category, slug = category_slug, warehouse=warehouse)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
+    category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
+    category_product_count = InventoryItem.objects.filter(user=request.user, warehouse=warehouse,category=category).count()
+    category_product_count_limit = request.user.get_products_per_category_limit()
+
+    if category_product_count >= category_product_count_limit:
+        messages.error(request,"You achieved your product count by category limit!")
+        return redirect(reverse_lazy('list-item-category',kwargs={'warehouse_slug':warehouse_slug, 'category_slug':category_slug}))
+
     if request.method == 'POST':
         form = InventoryItemFormWarehouse(request.POST, request.FILES ,user=request.user, warehouse = warehouse, category = category)
         if form.is_valid():
@@ -183,11 +191,11 @@ def edit_item(request, pk):
 
 @login_required(login_url='login')
 def item_detail(request, warehouse_slug, category_slug, item_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
-    category = get_object_or_404(Category, slug=category_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user,slug = warehouse_slug)
+    category = get_object_or_404(Category, user=request.user,slug=category_slug)
     item = get_object_or_404(InventoryItem, warehouse=warehouse, category=category, slug=item_slug)
     if request.method == 'POST':
-        form = InventoryItemFormWarehouse(request.POST, instance = item)
+        form = InventoryItemFormWarehouse(request.POST, request.FILES,instance = item)
         if form.is_valid():
             form.save()
             return redirect(reverse_lazy('list-item-category',kwargs={'warehouse_slug':warehouse_slug,'category_slug':category_slug}))
@@ -206,20 +214,31 @@ def item_detail(request, warehouse_slug, category_slug, item_slug):
 
 @login_required(login_url='login')
 def search_product_bar(request,warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
 
     search_filter = request.GET.get('searchProduct', '').strip()
 
     if not re.match(r'^[\w\s-]*$', search_filter):
         search_filter = ''
 
-    category_list = Category.objects.filter(user=request.user, warehouse=warehouse)
-    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = search_filter)
+    category_list = Category.objects.filter(user=request.user, warehouse=warehouse).order_by('-date_created')
+    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = search_filter).order_by('-date_created')
+    """
+    p = Paginator(category_list,3)
+    page = request.GET.get('category_page')
+    categories = p.get_page(page)"""
+    categories = PaginatorClass.paginator(request,category_list,3,'category_page')
+    """
+    p_item = Paginator(inventory_items,15)
+    page_item = request.GET.get('item_page')
+    items = p_item.get_page(page_item)"""
+    items = PaginatorClass.paginator(request,inventory_items,15,'item_page')
+
     context = {
         'warehouse':warehouse,
         'warehouse_slug':warehouse_slug,
-        'categorylist':category_list,
-        'all_items':inventory_items
+        'categorylist':categories,
+        'all_items':items
     }
     return render(request, 'category_man/list_category.html',context)
 
@@ -236,8 +255,8 @@ def delete_item(request, pk):
 
 @login_required(login_url='login')
 def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
-    warehouse = get_object_or_404(Warehouse, slug=warehouse_slug)
-    category = get_object_or_404(Category, slug=category_slug)
+    warehouse = get_object_or_404(Warehouse,user=request.user, slug=warehouse_slug)
+    category = get_object_or_404(Category, user=request.user,slug=category_slug)
     item = get_object_or_404(InventoryItem, slug = item_slug, warehouse=warehouse,category=category)
 
     # Create ByteStream Buffer
@@ -294,3 +313,4 @@ def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
     buf.seek(0)
     filename = f'{item.item_name}.pdf'
     return FileResponse(buf, as_attachment=True, filename=filename)
+

@@ -12,7 +12,7 @@ class UserRegisterForm(UserCreationForm):
     phone_number = forms.CharField(help_text="Choose a unique phone number, please.", required=True)
     class Meta:
         model = get_user_model()
-        fields = ['first_name','last_name','username','email','phone_number','password1','password2']
+        fields = ['user_image','first_name','last_name','username','email','phone_number','password1','password2']
 
     def save(self, commit=True):
         user = super(UserRegisterForm, self).save(commit=False)
@@ -43,5 +43,5 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['first_name','last_name','email','phone_number']
+        fields = ['user_image','first_name','last_name','email','phone_number']
 
