@@ -23,8 +23,20 @@
               <li class="list-group-item">Max Product per Category: {{plan.products_per_category_limit}}</li>
             </ul>
             <div class="card-body">
-              <a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Upgrade</a>
-              <a href="#" class="card-link">Another link</a>
+              {% if plan.plan_type == subscription.sub_plan.plan_type %}
+              <p class="text-muted">Your Current Plan</p>
+              {% else %}
+                {% if plan.plan_type == 'infinite' %}
+                <p class="text-muted">A plan for free</p>
+                <p><a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Basic Plan</a></p>
+                {% else %}
+                  {% if plan.plan_type == 'monthly' %}
+                  <p><a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Buy Monthly Plan</a></p>
+                  {% else %}
+                  <p><a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Buy Annualy Plan</a></p>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
             </div>
           </div>
       </div>

@@ -14,8 +14,10 @@ from warehouse_man.models import Warehouse
 
 def plan_page(request):
     plans = Plan.objects.all()
+    subscription = Subscription.objects.filter(sub_user = request.user).first()
     context = {
-        'plans':plans
+        'plans':plans,
+        'subscription':subscription
     }
     return render(request,'accounts_plans/plans.html',context)
 
