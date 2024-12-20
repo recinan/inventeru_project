@@ -117,6 +117,11 @@ def warehouse_detail(request, warehouse_slug):
         
     if warehouse:
         form = WarehouseForm(instance=warehouse)
+
+    CHART_OPTIONS = {
+    'options1': 'Categories in warehouse',
+    'options2': 'Products in warehouse'
+    }
     
     context = {
         'map':m,
@@ -125,7 +130,8 @@ def warehouse_detail(request, warehouse_slug):
         'categories':categories,
         'items':items,
         'less_items': inventory_items_less_than_five,
-        'chart':category_chart
+        'chart':category_chart,
+        'chart_options':CHART_OPTIONS
     }
     
     return render(request, 'warehouse_man/warehouse-detail.html',context)
@@ -256,7 +262,7 @@ def category_per_warehouse_chart(request, warehouse_slug):
         return image_base64
     
     plt.figure(figsize=(6,6))
-    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
+    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140, textprops={'fontsize':10}, labeldistance=0.8)
     plt.title('Categories per warehouse')
 
     buffer = BytesIO()
@@ -267,3 +273,4 @@ def category_per_warehouse_chart(request, warehouse_slug):
     plt.close()
 
     return image_base64
+
