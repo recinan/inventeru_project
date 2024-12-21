@@ -237,6 +237,9 @@ def category_per_warehouse_chart(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
     categories = Category.objects.filter(warehouse=warehouse)
     
+    if not categories:
+        return empty_chart("There is no category")
+
     category_data = {}
     for category in categories:
         max_quantity = InventoryItem.objects.filter(user=request.user, category=category).aggregate(total=models.Sum('quantity'))['total'] or 0
@@ -274,7 +277,7 @@ def products_per_category_chart(request, warehouse_slug):
     if not category_slug:
         category = Category.objects.filter(user=request.user,warehouse=warehouse).first()
         if not category:
-            return None
+            return empty_chart("There is no product")
         category_slug = category.slug
     category = get_object_or_404(Category, user=request.user, warehouse=warehouse, slug=category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, category=category)
@@ -320,4 +323,27 @@ def products_per_category_chart(request, warehouse_slug):
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
     plt.close()
+    return image_base64
+
+def empty_chart(title:str):
+
+    fig, ax = plt.subplots(figsize=(4, 4))
+
+    # Boş bir pie chart çiz (sadece kenar çizgisi olacak)
+    ax.pie([], labels=[], wedgeprops={'linewidth': 1, 'edgecolor': 'black'})
+
+    # İçini doldurmak için bir daire ekle
+    circle = plt.Circle((0, 0), 0.7, color="#3266a8", zorder=0)  # Çember yarıçapını ve rengini ayarlayın
+    ax.add_artist(circle)
+
+    # Başlık ekle
+    plt.title(title)
+
+    # Görseli kaydet ve base64 olarak döndür
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png', bbox_inches='tight')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+    plt.close(fig)
     return image_base64
