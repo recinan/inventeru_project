@@ -273,6 +273,8 @@ def products_per_category_chart(request, warehouse_slug):
     category_slug = request.GET.get('selected_category')
     if not category_slug:
         category = Category.objects.filter(user=request.user,warehouse=warehouse).first()
+        if not category:
+            return None
         category_slug = category.slug
     category = get_object_or_404(Category, user=request.user, warehouse=warehouse, slug=category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, category=category)

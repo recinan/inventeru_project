@@ -97,10 +97,13 @@
                     <div class="input-group mb-3">
                       <label class="input-group-text" for="inputGroupSelect01">Chart</label>
                       <select class="form-select" id="inputGroupSelect01" name="selected_category">
-                        {% for category in categories %}
-                        <option value="{{category.slug}}">{{category.category_name}}</option>
-                        {% endfor %}
-                        
+                        {% if categories %}
+                          {% for category in categories %}
+                          <option value="{{category.slug}}">{{category.category_name}}</option>
+                          {% endfor %}
+                        {% else %}
+                          <option value="#">There is no category</option>
+                        {% endif %}    
                       </select>
                       <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
@@ -109,8 +112,6 @@
                     <img src="data:image/png;base64,{{ product_chart }}" alt="Categories per warehouse">
                   </div>
                 </div>
-                
-                
             </div>
         </div>
     </div>
