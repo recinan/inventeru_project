@@ -97,13 +97,14 @@ def warehouse_location(address):
 @login_required(login_url='login')
 def warehouse_detail(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user = request.user,slug = warehouse_slug)
-    categories = Category.objects.filter(user = request.user, warehouse=warehouse)
+    categories = Category.objects.filter(user = request.user, warehouse=warehouse).order_by('date_created')
     items = InventoryItem.objects.filter(user = request.user, warehouse=warehouse)
     inventory_items_less_than_five= InventoryItem.objects.filter(user=request.user,warehouse=warehouse, quantity__lte = 5 )
     
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
     category_chart = category_per_warehouse_chart(request,warehouse_slug)
+    product_chart = products_per_category_chart(request,warehouse_slug)
 
     if request.method == "POST":
         warehouse = warehouse
@@ -130,7 +131,8 @@ def warehouse_detail(request, warehouse_slug):
         'categories':categories,
         'items':items,
         'less_items': inventory_items_less_than_five,
-        'chart':category_chart,
+        'category_chart':category_chart,
+        'product_chart':product_chart,
         'chart_options':CHART_OPTIONS
     }
     
@@ -248,7 +250,7 @@ def category_per_warehouse_chart(request, warehouse_slug):
 
     if not sizes:
         sizes = list()
-        plt.figure(figsize=(6,6))
+        plt.figure(figsize=(4,4))
         plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
         plt.title('Categories per warehouse')
 
@@ -261,7 +263,7 @@ def category_per_warehouse_chart(request, warehouse_slug):
 
         return image_base64
     
-    plt.figure(figsize=(6,6))
+    plt.figure(figsize=(4,4))
     plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140, textprops={'fontsize':10}, labeldistance=0.8)
     plt.title('Categories per warehouse')
 
@@ -274,3 +276,63 @@ def category_per_warehouse_chart(request, warehouse_slug):
 
     return image_base64
 
+def products_per_category_chart(request, warehouse_slug):
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
+    category_slug = request.GET.get('selected_category')
+    if not category_slug:
+        category = Category.objects.filter(user=request.user,warehouse=warehouse).first()
+        category_slug = category.slug
+    category = get_object_or_404(Category, user=request.user, warehouse=warehouse, slug=category_slug)
+    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, category=category)
+
+    total_quantity = inventory_items.aggregate(total=models.Sum('quantity'))['total'] or 0
+    item_data = {}  
+    for item in inventory_items:
+        if item.quantity > 0:
+            item_data[item.item_name] = item.quantity
+
+    labels = list(item_data.keys())
+    sizes = list(item_data.values())
+
+    threshold = 5
+    filtered_labels = []
+    percentages = []
+    if total_quantity > 0:
+        for size in sizes:
+            percentage = (size/total_quantity)*100
+            percentages.append(percentage)
+        for label, percentage in zip(labels, percentages):
+            if percentage >= threshold:
+                filtered_labels.append(label)
+            else:
+                filtered_labels.append("")
+    else:
+        filtered_labels=[]
+
+    if not sizes:
+        sizes = list()
+        plt.figure(figsize=(4,4))
+        plt.pie(sizes, labels=filtered_labels, autopct='%1.1f%%',startangle=140)
+        plt.title(f'Products per {category.category_name}')
+
+        buffer = BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        buffer.close()
+        plt.close()
+
+        return image_base64
+
+    plt.figure(figsize=(4,4))
+    plt.pie(sizes, labels=filtered_labels, autopct='%1.1f%%', startangle=140,textprops={'fontsize':10}, labeldistance=0.8)
+    plt.title(f'Products per {category.category_name}')
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    buffer.close()
+    plt.close()
+
+    return image_base64

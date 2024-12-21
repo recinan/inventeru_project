@@ -45,7 +45,7 @@ class InventoryItemFormWarehouse(forms.ModelForm):
         if not self.user or not self.warehouse:
             raise ValidationError("User or warehouse information is missing.")
 
-        if InventoryItem.objects.filter(user=self.user, warehouse=self.warehouse,item_name=item_name).exists():
+        if InventoryItem.objects.filter(user=self.user, warehouse=self.warehouse,item_name=item_name).exclude(pk=self.instance.pk).exists():
             raise ValidationError(f'{item_name} already exists in this warehouse!')
         return item_name
 
