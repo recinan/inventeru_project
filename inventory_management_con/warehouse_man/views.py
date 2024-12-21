@@ -103,7 +103,7 @@ def warehouse_detail(request, warehouse_slug):
     
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
-    category_chart = category_per_warehouse_chart(request,warehouse_slug)
+    category_chart = category_per_warehouse_chart(request,warehouse_slug) 
     product_chart = products_per_category_chart(request,warehouse_slug)
 
     if request.method == "POST":
