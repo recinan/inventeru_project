@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Warehouse',
+            name="Warehouse",
             fields=[
                 (
                     "id",
@@ -50,8 +50,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                'verbose_name_plural': 'Warehouses',
-                'unique_together': {('user', 'slug')},
+                "verbose_name_plural": "Warehouses",
+                "unique_together": {("user", "slug")},
             },
         ),
     ]

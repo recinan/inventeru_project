@@ -2,126 +2,142 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<a onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
+<!-- Go Back Button -->
+<a href="{% url 'list-warehouse' %}" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
 
-<div class="container text-center">
-    <div class="row mt-5 mb-5">
-        <!-- Map Column (will be first on mobile) -->
-        <div class="col-12 col-md-6 order-md-1">
-            <div class="map-container">
-                {{ map|safe }}
-            </div>
-        </div>
-
-        <!-- Warehouse Information Column -->
-        <div class="col-12 col-md-6 order-md-0">
-            <div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial-style" style="min-height: 65vh;">
+<div class="container-fluid p-0 m-0">
+    <div class="row justify-content-center mx-0">
+        <!-- Main Content Section -->
+        <div class="col-12 content-section p-3" style="background-color: #f8f9fa; min-height: 100vh;">
+            
+            <!-- Warehouse Information -->
+            <div class="mb-4">
                 <legend class="border-bottom mb-4">Warehouse Information</legend>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="media">
                         <div class="media-body">
-                            <h2 class="account-heading">{{warehouse_form.instance.warehouse_name}}</h2>
-                            <p class="text-secondary">{{warehouse_form.instance.phone_number}}</p>
-                            <p class="text-secondary">{{warehouse_form.instance.email}}</p>
-                            <p class="text-secondary">{{warehouse_form.instance.neighborhood}} {{warehouse_form.instance.street}}</p>
-                            <p class="text-secondary">{{warehouse_form.instance.district}}/{{warehouse_form.instance.city}} {{warehouse_form.instance.country}} {{warehouse_form.instance.postal_code}}</p>
+                            <h2 class="account-heading">{{ warehouse_form.instance.warehouse_name }}</h2>
+                            <p class="text-secondary">{{ warehouse_form.instance.phone_number }}</p>
+                            <p class="text-secondary">{{ warehouse_form.instance.email }}</p>
+                            <p class="text-secondary">
+                                {{ warehouse_form.instance.neighborhood }} {{ warehouse_form.instance.street }}
+                            </p>
+                            <p class="text-secondary">
+                                {{ warehouse_form.instance.district }}/{{ warehouse_form.instance.city }} 
+                                {{ warehouse_form.instance.country }} {{ warehouse_form.instance.postal_code }}
+                            </p>
                         </div>
-                    </div>
-                    <div>
-                        <legend>Inventory Information</legend>
-                        <hr>
-                        <p class="text-danger">Low inventory items: {{less_items|length}} <a href="{% url 'list-less-items' warehouse.slug %}" class="btn btn-outline-danger btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-                          </svg></a>
-                          <a href="{% url 'warehouse-detail-pdf' warehouse.slug %}?less_item_id=less_items" class="btn btn-outline-success btn-sm" id="less_items"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                          </svg></a>
-                        </p>
-                        <p class="text-secondary">Total number of items: {{items|length}} <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-outline-dark btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-                          </svg></a>
-                          <a href="{% url 'warehouse-detail-pdf' warehouse.slug %}" class="btn btn-outline-success btn-sm" id="less_items"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                          </svg></a>
-                        </p>
-                        <p class="text-secondary">Total number of categories: {{categories|length}} <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-outline-dark btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-                          </svg></a></p>
-                    </div>
-
-                    <fieldset class="form-group">
-                        <legend class="border-bottom mb-4">Edit Warehouse</legend>
-                        <div class="form-group">
-                            {{ warehouse_form.warehouse_name|as_crispy_field }}
-                        </div>
-                        <div class="form-group">
-                            {{ warehouse_form.phone_number|as_crispy_field }}
-                        </div>
-                        <hr>
-                        <h5>Warehouse Address</h5>
-                        <hr>
-                        <div class="form-group">
-                            {{ warehouse_form.neighborhood|as_crispy_field }}
-                        </div>
-                        <div class="form-group">
-                            {{ warehouse_form.street|as_crispy_field }}
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-6">
-                                {{ warehouse_form.district|as_crispy_field }}
-                            </div>
-                            <div class="col-6">
-                                {{ warehouse_form.city|as_crispy_field }}
-                            </div>
-                        </div>
-                        <div class="form-group row ">
-                            <div class="col-6">
-                                {{ warehouse_form.postal_code|as_crispy_field}}
-                            </div>
-                            <div class="col-6">
-                                {{warehouse_form.country|as_crispy_field}}
-                            </div>
-                        </div>
-                    </fieldset>
-                    <div class="form-group">
-                        <button class="btn btn-outline-info" type="submit">Update</button>
                     </div>
                 </form>
-              </div>
             </div>
-            <div class="col-6">
-                <div style="width: 600px; height: 365px; border: 2px solid #000; border-radius: 10px;">
-                    {{ map|safe }}
+
+            <!-- Map (Scaled and Responsive) -->
+            <div class="mb-4" style="width: 100%; height: 400px; border: 2px solid #000; border-radius: 10px; overflow: hidden;">
+                {{ map|safe }}
+            </div>
+
+            <!-- Inventory Information -->
+            <div>
+                <legend>Inventory Information</legend>
+                <hr>
+                <p class="text-danger">
+                    Low inventory items: {{ less_items|length }}
+                    <a href="{% url 'list-less-items' warehouse.slug %}" class="btn btn-outline-danger btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                        </svg>
+                    </a>
+                </p>
+                <p class="text-secondary">
+                    Total number of items: {{ items|length }}
+                    <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-outline-dark btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                        </svg>
+                    </a>
+                </p>
+                <p class="text-secondary">
+                    Total number of categories: {{ categories|length }}
+                    <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-outline-dark btn-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                        </svg>
+                    </a>
+                </p>
+            </div>
+
+            <!-- Category per Warehouse Chart (Smaller size) -->
+            <div class="mt-4">
+                <div class="container" style="max-width: 350px; max-height: 350px; border: 2px solid #000; border-radius: 10px; box-sizing: border-box; overflow: hidden;">
+                    <img src="data:image/png;base64,{{ category_chart }}" alt="Categories per warehouse" style="width: 100%; height: auto;">
+                </div>
+            </div>
+
+            <!-- Product per Category Chart (Smaller size) -->
+            <div class="mt-4">
+                <div class="container mt-3">
+                    <form method="GET" action="{% url 'product-per-warehouse-chart' warehouse.slug %}">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="inputGroupSelect01">Chart</label>
+                            <select class="form-select" id="inputGroupSelect01" name="selected_category">
+                                {% if categories %}
+                                    {% for category in categories %}
+                                        <option value="{{category.slug}}">{{category.category_name}}</option>
+                                    {% endfor %}
+                                {% else %}
+                                    <option value="#">There is no category</option>
+                                {% endif %}
+                            </select>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="container mt-3" style="max-width: 350px; max-height: 350px; border: 2px solid #000; border-radius: 10px; box-sizing: border-box; overflow: hidden;">
+                    <img src="data:image/png;base64,{{ product_chart }}" alt="Products per category" style="width: 100%; height: auto;">
+                </div>
+            </div>
+
+            <!-- Edit Warehouse Form -->
+            <fieldset class="form-group mt-4">
+                <legend class="border-bottom mb-4">Edit Warehouse</legend>
+                <div class="form-group">
+                    {{ warehouse_form.warehouse_name|as_crispy_field }}
+                </div>
+                <div class="form-group">
+                    {{ warehouse_form.phone_number|as_crispy_field }}
                 </div>
                 <hr>
-                <div class="container">
-                  <div class="mt-3" style="width: 420px; height: 420px; border: 2px solid #000; border-radius: 10px;">
-                    <img src="data:image/png;base64,{{ category_chart }}" alt="Categories per warehouse">
-                  </div>
+                <h5>Warehouse Address</h5>
+                <hr>
+                <div class="form-group">
+                    {{ warehouse_form.neighborhood|as_crispy_field }}
                 </div>
-                <div class="container mt-3">
-                  <form method="GET" action="{% url 'product-per-warehouse-chart' warehouse.slug %}">
-                    <div class="input-group mb-3">
-                      <label class="input-group-text" for="inputGroupSelect01">Chart</label>
-                      <select class="form-select" id="inputGroupSelect01" name="selected_category">
-                        {% for category in categories %}
-                        <option value="{{category.slug}}">{{category.category_name}}</option>
-                        {% endfor %}
-                        
-                      </select>
-                      <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="form-group">
+                    {{ warehouse_form.street|as_crispy_field }}
+                </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        {{ warehouse_form.district|as_crispy_field }}
                     </div>
-                  </form>
-                  <div class="mt-3" style="width: 420px; height: 420px; border: 2px solid #000; border-radius: 10px;">
-                    <img src="data:image/png;base64,{{ product_chart }}" alt="Categories per warehouse">
-                  </div>
+                    <div class="col-6">
+                        {{ warehouse_form.city|as_crispy_field }}
+                    </div>
                 </div>
-                
-                
-            </div>
-        </div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        {{ warehouse_form.postal_code|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                        {{ warehouse_form.country|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Update</button>
+                </div>
+            </fieldset>
 
+        </div>
     </div>
 </div>
 

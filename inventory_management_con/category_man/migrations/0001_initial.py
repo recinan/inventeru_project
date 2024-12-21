@@ -10,13 +10,13 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('warehouse_man', '0001_initial'),
+        ("warehouse_man", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
                 (
                     "id",
@@ -46,8 +46,8 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                'verbose_name_plural': 'Categories',
-                'unique_together': {('user', 'warehouse', 'slug')},
+                "verbose_name_plural": "Categories",
+                "unique_together": {("user", "warehouse", "slug")},
             },
         ),
     ]

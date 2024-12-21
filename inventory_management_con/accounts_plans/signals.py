@@ -6,6 +6,24 @@ from .models import Subscription
 from .models import Plan
 from django.utils.timezone import now
 
+from django.db.models.signals import post_migrate
+
+
+
+@receiver(post_migrate)
+def create_default_plan(sender, **kwargs):
+    if not Plan.objects.filter(is_default=True).exists():
+        Plan.objects.create(
+            plan_name="Default Plan",
+            plan_description="This is the default plan.",
+            warehouse_limit=1,
+            category_per_warehouse_limit=3,
+            products_per_category_limit=20,
+            price=None,
+            is_default=True,
+            plan_type="monthly"
+        )
+
 @receiver(user_logged_in)
 def check_subscription_status_every_logged_in(sender,request,user,**kwargs):
     print("Django signals")

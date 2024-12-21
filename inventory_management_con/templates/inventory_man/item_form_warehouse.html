@@ -5,11 +5,6 @@
     <div class="row">
         <div class="col-11 col-md-4 mx-auto mt-5">
             <h1>Inventory Item</h1>
-            <small class="text-muted  fs-5 ">
-                You are adding a new product to
-                <p class="fs-5 fw-semibold"> {{category.category_name}} </p>            
-            </small>
-            <hr>
             <img src="{{item.item_image.url}}" alt="{{item.item_name}}" style="max-width: 300px;">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}

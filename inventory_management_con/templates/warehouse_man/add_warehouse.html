@@ -1,16 +1,19 @@
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
-<div class="container">
+<div class="container-fluid">
+    <button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
+
     <div class="row">
-        <div class="col d-flex mt-4">
+        <div class="col text-center mt-4">
             <h1>Warehouse Page</h1>
         </div>
     </div>
-    <hr size="6">
+
+    <hr>
+
     <div class="row">
-        <div class="col-11 col-md-4 mx-auto mt-5">
+        <div class="col-12 col-md-6 col-lg-4 mx-auto mt-5">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
@@ -27,10 +30,10 @@
                     {{ warehouse_form.street|as_crispy_field }}
                 </div>
                 <div class="form-group row">
-                    <div class="col-6">
+                    <div class="col-12 col-sm-6">
                         {{ warehouse_form.district|as_crispy_field }}
                     </div>
-                    <div class="col-6">
+                    <div class="col-12 col-sm-6">
                         {{ warehouse_form.city|as_crispy_field }}
                     </div>
                 </div>
@@ -40,15 +43,11 @@
                 <div class="form-group">
                     {{ warehouse_form.country|as_crispy_field }}
                 </div>
-                <div class="mt-3">
-                    <button class="btn btn-primary">Add Warehouse</button>
+                <div class="mt-4 text-center">
+                    <button class="btn btn-primary w-100">Add Warehouse</button>
                 </div>
             </form>
-            
         </div>
     </div>
 </div>
-
-
 {% endblock content %}
-

@@ -1,21 +1,16 @@
 
 [High Priority]
 
-User kısmında 'Change Password' biryere götürmüyor .
+-Search Category keyword , eklenmiş bir depoda kategorileri ararken eğer ilk kez arama keywordunda hiçbir sonuç yoksa there is no catergory or product diyor depo için , halbuki kategori veya depo var ama aranan sonuç yok . Bu hata sadece ilk kez arama yapıldığında oluyor .
+-Üst maddedeki hata aynı zamanda Search Category Keyword yerine "." , "?" gibi semboller yazıldığında da oluyor . -> çözüldü
+-depo'ya gidildi -> kategoride x'te products'a tıklandı -> çıkan item'de detail'e tıklandı -> hiçbir şey yapılmadan edit'e tıklandı -> hata  ; birşey değitirilip edit'e tıklanırsa yine hata -> çözüldü
 
 [Medium Priority]
 
--requirements.txt güncellenmeli
+-requirements.txt güncellenmeli , reportlab eklenmeli
 
 [Low Priority]
 
 -eklenen resimlerin media/images/item_images a ekleniyor , bu database'de olmalı(?) programda şişme oluşturabilir mi ? BLOB yöntemi kullanılabirir , chatgpt şuanki yöntemin değişmemesini öneriyor.
 -eklenen depo'da giridilerin invalid olup olmadığı kontrol edilmiyor .
-
-
-[Çözüldü]
-
--Search Category keyword , eklenmiş bir depoda kategorileri ararken eğer ilk kez arama keywordunda hiçbir sonuç yoksa there is no catergory or product diyor depo için , halbuki kategori veya depo var ama aranan sonuç yok . Bu hata sadece ilk kez arama yapıldığında oluyor .
--Üst maddedeki hata aynı zamanda Search Category Keyword yerine "." , "?" gibi semboller yazıldığında da oluyor . -> çözüldü
--depo'ya gidildi -> kategoride x'te products'a tıklandı -> çıkan item'de detail'e tıklandı -> hiçbir şey yapılmadan edit'e tıklandı -> hata  ; birşey değitirilip edit'e tıklanırsa yine hata -> çözüldü
 -delete warehouse olmalı (?)
