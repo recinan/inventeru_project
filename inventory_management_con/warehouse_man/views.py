@@ -22,7 +22,6 @@ import matplotlib
 from io import BytesIO
 import base64
 
-
 matplotlib.use('Agg')
 
 # Create your views here.
@@ -111,9 +110,8 @@ def warehouse_detail(request, warehouse_slug):
     
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
-    category_chart = category_per_warehouse_chart(request,warehouse_slug) 
+    category_chart = category_per_warehouse_chart(request,warehouse_slug)
     product_chart = products_per_category_chart(request,warehouse_slug)
-
     if request.method == "POST":
         warehouse = warehouse
         form = WarehouseForm(request.POST, instance = warehouse)
@@ -252,36 +250,30 @@ def category_per_warehouse_chart(request, warehouse_slug):
         max_quantity = InventoryItem.objects.filter(user=request.user, category=category).aggregate(total=models.Sum('quantity'))['total'] or 0
         if max_quantity > 0:
             category_data[category.category_name] = max_quantity
-
     labels = list(category_data.keys())
     sizes = list(category_data.values())
-
     if not sizes:
         sizes = list()
         plt.figure(figsize=(4,4))
-        plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
+        plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140,textprops={'fontsize':10}, labeldistance=0.8)
         plt.title('Categories per warehouse')
-
         buffer = BytesIO()
         plt.savefig(buffer, format='png')
         buffer.seek(0)
         image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
         buffer.close()
         plt.close()
-
         return image_base64
     
     plt.figure(figsize=(4,4))
-    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140, textprops={'fontsize':10}, labeldistance=0.8)
+    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
     plt.title('Categories per warehouse')
-
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
     plt.close()
-
     return image_base64
 
 def products_per_category_chart(request, warehouse_slug):
@@ -292,16 +284,13 @@ def products_per_category_chart(request, warehouse_slug):
         category_slug = category.slug
     category = get_object_or_404(Category, user=request.user, warehouse=warehouse, slug=category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, category=category)
-
     total_quantity = inventory_items.aggregate(total=models.Sum('quantity'))['total'] or 0
     item_data = {}  
     for item in inventory_items:
         if item.quantity > 0:
             item_data[item.item_name] = item.quantity
-
     labels = list(item_data.keys())
     sizes = list(item_data.values())
-
     threshold = 5
     filtered_labels = []
     percentages = []
@@ -316,31 +305,25 @@ def products_per_category_chart(request, warehouse_slug):
                 filtered_labels.append("")
     else:
         filtered_labels=[]
-
     if not sizes:
         sizes = list()
         plt.figure(figsize=(4,4))
         plt.pie(sizes, labels=filtered_labels, autopct='%1.1f%%',startangle=140)
         plt.title(f'Products per {category.category_name}')
-
         buffer = BytesIO()
         plt.savefig(buffer, format='png')
         buffer.seek(0)
         image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
         buffer.close()
         plt.close()
-
         return image_base64
-
     plt.figure(figsize=(4,4))
     plt.pie(sizes, labels=filtered_labels, autopct='%1.1f%%', startangle=140,textprops={'fontsize':10}, labeldistance=0.8)
     plt.title(f'Products per {category.category_name}')
-
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
     plt.close()
-
     return image_base64
