@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="container d-flex justify-content-start align-items-start">
-    <button onclick="goBack()" class="btn btn-outline-primary my-3">Go Back</button>
+    <a href="{% url 'list-warehouse' %}" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
 </div>
         <div class="col mt-5">
           <h1>{{warehouse.warehouse_name}}</h1>

@@ -192,6 +192,15 @@
       flex: 0 0 100%;
       max-width: 100%;
     }
+
+    .col-md-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+      .col-md-9 {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
   }
 
   /* Daha küçük ekranlar için (telefonlar) */
@@ -223,6 +232,24 @@ img {
     height: auto;
 }
 
+.go-back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+  }
+  
+  /* Çerçeve */
+  .content-wrapper {
+    padding: 20px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    max-width: 1200px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
 
 
 

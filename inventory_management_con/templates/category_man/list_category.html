@@ -2,74 +2,54 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<!-- Go Back Butonu -->
+<div class="go-back-button">
+    <a href="{% url 'list-warehouse' %}" class="btn btn-outline-primary my-3 mx-4">Go Back</a>
 
-<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
-<div class="container">
+</div>
 
+<!-- Ana İçerik -->
+<div class="content-wrapper mt-4">
 
-  <div class="row">
-    <!-- Sol sütun (Kategoriler) -->
+  <!-- Satır -->
+  <div class="row gx-3 gy-4">
+
+    <!-- Sol Sütun (Kategoriler) -->
     <div class="col-12 col-md-3">
-      <div class="container">
-        <div class="row">
-          <!-- Arama Alanı -->
-          <div class="input-group mb-3">
-            <input class="form-control col-3" id="searchTerm" placeholder="Enter search term..." type="text">
-            
-            <!-- Kategori ve Item seçim dropdown -->
-            <select id="searchType" class="form-control">
-              <option value="category">Search Category</option>
-              <option value="item">Search Item</option>
-            </select>
-
-            <button class="btn btn-primary col-3" onclick="performSearch()">Search</button>
-          </div>
+      <div class="px-2 py-3 border rounded">
+        <!-- Arama Alanı -->
+        <div class="input-group mb-3">
+          <input class="form-control" id="searchTerm" placeholder="Enter search term..." type="text">
+          <select id="searchType" class="form-control">
+            <option value="category">Search Category</option>
+            <option value="item">Search Item</option>
+          </select>
+          <button class="btn btn-primary" onclick="performSearch()">Search</button>
         </div>
-
         <hr>
-
         <!-- Kategori Listesi -->
         {% for category in categorylist %}
           <div class="card mb-3 category-card">
             <div class="card-body text-center">
               <h5 class="card-title">{{ category.category_name }}</h5>
-              
-              <div class="btn-group" role="group">
-                <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-outline-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                </svg></a>
-                <a href="{% url 'delete-category' category.slug %}" class="btn btn-outline-danger btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                </svg></a>
-                {% if category.slug %}
-                <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug category.slug %}" class="btn btn-outline-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                </svg></a>
-                {% else %}
-                <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug%}" class="btn btn-outline-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                </svg></a>
-                {% endif %}
+              <div class="btn-group">
+                <a href="{% url 'add-item-warehouse' category.warehouse.slug category.slug %}" class="btn btn-outline-primary btn-sm">Add</a>
+                <a href="{% url 'delete-category' category.slug %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                <a href="{% url 'warehouse-detail-pdf' category.warehouse.slug category.slug %}" class="btn btn-outline-success btn-sm">Download</a>
               </div>
-
-
             </div>
           </div>
         {% endfor %}
       </div>
     </div>
 
-    <!-- Sağ sütun (Ürünler) -->
+    <!-- Sağ Sütun (Ürünler) -->
     <div class="col-12 col-md-9">
-
-      <h1>{{warehouse.warehouse_name}}</h1>
+      <h1 class="mb-3">{{ warehouse.warehouse_name }}</h1>
       <hr>
-
-      <div class="table-responsive">
-        <table class="table table-striped">  
-
+      <!-- Ürün Tablosu -->
+      <div class="table-responsive px-2">
+        <table class="table table-striped">
           <thead>
             <tr>
               <th>ID</th>
@@ -77,6 +57,7 @@
               <th>Qty</th>
               <th>Price</th>
               <th>Description</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -87,73 +68,42 @@
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.price }}</td>
                 <td>{{ item.description }}</td>
-                
-                
-
-                <td class="colspan-3">
-                  <div class="btn-group" role="group">
-                    <a href="{% url 'item-detail' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
-                    </svg></a>
-                    <a href="{% url 'delete-item' item.id %}" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                    </svg></a>
-                    <a href="{% url 'item-detail-pdf' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
-                    </svg></a>
+                <td>
+                  <div class="btn-group">
+                    <a href="{% url 'item-detail' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-dark btn-sm">Details</a>
+                    <a href="{% url 'delete-item' item.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                    <a href="{% url 'item-detail-pdf' item.warehouse.slug item.category.slug item.slug %}" class="btn btn-outline-success btn-sm">Download</a>
                   </div>
                 </td>
-
-
               </tr>
-
-
             {% endfor %}
           </tbody>
-
-          
-
         </table>
       </div>
     </div>
+
   </div>
+
 </div>
 
 <script>
-  // Arama fonksiyonu
+  // Arama Fonksiyonu
   function performSearch() {
     const searchTerm = document.getElementById('searchTerm').value.toLowerCase();
     const searchType = document.getElementById('searchType').value;
 
-    // Kategori araması
     if (searchType === 'category') {
-      const categoryCards = document.querySelectorAll('.category-card');
-      categoryCards.forEach(card => {
+      document.querySelectorAll('.category-card').forEach(card => {
         const categoryName = card.querySelector('.card-title').textContent.toLowerCase();
-        if (categoryName.includes(searchTerm)) {
-          card.style.display = '';
-        } else {
-          card.style.display = 'none';
-        }
+        card.style.display = categoryName.includes(searchTerm) ? '' : 'none';
       });
-    }
-
-    // Ürün araması
-    if (searchType === 'item') {
-      const itemRows = document.querySelectorAll('.item-row');
-      itemRows.forEach(row => {
+    } else if (searchType === 'item') {
+      document.querySelectorAll('.item-row').forEach(row => {
         const itemName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-        if (itemName.includes(searchTerm)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
+        row.style.display = itemName.includes(searchTerm) ? '' : 'none';
       });
     }
   }
 </script>
-
-<!-- Bootstrap Bundle JS -->
 
 {% endblock %}
