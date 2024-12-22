@@ -1,7 +1,8 @@
 
 [High Priority]
 
-User kısmında 'Change Password' biryere götürmüyor .
+User kısmında 'Change Password' biryere götürmüyor.
+-> bu kısım e-mail verification eklendikten sonra eklenecek
 
 [Medium Priority]
 
