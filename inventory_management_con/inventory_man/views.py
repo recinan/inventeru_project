@@ -314,3 +314,12 @@ def item_detail_pdf(request,warehouse_slug,category_slug,item_slug):
     filename = f'{item.item_name}.pdf'
     return FileResponse(buf, as_attachment=True, filename=filename)
 
+def update_item_quantity(request,warehouse_slug,item_id):
+    if request.method == "POST":
+        item = get_object_or_404(InventoryItem, id=item_id)
+        quantity = request.POST.get('quantity')
+        if quantity.isdigit():
+            item.quantity = int(quantity)
+            item.save()
+
+    return redirect('list-item', warehouse_slug=warehouse_slug)

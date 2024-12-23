@@ -173,7 +173,23 @@
               <tr>
                 <th scope="row">{{ all_items.start_index|add:forloop.counter0 }}</th>
                 <td>{{ item.item_name }}</td>
-                <td>{{ item.quantity }} {{ item.unit }}</td>
+                <td>
+                  <form method="POST" action="{% url 'update-item-quantity' item.warehouse.slug item.id %}">
+                    {% csrf_token %}
+                    <input
+                     type="number"
+                     name="quantity"
+                     value="{{ item.quantity }}"
+                     min="0"
+                     step="1"
+                     class="form-control"
+                     style="width: 80px; display: inline-block;"
+                     onchange="this.form.submit();"
+                     aria-label="Quantity"
+                    >
+                    {{ item.unit }}
+                  </form>
+                </td>
                 <td>{{ item.price }} {{ item.currency }}</td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.category.category_name }}</td>
