@@ -26,7 +26,7 @@ def index(request):
 @login_required(login_url='login')
 def dashboard(request):
     items = InventoryItem.objects.filter(user=request.user.id).order_by('id')
-    
+    """
     low_inventory = InventoryItem.objects.filter(
         user = request.user.id,
         quantity__lte = LOW_QUANTITY
@@ -39,11 +39,10 @@ def dashboard(request):
         else:
             messages.error(request, f'{low_inventory_count} item has low inventory')
 
-    low_inventory_ids = low_inventory.values_list('id',flat=True)
+    low_inventory_ids = low_inventory.values_list('id',flat=True)"""
 
     return render(request, 'inventory_man/dashboard.html',{
-        'items':items,
-        'low_inventory_ids':low_inventory_ids
+        'items':items
     })
 
 @login_required(login_url='login')

@@ -261,7 +261,7 @@ def category_per_warehouse_chart(request, warehouse_slug):
         return image_base64
     
     plt.figure(figsize=(4,4))
-    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140)
+    plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140, textprops={'fontsize':10}, labeldistance=0.8)
     plt.title('Categories per warehouse')
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
