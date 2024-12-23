@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required
 from .models import Plan
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -13,14 +14,21 @@ from warehouse_man.models import Warehouse
 # Create your views here.
 
 def plan_page(request):
-    plans = Plan.objects.all()
-    subscription = Subscription.objects.filter(sub_user = request.user).first()
-    context = {
-        'plans':plans,
-        'subscription':subscription
-    }
+    if request.user.is_authenticated:
+        plans = Plan.objects.all()
+        subscription = Subscription.objects.filter(sub_user = request.user).first()
+        context = {
+            'plans':plans,
+            'subscription':subscription
+        }
+    else:
+        plans = Plan.objects.all()
+        context = {
+            'plans':plans
+        }
     return render(request,'accounts_plans/plans.html',context)
 
+@login_required(login_url='login')
 def upgrade_plan(request, plan_id):
     new_plan = Plan.objects.get(id=plan_id)
     request.user.user_plan = new_plan
