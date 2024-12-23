@@ -11,7 +11,14 @@
                     <legend class="border-bottom mb-4 text-center">Profile Information</legend>
                     <form method="POST" enctype="multipart/form-data" class="w-100">
                         {% csrf_token %}
-                        
+                        {% if user.username == form.instance.username %}
+                                <input id="id_image" type="file" name="user_image" hidden/>
+                                    <label for="id_image">
+                                        <img class="rounded-circle account-img profile-img" style="max-width: 150px; cursor: pointer;" src="{{form.instance.user_image.url}}" title="Upload new image">
+                                    </label>
+                            {% else %}
+                                <img class="rounded-circle account-img profile-img" style="max-width: 150px;" src="{{form.instance.user_image.url}}" alt="">
+                            {% endif %}
                         <div class="media mb-4">
                             <div class="media-body text-center">
                                 <h2 class="account-heading">
