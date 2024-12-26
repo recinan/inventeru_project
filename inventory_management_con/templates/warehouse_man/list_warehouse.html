@@ -1,46 +1,63 @@
-{% extends "partials/_base.html" %}
+{% extends 'partials/_base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col d-flex mt-4">
-                <h1>Warehouse Page</h1>
-            </div>
-            {% if warehouselist|length > 0 %}
-            <div class="col d-flex justify-content-end mt-5">
-                <a href="{% url "add-warehouse" %}" class="btn btn-primary">Add Warehouse</a>
-            </div>
-            {%endif%}
+  <style>
+    .card {
+      height: 250px; /* Kartların yüksekliğini sabit tutar */
+      display: flex;
+      flex-direction: column; /* Kart içeriğini dikey olarak düzenler */
+    }
+    
+    .card-body {
+      display: flex;
+      flex-direction: column; /* İçeriği dikey hizalamak için */
+      flex-grow: 1; /* Kart gövdesini esnek hale getirir */
+      justify-content: space-between; /* Üstte içerik, altta butonlar */
+    }
+    
+    .card-body .btn-group {
+      margin-top: auto; /* Buton grubunu en alta iter */
+    }
+  </style>
+  <div class="container">
+    <div class="row">
+      <div class="col d-flex mt-4">
+        <h1>Warehouse Page</h1>
+      </div>
+      {% if warehouselist|length > 0 %}
+        <div class="col d-flex justify-content-end mt-5">
+          <a href="{% url 'add-warehouse' %}" class="btn btn-primary">Add Warehouse</a>
         </div>
-        <hr size="6">
-        <div class="row">
-            {% if warehouselist|length > 0 %}
-            {% for warehouse in warehouselist %}
-            <div class="col-4 mt-5">
-                <div class="card">
-                    <h5 class="card-header">{{warehouse.warehouse_name}}</h5>
-                    <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">{{warehouse.neighborhood}} {{warehouse.street}} {{warehouse.district}}/{{warehouse.city}} {{warehouse.country}} {{warehouse.postal_code}}</p>
-                      <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-primary">Products</a>
-                      <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-primary">Warehouse info</a>
-                      <a href="{% url 'delete-warehouse' warehouse.slug %}" class="btn btn-outline-primary">Delete</a>
-                    </div>
-                    <h5 class="card-header"></h5>
-                  </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <div class="col-4 mt-5">
-                <small class="text-muted  fs-5 ">
-                    There is no Warehouse! If you want to
-                    <a href="{% url 'add-warehouse' %}"><p class="fs-5 fw-semibold"> Add Warehouse </p></a>            
-                </small>
-            </div>
-            {% endif %}
-            
-        </div>
+      {% endif %}
     </div>
-{% endblock content %}
-
-
+    <hr size="6" />
+    <div class="row">
+      {% if warehouselist|length > 0 %}
+        {% for warehouse in warehouselist %}
+          <div class="col-4 mt-5">
+            <div class="card">
+              <h5 class="card-header">{{ warehouse.warehouse_name }}</h5>
+              <div class="card-body">
+                <h5 class="card-title">{{ warehouse.phone_number }}</h5>
+                <p class="card-text">{{ warehouse.neighborhood }} {{ warehouse.street }} {{ warehouse.district }}/{{ warehouse.city }} {{ warehouse.country }} {{ warehouse.postal_code }}</p>
+                <div class="btn-group">
+                  <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-outline-primary">Products</a>
+                  <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-success">Warehouse info</a>
+                  <a href="{% url 'delete-warehouse' warehouse.slug %}" class="btn btn-outline-danger">Delete</a>
+                </div>
+              </div>
+              <h5 class="card-header"></h5>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-4 mt-5">
+          <small class="text-muted fs-5">
+            There is no Warehouse! If you want to
+            <a href="{% url 'add-warehouse' %}"><p class="fs-5 fw-semibold">Add Warehouse</p></a>
+          </small>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
