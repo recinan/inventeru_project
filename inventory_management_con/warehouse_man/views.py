@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 from io import BytesIO
 import base64
+from django.core.exceptions import ValidationError
 
 matplotlib.use('Agg')
 
@@ -58,17 +59,22 @@ def add_warehouse(request):
     }
     return render(request, 'warehouse_man/add_warehouse.html',context)
 
+@login_required(login_url='login')
 def edit_warehouse(request,warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, slug = warehouse_slug)
+    warehouse = get_object_or_404(Warehouse, user=request.user ,slug = warehouse_slug)
+
+    if not request.user.is_authenticated:
+        print("You must be logged in to edit a warehouse.")
+    
     if request.method == 'POST':
-        warehouse_form = WarehouseForm(request.POST, instance = warehouse)
+        warehouse_form = WarehouseForm(request.POST, user=request.user ,instance = warehouse)
         if warehouse_form.is_valid():
             warehouse = warehouse_form.save(commit=False)
             warehouse.user = request.user
             warehouse.save()
             return redirect(reverse_lazy('warehouse-detail', kwargs={'warehouse_slug':warehouse_slug}))
     else:
-        warehouse_form = WarehouseForm(instance = warehouse)
+        warehouse_form = WarehouseForm(user=request.user ,instance = warehouse)
 
     context = {
         'warehouse_form':warehouse_form
