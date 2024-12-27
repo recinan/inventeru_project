@@ -6,6 +6,50 @@ from .models import Subscription
 from .models import Plan
 from django.utils.timezone import now
 
+from django.db.models.signals import post_migrate
+
+@receiver(post_migrate)
+def create_default_plan(sender, **kwargs):
+    if not Plan.objects.filter(is_default=True).exists():
+        Plan.objects.create(
+            plan_name = "Basic",
+            plan_description = "A free plan to have quick start.",
+            warehouse_limit = 1,
+            category_per_warehouse_limit = 3,
+            products_per_category_limit=20,
+            price = 0,
+            is_default = True,
+            plan_type = 'infinite'
+        )
+
+@receiver(post_migrate)
+def create_monthly_plan(sender, **kwargs):
+    if not Plan.objects.filter(plan_type='monthly').exists():
+        Plan.objects.create(
+            plan_name = "Basic Plus Monthly",
+            plan_description = "Looks like your business has grown.",
+            warehouse_limit = 2,
+            category_per_warehouse_limit = 5,
+            products_per_category_limit=20,
+            price = 0,
+            is_default = False,
+            plan_type = 'monthly'
+        )
+
+@receiver(post_migrate)
+def create_annualy_plan(sender, **kwargs):
+    if not Plan.objects.filter(plan_type='annual').exists():
+        Plan.objects.create(
+            plan_name = "Basic Plus Annualy",
+            plan_description = "Looks like your business has grown.",
+            warehouse_limit = 2,
+            category_per_warehouse_limit = 5,
+            products_per_category_limit=20,
+            price = 0,
+            is_default = False,
+            plan_type = 'annual'
+        )
+
 @receiver(user_logged_in)
 def check_subscription_status_every_logged_in(sender,request,user,**kwargs):
     print("Django signals")
