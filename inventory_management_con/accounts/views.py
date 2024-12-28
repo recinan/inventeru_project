@@ -83,14 +83,16 @@ def login_user(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
+            if user.is_active == False:
+                messages.error(request, f"Hello <b>{user.username}</b>, Maybe you didn't activate your account using your email address.")
+                return redirect('login')
+
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     messages.success(request, f"Hello <b>{user.username}</b> You have been logged in")
                     return redirect('index')
-                else:
-                    messages.error(request, f"Hello <b>{user.username}</b>, Maybe you didn't activate your account using your email address.")
-                    return redirect('login')
+                    
             else:
                 for key, error in list(form.errors.items()):
                     if key == 'captcha' and error[0] == 'This field is required.':

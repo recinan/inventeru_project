@@ -21,6 +21,15 @@
               <li class="list-group-item">Max Warehouse: {{plan.warehouse_limit}}</li>
               <li class="list-group-item">Max Category per Warehouse: {{plan.category_per_warehouse_limit}}</li>
               <li class="list-group-item">Max Product per Category: {{plan.products_per_category_limit}}</li>
+              {% if plan.plan_type == 'infinite' %}
+                <li class="list-group-item"> Free </li>
+              {% else %}
+                {% if plan.plan_type == 'monthly' %}
+                <li class="list-group-item">{{plan.price}} $ / Month</li>
+                {% else %}
+                <li class="list-group-item">{{plan.price}} $ / Year</li>
+                {% endif %}
+              {% endif %}
             </ul>
             <div class="card-body">
               {% if plan.plan_type == subscription.sub_plan.plan_type %}

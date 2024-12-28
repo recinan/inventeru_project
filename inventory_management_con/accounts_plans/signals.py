@@ -31,7 +31,7 @@ def create_monthly_plan(sender, **kwargs):
             warehouse_limit = 2,
             category_per_warehouse_limit = 5,
             products_per_category_limit=20,
-            price = 0,
+            price = 19.99,
             is_default = False,
             plan_type = 'monthly'
         )
@@ -45,7 +45,7 @@ def create_annualy_plan(sender, **kwargs):
             warehouse_limit = 2,
             category_per_warehouse_limit = 5,
             products_per_category_limit=20,
-            price = 0,
+            price = 199.99,
             is_default = False,
             plan_type = 'annual'
         )
