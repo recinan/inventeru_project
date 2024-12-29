@@ -23,6 +23,9 @@ from util_funcs.Paginator import PaginatorClass
 def index(request):
     return render(request, 'index.html')
 
+def about(request):
+    return render(request, 'about.html')
+
 @login_required(login_url='login')
 def dashboard(request):
     items = InventoryItem.objects.filter(user=request.user.id).order_by('id')
