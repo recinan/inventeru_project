@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme ="light" id="root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,5 +29,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script src="{% static 'js/anim.js' %}"></script>
+    <script>
+        window.onload = function () {
+            // Sayfa yüklendiğinde localStorage'daki tema durumunu uygula
+            const savedTheme = localStorage.getItem('theme') || 'light'; // Varsayılan 'light'
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            document.getElementById('nav').setAttribute('data-bs-theme', savedTheme);
+          
+            document.getElementById('themer').addEventListener('click', () => {
+              const current = document.documentElement.getAttribute('data-bs-theme');
+              const inverted = current === 'dark' ? 'light' : 'dark';
+              document.documentElement.setAttribute('data-bs-theme', inverted);
+              document.getElementById('nav').setAttribute('data-bs-theme', inverted);
+          
+              // Yeni temayı localStorage'a kaydet
+              localStorage.setItem('theme', inverted);
+            });
+          };
+    </script>
 </body>
 </html>
