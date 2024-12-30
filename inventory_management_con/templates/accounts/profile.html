@@ -49,10 +49,10 @@
                             </div>
                             {{form.email|as_crispy_field}}
                             {{form.phone_number|as_crispy_field}}
-                            <a href="{% url 'password_change' %}">Change Password</a>
                         </fieldset>
                         <div class="form-group">
                             <button class="btn btn-outline-info" type="submit">Update</button>
+                            <a class="btn btn-outline-info" href="{% url 'password_change' %}" style="margin-left: 25px;">Change Password</a>
                         </div>
                         {% endif %}
                     </form>

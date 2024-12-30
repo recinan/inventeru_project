@@ -40,9 +40,9 @@
                 <p><a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Basic Plan</a></p>
                 {% else %}
                   {% if plan.plan_type == 'monthly' %}
-                  <p><a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Buy Monthly Plan</a></p>
+                  <p><a href="{% url 'upgrade-plan' plan.id %}" class="btn btn-outline-primary card-link">Buy Monthly Plan</a></p>
                   {% else %}
-                  <p><a href="{% url 'upgrade-plan' plan.id %}" class="card-link">Buy Annualy Plan</a></p>
+                  <p><a href="{% url 'upgrade-plan' plan.id %}" class="btn btn-outline-primary card-link">Buy Annualy Plan</a></p>
                   {% endif %}
                 {% endif %}
               {% endif %}
