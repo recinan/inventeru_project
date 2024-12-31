@@ -1,59 +1,65 @@
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-
+            
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-6 mt-5 mb-5">
-                <div class="content-section col-lg-12 col-md-12 col-sm-12 tutorial-style" style="min-height: 65vh;">
+            <div class="col-12 col-md-10 col-lg-8 mt-5 mb-5">
+                <div class="content-section tutorial-style p-4" style="min-height: 65vh;">
                     <legend class="border-bottom mb-4">Profile Information</legend>
                     <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="media d-flex">
+                        <div class="media d-flex flex-column flex-md-row align-items-center">
                             {% if user.username == form.instance.username %}
-                                <input id="id_image" type="file" name="user_image" hidden/>
-                                    <label for="id_image">
-                                        <img class="rounded-circle account-img profile-img" style="max-width: 150px; cursor: pointer;" src="{{form.instance.user_image.url}}" title="Upload new image">
-                                    </label>
+                                <input id="id_image" type="file" name="user_image" hidden />
+                                <label for="id_image" class="mb-3 mb-md-0">
+                                    <img class="rounded-circle account-img profile-img" style="max-width: 150px; cursor: pointer;" src="{{form.instance.user_image.url}}" title="Upload new image">
+                                </label>
                             {% else %}
-                                <img class="rounded-circle account-img profile-img" style="max-width: 150px;" src="{{form.instance.user_image.url}}" alt="">
+                                <img class="rounded-circle account-img profile-img mb-3 mb-md-0" style="max-width: 150px;" src="{{form.instance.user_image.url}}" alt="">
                             {% endif %}
-                            <div class="media-body" style="margin-left:20px;">
-                                <h2 class="account-heading">{{form.instance.username}}
-                                    <small class="text-muted">({{form.instance.status}})</small>
+                            <div class="media-body text-center text-md-start" style="margin-left: 20px;">
+                                <h2 class="account-heading">{{ form.instance.username }}
+                                    <small class="text-muted">({{ form.instance.status }})</small>
                                 </h2>
-                                <p class="text-secondary">is active {{form.instance.is_active}}</p>
-                                <p class="text-secondary">{{form.instance.first_name}} {{form.instance.last_name}}</p>
-                                <p class="text-secondary">{{form.instance.email}}</p>
-                                <p class="text-secondary">{{form.instance.phone_number}}</p>
-                                <p class="text-secondary fs-6 fw-semibold">Current Plan: {{user.user_plan.plan_name}}   <a href="{% url 'plan-page' %}" class="btn btn-outline-info btn-sm">Upgrade Plan</a></p>
+                                <p class="text-secondary">{{ form.instance.first_name }} {{ form.instance.last_name }}</p>
+                                <p class="text-secondary">{{ form.instance.email }}</p>
+                                <p class="text-secondary">{{ form.instance.phone_number }}</p>
+                                <p class="text-secondary fs-6 fw-semibold">
+                                    Current Plan: {{ user.user_plan.plan_name }}
+                                    <a href="{% url 'plan-page' %}" class="btn btn-outline-info btn-sm">Upgrade Plan</a>
+                                </p>
                                 {% if user.user_plan.plan_type == 'infinite' %}
-                                <p class="text-secondary">You are on free plan</p>
+                                    <p class="text-secondary">You are on free plan</p>
                                 {% else %}
-                                <p class="text-secondary">Your plan expires on {{subscription.sub_end_date|date:"d/m/Y h:i a"}}</p>
+                                    <p class="text-secondary">Your plan expires on {{ subscription.sub_end_date|date:"d/m/Y h:i a" }}</p>
                                 {% endif %}
                             </div>
                         </div>
-            
-                        {% if user.username == form.instance.username %}
+                        <hr>
                         
-                        <fieldset class="form-group">
-                            <legend class="border-bottom mb-4">Edit Profile</legend>
-                            <div class="form-row">
-                                <div class="form-group col-md-6 mb-0">
-                                    {{form.first_name|as_crispy_field}}
+                        {% if user.username == form.instance.username %}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Edit Profile</legend>
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-md-6 mb-3">
+                                        {{ form.first_name|as_crispy_field }}
+                                    </div>
+                                    <div class="form-group col-12 col-md-6 mb-3">
+                                        {{ form.last_name|as_crispy_field }}
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 mb-0">
-                                    {{form.last_name|as_crispy_field}}
+                                <div class="form-group mb-3">
+                                    {{ form.email|as_crispy_field }}
                                 </div>
+                                <div class="form-group mb-3">
+                                    {{ form.phone_number|as_crispy_field }}
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                <button class="btn btn-outline-info w-100 w-md-auto mb-2" type="submit">Update</button>
+                                <a class="btn btn-outline-info w-100 w-md-auto" href="{% url 'password_change' %}">Change Password</a>
                             </div>
-                            {{form.email|as_crispy_field}}
-                            {{form.phone_number|as_crispy_field}}
-                        </fieldset>
-                        <div class="form-group">
-                            <button class="btn btn-outline-info" type="submit">Update</button>
-                            <a class="btn btn-outline-info" href="{% url 'password_change' %}" style="margin-left: 25px;">Change Password</a>
-                        </div>
                         {% endif %}
                     </form>
                 </div>

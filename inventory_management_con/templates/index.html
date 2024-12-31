@@ -1,14 +1,15 @@
 {% extends "partials/_base.html" %}
 {% load static %}
 {% block content %}
-    <div class="row">
-        <div class="col-sm-11 col-md-4 mx-auto mt-5 px-3">
-            <h1 class="fw-light">Track and Manage Your Inventory</h1>
-            <p class="fw-light">Keep track of your inventory and receive
-                quantity alerts for low inventory</p>
-            <div>
-                <a href="{% url "dashboard" %}" class="btn btn-primary">Get Started Now!</a>
-            </div>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6 col-lg-4 mx-auto mt-5 px-4 px-md-3">
+        <h1 class="fw-light text-center text-md-start">Track and Manage Your Inventory</h1>
+        <p class="fw-light text-center text-md-start">Keep track of your inventory and receive
+            quantity alerts for low inventory</p>
+        <div class="d-flex justify-content-center justify-content-md-start">
+            <a href="{% url 'list-warehouse' %}" class="btn btn-primary btn">Get Started Now!</a>
         </div>
     </div>
+</div>
+
 {% endblock content %}

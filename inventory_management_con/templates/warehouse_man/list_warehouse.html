@@ -1,6 +1,7 @@
 {% extends 'partials/_base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+<!--
   <style>
     .card {
       height: 250px; /* Kartların yüksekliğini sabit tutar */
@@ -59,5 +60,73 @@
         </div>
       {% endif %}
     </div>
+  </div>-->
+  <style>
+    .card {
+      height: 250px; /* Kartların dinamik olarak içeriğe uyum sağlaması */
+      display: flex;
+      flex-direction: column; /* Kart içeriğini dikey düzenler */
+    }
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+
+    .btn-group {
+      margin-top: auto;
+    }
+  </style>
+  <div class="container">
+    <!-- Üst Başlık ve Buton -->
+    <div class="row align-items-center mt-4">
+      <div class="col-12 col-md-6">
+        <h1>Warehouse Page</h1>
+      </div>
+      {% if warehouselist|length > 0 %}
+        <div class="col-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+          <a href="{% url 'add-warehouse' %}" class="btn btn-primary">Add Warehouse</a>
+        </div>
+      {% endif %}
+    </div>
+    <hr size="6" />
+
+    <!-- Kartlar -->
+    <div class="row">
+      {% if warehouselist|length > 0 %}
+        {% for warehouse in warehouselist %}
+          <div class="col-12 col-md-6 col-lg-4 mt-4">
+            <div class="card">
+              <h5 class="card-header">{{ warehouse.warehouse_name }}</h5>
+              <div class="card-body">
+                <h5 class="card-title">{{ warehouse.phone_number }}</h5>
+                <p class="card-text">
+                  {{ warehouse.neighborhood }} {{ warehouse.street }} {{ warehouse.district }}/{{ warehouse.city }}
+                  {{ warehouse.country }} {{ warehouse.postal_code }}
+                </p>
+                <div class="btn-group">
+                  <a href="{% url 'list-item' warehouse.slug %}" class="btn btn-outline-primary">Products</a>
+                  <a href="{% url 'warehouse-detail' warehouse.slug %}" class="btn btn-outline-success">Warehouse Info</a>
+                  <a href="{% url 'delete-warehouse' warehouse.slug %}" class="btn btn-outline-danger">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <!-- Depo Yok Mesajı -->
+        <div class="col-12 mt-5 text-center">
+          <small class="text-muted fs-5">
+            There is no Warehouse! If you want to
+            <a href="{% url 'add-warehouse' %}">
+              <p class="fs-5 fw-semibold">Add Warehouse</p>
+            </a>
+          </small>
+        </div>
+      {% endif %}
+    </div>
   </div>
+
 {% endblock %}

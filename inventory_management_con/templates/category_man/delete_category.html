@@ -1,23 +1,28 @@
 {% extends "partials/_base.html" %}
 {% block content %}
-    <div>
-        <button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
-        <div class="row">
-            <form method='POST' class="col-sm-11 col-md-4 mx-auto mt-5">
-                {% csrf_token %}
-                <h1 class="fw-light">Are you sure you want to delete {{category.category_name}} !</h1>
-                <h1 class="fw-light">All products in this category will be deleted!</h1>
-                <p class="fw-light">This cannot be undone</p>
-                <div>
-                    <button class="btn btn-danger">Delete</button>
-                </div>
-            </form>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <button onclick="goBack()" class="btn btn-outline-primary my-3">Go Back</button>
         </div>
     </div>
 
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
+    <div class="row justify-content-center">
+        <form method="POST" class="col-12 col-md-8 col-lg-6 text-center mt-5">
+            {% csrf_token %}
+            <h1 class="fw-light">Are you sure you want to delete <strong>{{ category.category_name }}</strong>?</h1>
+            <h1 class="fw-light text-danger">All products in this category will be deleted!</h1>
+            <p class="fw-light text-muted">This action cannot be undone.</p>
+            <div class="mt-4">
+                <button class="btn btn-danger btn-lg w-100">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 {% endblock content %}

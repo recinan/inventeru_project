@@ -1,6 +1,7 @@
 {% extends "partials/_base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<!--
 <button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
 <div class="container">
     <div class="row">
@@ -54,6 +55,79 @@
         window.history.back();
     }
 </script>
+-->
+<button onclick="goBack()" class="btn btn-outline-primary my-3 mx-4">Go Back</button>
+<div class="container">
+    <!-- Sayfa Başlığı -->
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center justify-content-md-start mt-4">
+            <h1>Warehouse Page</h1>
+        </div>
+    </div>
+    <hr size="6">
+
+    <!-- Form -->
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-6 mx-auto mt-5">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Warehouse Name -->
+                <div class="form-group mb-3">
+                    {{ warehouse_form.warehouse_name|as_crispy_field }}
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group mb-3">
+                    {{ warehouse_form.phone_number|as_crispy_field }}
+                </div>
+
+                <hr>
+
+                <!-- Address Fields -->
+                <div class="form-group mb-3">
+                    {{ warehouse_form.neighborhood|as_crispy_field }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ warehouse_form.street|as_crispy_field }}
+                </div>
+
+                <div class="form-group row mb-3">
+                    <!-- District -->
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        {{ warehouse_form.district|as_crispy_field }}
+                    </div>
+                    <!-- City -->
+                    <div class="col-12 col-md-6">
+                        {{ warehouse_form.city|as_crispy_field }}
+                    </div>
+                </div>
+
+                <!-- Postal Code -->
+                <div class="form-group mb-3">
+                    {{ warehouse_form.postal_code|as_crispy_field }}
+                </div>
+
+                <!-- Country -->
+                <div class="form-group mb-3">
+                    {{ warehouse_form.country|as_crispy_field }}
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-3">
+                    <button class="btn btn-primary btn">Add Warehouse</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
 
 {% endblock content %}
 
