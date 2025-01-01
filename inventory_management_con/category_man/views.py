@@ -13,21 +13,6 @@ from util_funcs.Paginator import PaginatorClass
 
 # Create your views here.
 
-@login_required(login_url="login")
-def add_category(request):
-    if request.method == 'POST':
-        form = CategoryForm(request.POST, user = request.user)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse_lazy('list-allcategories'))
-    else:
-        form = CategoryForm(user = request.user)
-
-    context = {
-        'form' :form
-    }
-    return render(request,'category_man/add_category.html',context)
-
 @login_required(login_url='login')
 def add_category_warehouse(request, warehouse_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user,slug = warehouse_slug)
@@ -54,12 +39,6 @@ def add_category_warehouse(request, warehouse_slug):
         'form' :form
     }
     return render(request,'category_man/add_category.html',context)
-
-@login_required
-def get_categories_for_warehouse(request, warehouse_id):
-    categories = Category.objects.filter(warehouse_id=warehouse_id)
-    category_list = [{"id": category.id, "name": category.category_name} for category in categories]
-    return JsonResponse({"categories": category_list})
 
 @login_required(login_url='login')
 def list_categories(request, warehouse_slug):
@@ -126,7 +105,7 @@ def delete_category(request,warehouse_slug,category_slug):
     category = get_object_or_404(Category, warehouse=warehouse,slug = category_slug)
     if request.method == 'POST':
         category.delete()
-        return redirect(reverse_lazy('dashboard'))
+        return redirect(reverse_lazy('list-item',kwargs={'warehouse_slug':warehouse_slug}))
     context = {
         'category':category
     }

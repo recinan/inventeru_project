@@ -17,6 +17,7 @@ from PIL import Image
 import re
 from django.core.paginator import Paginator
 from util_funcs.Paginator import PaginatorClass
+from django.db.models.functions import Lower
 
 # Create your views here.
 
@@ -105,28 +106,6 @@ def list_item_less_than_five(request,warehouse_slug):
     return render(request, 'category_man/list_category.html',context)
 
 @login_required(login_url='login')
-def add_item(request):
-    if request.method == 'POST':
-        form = InventoryItemForm(request.POST, user=request.user)
-        if form.is_valid():
-            print("Form geçerli", form.cleaned_data)
-            #form.save(commit=False)
-            item = form.save(commit=False)
-            item.user = request.user
-            item.save()
-            print(request.user)
-            return redirect(reverse_lazy('dashboard'))
-    else:
-        form = InventoryItemForm(user=request.user)
-
-    categories = Category.objects.all()
-    context = {
-        'form':form,
-        'categories':categories
-    }
-    return render(request, 'inventory_man/item_form.html',context)
-
-@login_required(login_url='login')
 def add_item_warehouse(request, warehouse_slug ,category_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug = warehouse_slug)
     category = get_object_or_404(Category, user=request.user, slug = category_slug, warehouse=warehouse)
@@ -159,24 +138,6 @@ def add_item_warehouse(request, warehouse_slug ,category_slug):
         'category':category,
     }
     return render(request, 'inventory_man/item_form_warehouse.html',context)
-
-
-@login_required(login_url='login')
-def edit_item(request, pk):
-    item = get_object_or_404(InventoryItem, pk = pk)
-    if request.method == 'POST':
-        form = InventoryItemForm(request.POST, instance=item)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse_lazy('dashboard'))
-    else:
-        form = InventoryItemForm(instance=item)
-
-    context = {
-        'form':form
-    }
-
-    return render(request, 'inventory_man/item_form.html',context)
 
 @login_required(login_url='login')
 def item_detail(request, warehouse_slug, category_slug, item_slug):
@@ -211,7 +172,7 @@ def search_product_bar(request,warehouse_slug):
         search_filter = ''
 
     category_list = Category.objects.filter(user=request.user, warehouse=warehouse).order_by('-date_created')
-    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__contains = search_filter).order_by('-date_created')
+    inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, item_name__icontains = search_filter).order_by('-date_created')
     """
     p = Paginator(category_list,3)
     page = request.GET.get('category_page')

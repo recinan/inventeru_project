@@ -59,28 +59,6 @@ def add_warehouse(request):
     }
     return render(request, 'warehouse_man/add_warehouse.html',context)
 
-@login_required(login_url='login')
-def edit_warehouse(request,warehouse_slug):
-    warehouse = get_object_or_404(Warehouse, user=request.user ,slug = warehouse_slug)
-
-    if not request.user.is_authenticated:
-        print("You must be logged in to edit a warehouse.")
-    
-    if request.method == 'POST':
-        warehouse_form = WarehouseForm(request.POST, user=request.user ,instance = warehouse)
-        if warehouse_form.is_valid():
-            warehouse = warehouse_form.save(commit=False)
-            warehouse.user = request.user
-            warehouse.save()
-            return redirect(reverse_lazy('warehouse-detail', kwargs={'warehouse_slug':warehouse_slug}))
-    else:
-        warehouse_form = WarehouseForm(user=request.user ,instance = warehouse)
-
-    context = {
-        'warehouse_form':warehouse_form
-    }
-    return render(request,'warehouse_man/edit_warehouse.html',context)
-
 def warehouse_location(address):
     google_api_key = config("GOOGLE_MAPS_API")
     gmaps = googlemaps.Client(key=google_api_key)
@@ -112,7 +90,7 @@ def warehouse_detail(request, warehouse_slug):
     product_chart,category_slug = products_per_category_chart(request,warehouse_slug)
     if request.method == "POST":
         warehouse = warehouse
-        form = WarehouseForm(request.POST, instance = warehouse)
+        form = WarehouseForm(request.POST,user=request.user ,instance = warehouse)
         if form.is_valid():
             warehouse_form = form.save()
             messages.success(request, f"Warehouse has been updated")
