@@ -55,7 +55,7 @@ def list_item(request, warehouse_slug):
 def list_item_category(request, warehouse_slug, category_slug):
     warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
     all_categories = Category.objects.filter(user = request.user,warehouse=warehouse).order_by('-date_created')
-    category = get_object_or_404(Category, user=request.user, slug = category_slug)
+    category = get_object_or_404(Category, user=request.user, warehouse=warehouse,slug = category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user,category=category).order_by('-date_created')
     """
     p_item = Paginator(inventory_items,15)
@@ -232,11 +232,11 @@ def search_product_bar(request,warehouse_slug):
     return render(request, 'category_man/list_category.html',context)
 
 @login_required(login_url='login')
-def delete_item(request, pk):
+def delete_item(request,pk,warehouse_slug):
     item = get_object_or_404(InventoryItem, pk = pk)
     if request.method == 'POST':
         item.delete()
-        return redirect(reverse_lazy('dashboard'))
+        return redirect(reverse_lazy('list-item',kwargs={'warehouse_slug':warehouse_slug}))
     context = {
         'item':item
     }

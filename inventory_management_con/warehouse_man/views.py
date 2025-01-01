@@ -109,7 +109,7 @@ def warehouse_detail(request, warehouse_slug):
     address = f"{warehouse.neighborhood} {warehouse.street} {warehouse.district}/{warehouse.city} {warehouse.country} {warehouse.postal_code}"
     m = warehouse_location(address=address)
     category_chart = category_per_warehouse_chart(request,warehouse_slug)
-    product_chart = products_per_category_chart(request,warehouse_slug)
+    product_chart,category_slug = products_per_category_chart(request,warehouse_slug)
     if request.method == "POST":
         warehouse = warehouse
         form = WarehouseForm(request.POST, instance = warehouse)
@@ -137,7 +137,8 @@ def warehouse_detail(request, warehouse_slug):
         'less_items': inventory_items_less_than_five,
         'category_chart':category_chart,
         'product_chart':product_chart,
-        'chart_options':CHART_OPTIONS
+        'chart_options':CHART_OPTIONS,
+        'selected_category':category_slug
     }
     
     return render(request, 'warehouse_man/warehouse-detail.html',context)
@@ -257,18 +258,18 @@ def category_per_warehouse_chart(request, warehouse_slug):
         sizes = list()
         plt.figure(figsize=(4,4))
         plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140,textprops={'fontsize':10}, labeldistance=0.8)
-        plt.title('Categories per warehouse')
+        plt.title('Categories percentage of warehouse')
         buffer = BytesIO()
         plt.savefig(buffer, format='png')
         buffer.seek(0)
         image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
         buffer.close()
         plt.close()
-        return image_base64
+        return empty_chart("There is no product")
     
     plt.figure(figsize=(4,4))
     plt.pie(sizes, labels=labels,autopct='%1.1f%%',startangle=140, textprops={'fontsize':10}, labeldistance=0.8)
-    plt.title('Categories per warehouse')
+    plt.title('Categories percentage of warehouse')
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
@@ -283,7 +284,7 @@ def products_per_category_chart(request, warehouse_slug):
     if not category_slug:
         category = Category.objects.filter(user=request.user,warehouse=warehouse).first()
         if not category:
-            return empty_chart("There is no product")
+            return (empty_chart("There is no product"),category_slug)
         category_slug = category.slug
     category = get_object_or_404(Category, user=request.user, warehouse=warehouse, slug=category_slug)
     inventory_items = InventoryItem.objects.filter(user=request.user, warehouse=warehouse, category=category)
@@ -312,24 +313,24 @@ def products_per_category_chart(request, warehouse_slug):
         sizes = list()
         plt.figure(figsize=(4,4))
         plt.pie(sizes, labels=filtered_labels, autopct='%1.1f%%',startangle=140)
-        plt.title(f'Products per {category.category_name}')
+        plt.title(f'Products percentage of {category.category_name}')
         buffer = BytesIO()
         plt.savefig(buffer, format='png')
         buffer.seek(0)
         image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
         buffer.close()
         plt.close()
-        return image_base64
+        return (empty_chart("There is no product"),category_slug)
     plt.figure(figsize=(4,4))
     plt.pie(sizes, labels=filtered_labels, autopct='%1.1f%%', startangle=140,textprops={'fontsize':10}, labeldistance=0.8)
-    plt.title(f'Products per {category.category_name}')
+    plt.title(f'Products percentage of {category.category_name}')
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
     buffer.close()
     plt.close()
-    return image_base64
+    return (image_base64,category_slug)
 
 def empty_chart(title:str):
 

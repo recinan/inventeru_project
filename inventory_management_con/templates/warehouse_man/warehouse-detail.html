@@ -120,7 +120,7 @@
                         <select class="form-select" id="inputGroupSelect01" name="selected_category">
                             {% if categories %}
                                 {% for category in categories %}
-                                    <option value="{{ category.slug }}">{{ category.category_name }}</option>
+                                    <option value="{{ category.slug }}"{% if category.slug == selected_category %}selected{% endif %}>{{ category.category_name }}</option>
                                 {% endfor %}
                             {% else %}
                                 <option value="#">There is no category</option>

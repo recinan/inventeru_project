@@ -34,7 +34,8 @@ def upgrade_plan(request, plan_id):
     request.user.user_plan = new_plan
     subscription = create_subscription(request.user, new_plan)
     request.user.save()
-    messages.success(request,f"Your plan updated as {new_plan.plan_name}! It expires on {subscription.sub_end_date}")
+    formatted_date = subscription.sub_end_date.strftime('%d/%m/%y')
+    messages.success(request,f"Your plan updated as {new_plan.plan_name}! It expires on {formatted_date}")
     return redirect(reverse_lazy('profile-update',kwargs={'username':request.user.username}))
 
 

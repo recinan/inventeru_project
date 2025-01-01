@@ -121,12 +121,13 @@ def search_category_bar(request,warehouse_slug):
     return render(request, 'category_man/list_category.html', context)
 
 @login_required(login_url='login')
-def delete_category(request,category_slug):
-    item = get_object_or_404(Category, slug = category_slug)
+def delete_category(request,warehouse_slug,category_slug):
+    warehouse = get_object_or_404(Warehouse, user=request.user, slug=warehouse_slug)
+    category = get_object_or_404(Category, warehouse=warehouse,slug = category_slug)
     if request.method == 'POST':
-        item.delete()
+        category.delete()
         return redirect(reverse_lazy('dashboard'))
     context = {
-        'category':item
+        'category':category
     }
     return render(request,'category_man/delete_category.html',context)
