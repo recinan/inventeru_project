@@ -1,13 +1,42 @@
 {% extends "partials/_base.html" %}
 {% load static %}
 {% block content %}
+<title>InventERU</title>
+
+<div id="carouselExampleIndicators" class="carousel slide mt-4">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="{% static 'images/e-commerce-g7d9bc4899_1281.jpg' %}" class="d-block w-100" alt="..." style="border: 3px solid black; border-radius: 5px;">
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'images/newtruck2.png' %}" class="d-block w-100" alt="..." style="border: 3px solid black; border-radius: 5px;">
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'images/container-ship-ge9700ff74_1281.jpg' %}" class="d-block w-100" alt="..." style="border: 3px solid black; border-radius: 5px;">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<hr>
+
 <div class="row justify-content-center">
     <div class="col-12 col-md-6 col-lg-4 mx-auto mt-5 px-4 px-md-3">
-        <h1 class="fw-light text-center text-md-start">Track and Manage Your Inventory</h1>
-        <p class="fw-light text-center text-md-start">Keep track of your inventory and receive
-            quantity alerts for low inventory</p>
-        <div class="d-flex justify-content-center justify-content-md-start">
-            <a href="{% url 'list-warehouse' %}" class="btn btn-primary btn">Get Started Now!</a>
+        <h1 class="fw-light text-center">Track and Manage Your Inventory</h1>
+        <p class="fw-light text-center">Keep track of your inventory receive your detailed reports and increase your efficiency</p>
+        <div class="d-flex justify-content-center">
+            <a href="{% url 'list-warehouse' %}" class="btn btn-outline-primary btn">Get Started Now!</a>
         </div>
     </div>
 </div>

@@ -1,6 +1,104 @@
 {% extends 'partials/_base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block content %}
+<style>
+    /* Responsive image settings */
+.carousel-inner img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
 
+/* Make sure the text and headings are responsive */
+h1 {
+    font-size: 2.5rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+/* Ensure padding and margins work well on all devices */
+.container {
+    padding: 15px;
+}
+
+/* Use responsive utility classes from Bootstrap */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .container p {
+        font-size: 0.9rem;
+    }
+}
+
+</style>
+<title>InventERU/about</title>
+
+<div class="d-grid gap-2">
+    <div id="carouselExampleIndicators" class="carousel slide mt-4">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'images/e-commerce-g7d9bc4899_1281.jpg' %}" class="d-block w-100" alt="..." style="border: 3px solid black; border-radius: 5px;">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'images/newtruck2.png' %}" class="d-block w-100" alt="..." style="border: 3px solid black; border-radius: 5px;">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'images/container-ship-ge9700ff74_1281.jpg' %}" class="d-block w-100" alt="..." style="border: 3px solid black; border-radius: 5px;">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <hr>
+    
+    <div class="container">
+        <div class="text-center">
+            <h1>InventERU</h1>
+        </div>
+        <p><strong>About Us</strong></p>
+        <p>InventERU is an innovative SaaS platform that digitalizes warehouse management, simplifying stock tracking and optimizing business processes. With core features such as adding warehouses, managing categories, and tracking products, InventERU offers great flexibility to your business, providing full control over inventory management.</p>
+        
+        <p><strong>Why Choose InventERU?</strong></p>
+        <p>Every business has unique warehouse management needs. At InventERU, we provide powerful tools that can be customized to fit the specific needs of your business. You can add warehouses, create custom categories for each warehouse, and easily track products within those categories. Additionally, generating reports on products in your warehouses is seamless, ensuring that you always have the correct information at your fingertips.</p>
+        
+        <p><strong>Our Features</strong></p>
+        <ul>
+            <li><strong>Add and Manage Warehouses:</strong> Add multiple warehouses and easily track stock levels and settings for each warehouse.</li>
+            <li><strong>Category and Product Management:</strong> Within each warehouse, you can create categories to group your products, keeping everything organized and accessible.</li>
+            <li><strong>Real-Time Product Tracking:</strong> Monitor your products' inventory status in real-time and track any changes instantly.</li>
+            <li><strong>Output Generation:</strong> Generate reports on products in your warehouses, making it easier to assess stock levels and perform analysis.</li>
+            <li><strong>Cloud-Based Access:</strong> With our cloud-based platform, you can access your system from anywhere, on any device.</li>
+        </ul>
+        
+        <p><strong>Partner with Us</strong></p>
+        <p>InventERU is not just a warehouse management tool; it's a powerful partner that helps you digitalize and streamline your business operations. With our user-friendly interface, flexible configurations, and comprehensive support team, we're with you every step of the way. Whether you're a small business or a large enterprise with multiple warehouses, managing your stock with InventERU has never been easier.</p>
+    </div>
+    
+    <hr>
+    
+    <div class="container">
+        <p><strong>Contact</strong></p>
+        <p>E-mail: info@inventeru.com - Phone Number: +1 (310) 896-6899</p>
+    </div>
+    
+    <hr>
+</div>
+    
 {% endblock content %}
 

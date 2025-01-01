@@ -2,8 +2,9 @@ from django.db import models
 from django.utils.text import slugify
 import uuid
 from django.conf import settings
-from django.utils.timezone import now
-from datetime import timedelta
+from django.utils.timezone import now, make_aware
+from datetime import timedelta, datetime
+from zoneinfo import ZoneInfo
 # Create your models here.
 
 class Plan(models.Model):
