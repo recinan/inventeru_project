@@ -39,6 +39,12 @@ class CategoryFormWarehouse(forms.ModelForm):
             raise forms.ValidationError(f'{category_name} category already exists!')
         return category_name
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.user or not self.warehouse:
+            raise forms.ValidationError("User or warehouse information is missing.")
+        return cleaned_data
+
     def __init__(self, *args, user=None, warehouse=None, **kwargs):
         self.user = user
         self.warehouse = warehouse

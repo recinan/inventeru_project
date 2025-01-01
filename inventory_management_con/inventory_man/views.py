@@ -29,21 +29,7 @@ def about(request):
 @login_required(login_url='login')
 def dashboard(request):
     items = InventoryItem.objects.filter(user=request.user.id).order_by('id')
-    """
-    low_inventory = InventoryItem.objects.filter(
-        user = request.user.id,
-        quantity__lte = LOW_QUANTITY
-    )
-
-    low_inventory_count = low_inventory.count()
-    if low_inventory_count > 0:
-        if low_inventory_count > 1:
-            messages.error(request, f'{low_inventory_count} items have low inventory')
-        else:
-            messages.error(request, f'{low_inventory_count} item has low inventory')
-
-    low_inventory_ids = low_inventory.values_list('id',flat=True)"""
-
+    
     return render(request, 'inventory_man/dashboard.html',{
         'items':items
     })
@@ -173,6 +159,7 @@ def add_item_warehouse(request, warehouse_slug ,category_slug):
         'category':category,
     }
     return render(request, 'inventory_man/item_form_warehouse.html',context)
+
 
 @login_required(login_url='login')
 def edit_item(request, pk):

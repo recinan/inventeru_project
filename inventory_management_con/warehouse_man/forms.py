@@ -34,6 +34,12 @@ class WarehouseForm(forms.ModelForm):
             return formatted_number
         
         return phone_number
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.user:
+            raise forms.ValidationError("User or warehouse information is missing.")
+        return cleaned_data
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user',None)
